@@ -10,7 +10,7 @@ return [
     'nav_register' => 'Register',
     'nav_login' => 'Login',
     'nav_account' => 'Account',
-    
+
     // Account-related
     'points' => 'Points',
     'tokens' => 'Tokens',
@@ -18,13 +18,13 @@ return [
     'admin_panel' => 'Admin Panel',
     'logout' => 'Logout',
     'vote' => 'Vote',
-    
+
     // Arena navigation
     'arenanav_solo_pvp' => 'SOLO PVP Ladder',
     'arenanav_2v2_arena' => '2v2 Arena',
     'arenanav_3v3_arena' => '3v3 Arena',
     'arenanav_5v5_arena' => '5v5 Arena',
-    
+
     // Admin menu
     'admin_menu' => 'Admin Menu',
     'admin_dashboard' => 'Dashboard',
@@ -34,18 +34,18 @@ return [
     'admin_shop' => 'Shop Management',
     'admin_gm_commands' => 'GM Commands',
     'admin_settings' => 'Settings',
-    
-   // Settings navigation
-'settings_nav_menu'        => 'Settings Menu',
-'settings_nav_general'     => 'General',
-'settings_nav_smtp'        => 'SMTP',
-'settings_nav_recaptcha'   => 'reCAPTCHA',
-'settings_nav_realm'       => 'Realm',
-'settings_nav_soap'        => 'SOAP',
-'settings_nav_vote_sites'  => 'Vote Sites',
-'settings_nav_page_manager'=> 'Page Manager',
 
-    
+    // Settings navigation
+    'settings_nav_menu' => 'Settings Menu',
+    'settings_nav_general' => 'General',
+    'settings_nav_smtp' => 'SMTP',
+    'settings_nav_recaptcha' => 'reCAPTCHA',
+    'settings_nav_realm' => 'Realm',
+    'settings_nav_soap' => 'SOAP',
+    'settings_nav_vote_sites' => 'Vote Sites',
+    'settings_nav_page_manager' => 'Page Manager',
+
+
     // Social media alt text
     'footer_logo_alt' => 'Sahtout Server Logo',
     'facebook_alt' => 'Facebook',
@@ -56,9 +56,9 @@ return [
     'instagram_alt' => 'Instagram',
     'github_alt' => 'GitHub',
     'linkedin_alt' => 'LinkedIn',
-    
+
     // Realm status (from realm_status.php)
-   'error_direct_access' => 'Direct access to this file is not allowed.',
+    'error_direct_access' => 'Direct access to this file is not allowed.',
     'error_access_denied' => 'Access denied.',
     'server_status_title' => 'Server Status',
     'realm_sahtout_name' => 'Sahtout Realm',
@@ -75,5 +75,30 @@ return [
     'uptime_hours' => 'hours',
     'uptime_minutes' => 'minutes',
     'realmlist' => '🌐 Realmlist: %s',
+
+    // Map
+    'nav_map' => 'Map',
+
+    // Server Status & Top Players Widget
+    'server_status' => 'SERVER STATUS',
+    'online_players' => 'Online Players',
+    'limited_display' => 'Limited to 50 players',
+    'no_players_online' => 'No players are currently online.',
+    'top_players' => 'TOP PLAYERS',
+    'name' => 'Name',
+    'race' => 'Race',
+    'class' => 'Class',
+    'level' => 'Level',
+    'play_time' => 'Play Time',
+    'killers' => 'Killers',
+    'kills' => 'Kills',
+    'honor_points' => 'Honor Points',
+    'arena_points' => 'Arena Points',
+    'arena_teams' => 'Arena Teams',
+    'team_name' => 'Team Name',
+    'rating' => 'Rating',
+    'captain' => 'Captain',
+    'rank' => 'Rank',
+    'no_data' => 'No data available.',
 ];
 ?>

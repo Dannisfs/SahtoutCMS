@@ -73,5 +73,30 @@ return [
     'uptime_hours' => 'Stunden',
     'uptime_minutes' => 'Minuten',
     'realmlist' => '🌐 Realmlist: %s',
+
+    // Map
+    'nav_map' => 'Karte',
+
+    // Server Status & Top Players Widget
+    'server_status' => 'SERVERSTATUS',
+    'online_players' => 'Spieler Online',
+    'limited_display' => 'Auf 50 Spieler begrenzt',
+    'no_players_online' => 'Derzeit sind keine Spieler online.',
+    'top_players' => 'TOP-SPIELER',
+    'name' => 'Name',
+    'race' => 'Volk',
+    'class' => 'Klasse',
+    'level' => 'Stufe',
+    'play_time' => 'Spielzeit',
+    'killers' => 'Killer',
+    'kills' => 'Kills',
+    'honor_points' => 'Ehrenpunkte',
+    'arena_points' => 'Arenapunkte',
+    'arena_teams' => 'Arenateams',
+    'team_name' => 'Teamname',
+    'rating' => 'Wertung',
+    'captain' => 'Kapitän',
+    'rank' => 'Rang',
+    'no_data' => 'Keine Daten verfügbar.',
 ];
 ?>
