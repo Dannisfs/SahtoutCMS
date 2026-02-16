@@ -1,0 +1,103 @@
+[general]
+; Player map language (en/zh/etc)
+language = "en"
+; Site encoding
+site_encoding = "utf-8"
+; Database type
+db_type = "MySQL"
+; 0=MaNGOS, 1=AzerothCore/TrinityCore
+server_type = 1
+
+; GM online options
+; Show GMs in online list
+gm_online = true
+; Max GMs to show online
+gm_online_count = 100
+
+; Show GM point only if in '.gm off' [1/0]
+map_gm_show_online_only_gmoff = 1
+; Show GM point only if in '.gm visible on' [1/0]
+map_gm_show_online_only_gmvisible = 1
+; Add '{GM}' to GM name [1/0]
+map_gm_add_suffix = 1
+; Include 'all GMs in game'/'who on map' [1/0]
+map_status_gm_include_all = 0
+
+; Show server status window [1/0]
+map_show_status = 1
+; Show autoupdate timer 1 - on, 0 - off
+map_show_time = 1
+; Map autoupdate interval (seconds), 0 = disabled
+map_time = 5
+; Time to show uptime string (ms)
+map_time_to_show_uptime = 3000
+; Time to show max online (ms)
+map_time_to_show_maxonline = 3000
+; Time to show GM online (ms)
+map_time_to_show_gmonline = 3000
+
+; Enable developer test mode
+developer_test_mode = false
+
+; Enable multi-realm mode
+multi_realm_mode = true
+
+; Realm DB (also known as auth server)
+; SQL server IP:port this realmd located on
+realm_db_addr = "127.0.0.1:3306"
+; SQL server login
+realm_db_user = "acore"
+; SQL server password
+realm_db_pass = "acore"
+; Realmd DB name
+realm_db_name = "acore_auth"
+; SQL connection encoding
+realm_db_encoding = "utf8"
+
+; Realm ID to display. Currently it only supports one realm
+; Must match a realm_<id> section
+realm_id = 1
+
+; =======================
+; Realm config. For each realm, add a new [realm_#id] section. For example: [realm_1], [realm_101], and so on
+; Id must match the realm id in the realmlist table of the realm_db_addr server
+; =======================
+
+[realm_1]
+
+; World DB
+; SQL server IP:port this DB located on
+world_db_addr = "127.0.0.1:3306"
+; SQL server login
+world_db_user = "acore"
+; SQL server password
+world_db_pass = "acore"
+; World Database name
+world_db_name = "acore_world"
+; SQL connection encoding
+world_db_encoding = "utf8"
+
+; Characters DB
+; SQL server IP:port this DB located on
+characters_db_addr = "127.0.0.1:3306"
+; SQL server login
+characters_db_user = "acore"
+; SQL server password
+characters_db_pass = "acore"
+; Character Database name
+characters_db_name = "acore_characters"
+; SQL connection encoding
+characters_db_encoding = "utf8"
+
+; Game Server Configuration
+; Game Server IP (MiniManager perspective)
+server_addr = "127.0.0.1"
+; Game Server IP as seen by clients (external)
+server_addr_wan = "127.0.0.1"
+; Game Server port
+server_game_port = 8085
+; MaNGOS rev (AzerothCore/TrinityCore does not need this)
+server_rev = ""
+; Allow to see opponent faction characters [true/false]
+server_both_factions = true
+

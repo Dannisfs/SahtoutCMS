@@ -1,0 +1,12 @@
+{
+  "name": "azerothmap",
+  "version": "1.0.0",
+  "description": "![Eastern Kingdom](https://raw.githubusercontent.com/azerothcore/playermap/master/img/showcase/eastern_kingdom.png) ![Outland](https://raw.githubusercontent.com/azerothcore/playermap/master/img/showcase/outland.png) ![Northrend](https://raw.githubusercontent.com/azerothcore/playermap/master/img/showcase/northrend.png)",
+  "main": "index.js",
+  "scripts": {
+    "start": "php -S 192.168.0.93:80"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
