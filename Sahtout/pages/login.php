@@ -29,7 +29,8 @@ $show_resend_button = false;
 $remaining_attempts = MAX_LOGIN_ATTEMPTS; // Default to max attempts
 
 // Function to get client IP address
-function getUserIP() {
+function getUserIP()
+{
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         return $_SERVER['HTTP_CLIENT_IP'];
     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -40,7 +41,8 @@ function getUserIP() {
 }
 
 // Function to get current attempt count
-function getAttemptCount($site_db, $ip_address, $username) {
+function getAttemptCount($site_db, $ip_address, $username)
+{
     $stmt = $site_db->prepare("SELECT attempts, last_attempt 
         FROM failed_logins 
         WHERE ip_address = ? AND username = ?");
@@ -50,17 +52,18 @@ function getAttemptCount($site_db, $ip_address, $username) {
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
     $stmt->close();
-    
-    if ($row && (int)$row['last_attempt'] >= time() - ATTEMPT_WINDOW) {
+
+    if ($row && (int) $row['last_attempt'] >= time() - ATTEMPT_WINDOW) {
         return $row['attempts'];
     }
     return 0;
 }
 
 // Function to check and update login attempts
-function checkBruteForce($site_db, $ip_address, $username) {
+function checkBruteForce($site_db, $ip_address, $username)
+{
     global $errors, $remaining_attempts;
-    
+
     // Check if IP and username combo exists in failed_logins
     $stmt = $site_db->prepare("SELECT attempts, last_attempt, block_until 
         FROM failed_logins 
@@ -71,9 +74,9 @@ function checkBruteForce($site_db, $ip_address, $username) {
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
     $stmt->close();
-    
+
     // Delete expired block records
-    if ($row && $row['block_until'] && (int)$row['block_until'] <= time()) {
+    if ($row && $row['block_until'] && (int) $row['block_until'] <= time()) {
         $stmt = $site_db->prepare("DELETE FROM failed_logins 
             WHERE ip_address = ? AND username = ? AND block_until <= ?");
         $current_time = time();
@@ -82,9 +85,9 @@ function checkBruteForce($site_db, $ip_address, $username) {
         $stmt->close();
         $row = null; // Reset row as it no longer exists
     }
-    
+
     // Reset attempts if outside the attempt window
-    if ($row && (int)$row['last_attempt'] < time() - ATTEMPT_WINDOW) {
+    if ($row && (int) $row['last_attempt'] < time() - ATTEMPT_WINDOW) {
         $stmt = $site_db->prepare("UPDATE failed_logins 
             SET attempts = 0, block_until = NULL 
             WHERE ip_address = ? AND username = ?");
@@ -94,17 +97,17 @@ function checkBruteForce($site_db, $ip_address, $username) {
         $row['attempts'] = 0;
         $row['block_until'] = null;
     }
-    
+
     // Update remaining attempts
     $remaining_attempts = MAX_LOGIN_ATTEMPTS - ($row['attempts'] ?? 0);
-    
+
     // Check if currently blocked
-    if ($row && $row['block_until'] && (int)$row['block_until'] > time()) {
-        $remaining_time = ceil(((int)$row['block_until'] - time()) / 60);
+    if ($row && $row['block_until'] && (int) $row['block_until'] > time()) {
+        $remaining_time = ceil(((int) $row['block_until'] - time()) / 60);
         $errors[] = translate('error_too_many_attempts', 'Too many login attempts (%d made). Please try again in %d minutes.', $row['attempts'], $remaining_time);
         return false;
     }
-    
+
     // Check if max attempts reached
     if ($row && $row['attempts'] >= MAX_LOGIN_ATTEMPTS) {
         $block_until = time() + LOCKOUT_DURATION;
@@ -114,24 +117,25 @@ function checkBruteForce($site_db, $ip_address, $username) {
         $stmt->bind_param('iss', $block_until, $ip_address, $upper_username);
         $stmt->execute();
         $stmt->close();
-        
+
         $remaining_time = ceil(LOCKOUT_DURATION / 60);
         $errors[] = translate('error_too_many_attempts', 'Too many login attempts (%d made). Please try again in %d minutes.', $row['attempts'], $remaining_time);
         return false;
     }
-    
+
     return true;
 }
 
 // Function to log failed login attempt
-function logFailedAttempt($site_db, $ip_address, $username) {
+function logFailedAttempt($site_db, $ip_address, $username)
+{
     $upper_username = strtoupper($username);
     // Check if IP and username combo exists
     $stmt = $site_db->prepare("SELECT id FROM failed_logins WHERE ip_address = ? AND username = ?");
     $stmt->bind_param('ss', $ip_address, $upper_username);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows > 0) {
         // Update existing record
         $stmt = $site_db->prepare("UPDATE failed_logins 
@@ -214,10 +218,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $account = $result->fetch_assoc();
 
                     if (SRP6::VerifyPassword($username, $password, $account['salt'], $account['verifier'])) {
-                    session_regenerate_id(true);    
-                    $_SESSION['user_id'] = $account['id'];
+                        session_regenerate_id(true);
+                        $_SESSION['user_id'] = $account['id'];
                         $_SESSION['username'] = $account['username'];
-$_SESSION['last_regeneration'] = time();
+                        $_SESSION['last_regeneration'] = time();
+
+                        // Fetch and set avatar
+                        $stmt_avatar = $site_db->prepare("SELECT avatar FROM user_currencies WHERE account_id = ?");
+                        $stmt_avatar->bind_param('i', $account['id']);
+                        $stmt_avatar->execute();
+                        $res_avatar = $stmt_avatar->get_result();
+                        if ($row_avatar = $res_avatar->fetch_assoc()) {
+                            $_SESSION['avatar'] = $row_avatar['avatar'];
+                        }
+                        $stmt_avatar->close();
 
                         $update = $auth_db->prepare("UPDATE account SET last_login = NOW() WHERE id = ?");
                         $update->bind_param('i', $account['id']);
@@ -257,68 +271,77 @@ include_once $project_root . 'includes/header.php';
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($_SESSION['lang'] ?? 'en'); ?>">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="<?php echo translate('meta_description', 'Log in to your account to join our World of Warcraft server adventure!'); ?>">
-    <title><?php echo $site_title_name ." ". translate('page_title', 'Login'); ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="<?php echo translate('meta_description', 'Log in to your account to join our World of Warcraft server adventure!'); ?>">
+    <title><?php echo $site_title_name . " " . translate('page_title', 'Login'); ?></title>
     <style>
-        :root{
-            --bg-login:url('<?php echo $base_path; ?>img/backgrounds/bg-login.jpg');
+        :root {
+            --bg-login: url('<?php echo $base_path; ?>img/backgrounds/bg-login.jpg');
             --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
         }
     </style>
 </head>
+
 <body>
-<div class="wrapper">
-    <div class="form-container">
-        <div class="form-section">
-            <h2><?php echo translate('login_title', 'Login'); ?></h2>
+    <div class="wrapper">
+        <div class="form-container">
+            <div class="form-section">
+                <h2><?php echo translate('login_title', 'Login'); ?></h2>
 
-            <?php if (!empty($errors)): ?>
-                <div class="error">
-                    <?php foreach ($errors as $error): ?>
-                        <p><?php echo htmlspecialchars($error); ?></p>
-                    <?php endforeach; ?>
-                    <?php if ($show_resend_button): ?>
-                        <div class="resend-link">
-                            <p><?php echo translate('resend_activation_prompt', 'CLICK HERE:'); ?></p>
-                            <a href="<?php echo $base_path; ?>resend_activation?username=<?php echo htmlspecialchars($username); ?>">
-                                <?php echo translate('resend_activation_link', 'Resend Activation Code'); ?>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($remaining_attempts < MAX_LOGIN_ATTEMPTS && $remaining_attempts > 0): ?>
-                <div class="attempts-info">
-                    <p><?php echo translate('remaining_attempts', 'You have %d login attempts remaining.', $remaining_attempts); ?></p>
-                </div>
-            <?php endif; ?>
-
-            <form method="POST">
-                <input type="text" name="username" placeholder="<?php echo translate('username_placeholder', 'Username'); ?>" required value="<?php echo htmlspecialchars($username); ?>">
-                <br>
-                <input type="password" name="password" placeholder="<?php echo translate('password_placeholder', 'Password'); ?>" required>
-                <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
-                    <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
+                <?php if (!empty($errors)): ?>
+                    <div class="error">
+                        <?php foreach ($errors as $error): ?>
+                            <p><?php echo htmlspecialchars($error); ?></p>
+                        <?php endforeach; ?>
+                        <?php if ($show_resend_button): ?>
+                            <div class="resend-link">
+                                <p><?php echo translate('resend_activation_prompt', 'CLICK HERE:'); ?></p>
+                                <a
+                                    href="<?php echo $base_path; ?>resend_activation?username=<?php echo htmlspecialchars($username); ?>">
+                                    <?php echo translate('resend_activation_link', 'Resend Activation Code'); ?>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
-                <button type="submit"><?php echo translate('login_button', 'Sign In'); ?></button>
-                <div class="register-link">
-                    <?php echo sprintf(translate('register_link_text', 'Don\'t have an account? <a href="%s">Register now</a>'), htmlspecialchars($base_path . 'register')); ?>
-                </div>
-                <div class="forgot-password-link">
-                    <?php echo sprintf(translate('forgot_password_link_text', 'Forgot your password? <a href="%s">Reset it here</a>'), htmlspecialchars($base_path . 'forgot_password')); ?>
-                </div>
-            </form>
+
+                <?php if ($remaining_attempts < MAX_LOGIN_ATTEMPTS && $remaining_attempts > 0): ?>
+                    <div class="attempts-info">
+                        <p><?php echo translate('remaining_attempts', 'You have %d login attempts remaining.', $remaining_attempts); ?>
+                        </p>
+                    </div>
+                <?php endif; ?>
+
+                <form method="POST">
+                    <input type="text" name="username"
+                        placeholder="<?php echo translate('username_placeholder', 'Username'); ?>" required
+                        value="<?php echo htmlspecialchars($username); ?>">
+                    <br>
+                    <input type="password" name="password"
+                        placeholder="<?php echo translate('password_placeholder', 'Password'); ?>" required>
+                    <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
+                        <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
+                    <?php endif; ?>
+                    <button type="submit"><?php echo translate('login_button', 'Sign In'); ?></button>
+                    <div class="register-link">
+                        <?php echo sprintf(translate('register_link_text', 'Don\'t have an account? <a href="%s">Register now</a>'), htmlspecialchars($base_path . 'register')); ?>
+                    </div>
+                    <div class="forgot-password-link">
+                        <?php echo sprintf(translate('forgot_password_link_text', 'Forgot your password? <a href="%s">Reset it here</a>'), htmlspecialchars($base_path . 'forgot_password')); ?>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<?php endif; ?>
-<?php include_once $project_root . 'includes/footer.php'; ?>
+    <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <?php endif; ?>
+    <?php include_once $project_root . 'includes/footer.php'; ?>
 </body>
+
 </html>

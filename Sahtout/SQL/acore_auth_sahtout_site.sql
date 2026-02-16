@@ -40,3 +40,8 @@ SET SQL_MODE=@OLDTMP_SQL_MODE;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
+-- Sync existing accounts (Added by fix)
+INSERT IGNORE INTO `sahtout_site`.`user_currencies` (account_id, username, email, points, tokens, avatar)
+SELECT id, username, email, 0, 0, NULL
+FROM `account`;
