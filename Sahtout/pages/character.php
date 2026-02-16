@@ -454,13 +454,13 @@ require_once $project_root . 'includes/header.php';
                             alt="<?php echo translate('default_character_image', 'Default Character Image'); ?>"
                             class="default-image">
                         <script type="importmap">
-                            {
-                                "imports": {
-                                    "three": "https://esm.sh/three@0.167.1",
-                                    "three/addons/": "https://esm.sh/three@0.167.1/examples/jsm/"
+                                {
+                                    "imports": {
+                                        "three": "https://esm.sh/three@0.167.1",
+                                        "three/addons/": "https://esm.sh/three@0.167.1/examples/jsm/"
+                                    }
                                 }
-                            }
-                        </script>
+                            </script>
                         <script type="module">
                             import * as THREE from 'three';
                             import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -486,7 +486,7 @@ require_once $project_root . 'includes/header.php';
                             <?php
                             $raceIcon = isset($races[$character['race']]) ? $races[$character['race']]['icon'] : 'unknown';
                             $gender = ($character['gender'] ?? 0) == 0 ? 'male' : 'female';
-                            $modelPath = "$base_path/3dmodels/character/$raceIcon/$gender/$raceIcon.gltf";
+                            $modelPath = "{$base_path}3dmodels/character/$raceIcon/$gender/$raceIcon.gltf";
                             ?>
                             const modelPath = <?= json_encode($modelPath) ?>;
 
@@ -803,7 +803,8 @@ require_once $project_root . 'includes/header.php';
                     <div class="pvp-team"><?php echo translate('pvp_none', 'No PvP Teams'); ?></div>
                 <?php endif; ?>
                 <div class="pvp-kills"><?php echo translate('pvp_total_kills', 'Total PvP Kills'); ?>:
-                    <span><?= number_format($total_kills) ?></span></div>
+                    <span><?= number_format($total_kills) ?></span>
+                </div>
             </div>
         <?php endif; ?>
         <div style="clear: both;"></div>

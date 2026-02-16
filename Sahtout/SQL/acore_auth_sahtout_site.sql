@@ -45,3 +45,12 @@ SET SQL_MODE=@OLDTMP_SQL_MODE;
 INSERT IGNORE INTO `sahtout_site`.`user_currencies` (account_id, username, email, points, tokens, avatar)
 SELECT id, username, email, 0, 0, NULL
 FROM `account`;
+
+-- Update roles for existing GMs (Added by fix)
+UPDATE `sahtout_site`.`user_currencies` uc
+JOIN `account_access` aa ON uc.account_id = aa.id
+SET uc.role = CASE
+    WHEN aa.gmlevel >= 3 THEN 'admin'
+    WHEN aa.gmlevel >= 1 THEN 'moderator'
+    ELSE 'player'
+END;

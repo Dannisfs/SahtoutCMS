@@ -42,7 +42,7 @@ if (empty($_SESSION['csrf_token'])) {
 
 // Define protected and admin pages
 $protected_pages = ['account.php', 'buy_item.php'];
-$admin_pages = ['dashboard.php', 'users.php', 'anews.php','characters.php','ashop.php','gm_cmd.php', 'logout.php','save_general.php'];
+$admin_pages = ['dashboard.php', 'users.php', 'anews.php', 'characters.php', 'ashop.php', 'gm_cmd.php', 'logout.php', 'save_general.php'];
 $current_page = basename($_SERVER['PHP_SELF']);
 
 // Validate session for protected and admin pages
@@ -89,8 +89,8 @@ if (in_array($current_page, $protected_pages) || in_array($current_page, $admin_
     $_SESSION['gmlevel'] = $result->num_rows > 0 ? $result->fetch_assoc()['gmlevel'] : 0;
     $stmt->close();
 
-    // Restrict admin pages to admin or moderator
-    if (in_array($current_page, $admin_pages) && !in_array($_SESSION['role'], ['admin', 'moderator'])) {
+    // Restrict admin pages to admin or moderator, or GM Level > 0
+    if (in_array($current_page, $admin_pages) && !in_array($_SESSION['role'], ['admin', 'moderator']) && $_SESSION['gmlevel'] == 0) {
         $_SESSION['debug_errors'] = ["Unauthorized access to admin page."];
         header('Location: ' . $base_path . 'login?error=unauthorized');
         exit();
@@ -98,7 +98,7 @@ if (in_array($current_page, $protected_pages) || in_array($current_page, $admin_
 }
 
 // For login, register, and activate pages, redirect to account if already logged in
-$public_pages = ['login.php', 'register.php', 'activate.php','forgot-password.php', 'reset_password.php','resend-activation.php'];
+$public_pages = ['login.php', 'register.php', 'activate.php', 'forgot-password.php', 'reset_password.php', 'resend-activation.php'];
 if (in_array($current_page, $public_pages) && !empty($_SESSION['user_id']) && !empty($_SESSION['username'])) {
     /** @var \mysqli_stmt|false $stmt */
     $stmt = $auth_db->prepare("SELECT id FROM account WHERE id = ? AND username = ?");

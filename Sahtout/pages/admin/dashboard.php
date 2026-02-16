@@ -11,19 +11,21 @@ define('DB_AUTH', $db_auth_name);
 define('DB_CHAR', $db_char_name);
 define('DB_WORLD', $db_world_name);
 define('DB_SITE', $db_site_name);
-// Check if user is admin or moderator
-if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'moderator'])) {
+// Check if user is admin, moderator, or GM
+if (!isset($_SESSION['user_id']) || (!in_array($_SESSION['role'], ['admin', 'moderator']) && $_SESSION['gmlevel'] == 0)) {
     header("Location: {$base_path}login");
     exit;
 }
 
 // Function to get online status
-function getOnlineStatus($online) {
+function getOnlineStatus($online)
+{
     return $online ? "<span style='color: #55ff55'>" . translate('admin_dashboard_status_online', 'Online') . "</span>" : "<span style='color: #ff5555'>" . translate('admin_dashboard_status_offline', 'Offline') . "</span>";
 }
 
 // Function to get account status
-function getAccountStatus($locked, $banInfo) {
+function getAccountStatus($locked, $banInfo)
+{
     if (!empty($banInfo)) {
         $reason = htmlspecialchars($banInfo['banreason'] ?? translate('admin_dashboard_no_reason_provided', 'No reason provided'));
         $unbanDate = $banInfo['unbandate'] ? date('Y-m-d H:i:s', $banInfo['unbandate']) : translate('admin_dashboard_permanent', 'Permanent');
@@ -78,12 +80,12 @@ $types = '';
 if ($search_username) {
     $users_query .= " AND username LIKE ?";
     $params[] = "%$search_username%";
-    $types   .= 's';
+    $types .= 's';
 }
 if ($role_filter) {
     $users_query .= " AND role = ?";
     $params[] = $role_filter;
-    $types   .= 's';
+    $types .= 's';
 }
 $users_query .= " ORDER BY last_updated DESC LIMIT 5";
 
@@ -108,7 +110,7 @@ $stmt->close();
    ------------------------------------------------------------------ */
 if (!empty($account_ids)) {
     $placeholders = implode(',', array_fill(0, count($account_ids), '?'));
-    $auth_query   = "SELECT id, email, online, locked
+    $auth_query = "SELECT id, email, online, locked
                      FROM " . DB_AUTH . ".account
                      WHERE id IN ($placeholders)";
 
@@ -120,7 +122,7 @@ if (!empty($account_ids)) {
     while ($auth = $auth_result->fetch_assoc()) {
         $aid = $auth['id'];
         if (isset($users[$aid])) {
-            $users[$aid]['email']  = $auth['email'];
+            $users[$aid]['email'] = $auth['email'];
             $users[$aid]['online'] = $auth['online'];
             $users[$aid]['locked'] = $auth['locked'];
         }
@@ -157,10 +159,12 @@ $bans_result = $auth_db->query($bans_query);
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($_SESSION['lang'] ?? 'en'); ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?php echo translate('admin_dashboard_meta_description', 'Admin and Moderator Dashboard for Sahtout WoW Server'); ?>">
+    <meta name="description"
+        content="<?php echo translate('admin_dashboard_meta_description', 'Admin and Moderator Dashboard for Sahtout WoW Server'); ?>">
     <meta name="robots" content="noindex">
     <title><?php echo translate('admin_dashboard_page_title', 'Admin & Moderator Dashboard'); ?></title>
     <link rel="icon" href="<?php echo $base_path . $site_logo; ?>" type="image/x-icon">
@@ -170,6 +174,7 @@ $bans_result = $auth_db->query($bans_query);
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body class="dashboard">
     <div class="wrapper">
         <?php include $project_root . 'includes/header.php'; ?>
@@ -179,87 +184,122 @@ $bans_result = $auth_db->query($bans_query);
                 <?php include $project_root . 'includes/admin_sidebar.php'; ?>
                 <!-- Main Content -->
                 <div class="col-md-9">
-                    <h1 class="dashboard-title"><?php echo translate('admin_dashboard_title', 'Admin & Moderator Dashboard'); ?></h1>
+                    <h1 class="dashboard-title">
+                        <?php echo translate('admin_dashboard_title', 'Admin & Moderator Dashboard'); ?></h1>
                     <!-- Server Status -->
                     <div class="card server-status">
-                        <div class="card-header"><?php echo translate('admin_dashboard_server_status_header', 'Server Status'); ?></div>
+                        <div class="card-header">
+                            <?php echo translate('admin_dashboard_server_status_header', 'Server Status'); ?></div>
                         <div class="card-body">
-                            <?php 
-                            include $project_root . 'includes/realm_status.php'; 
+                            <?php
+                            include $project_root . 'includes/realm_status.php';
                             ?>
                         </div>
                     </div>
                     <!-- Quick Stats -->
                     <div class="card quick-stats">
-                        <div class="card-header"><?php echo translate('admin_dashboard_quick_stats_header', 'Quick Stats'); ?></div>
+                        <div class="card-header">
+                            <?php echo translate('admin_dashboard_quick_stats_header', 'Quick Stats'); ?></div>
                         <div class="card-body">
                             <div class="quick-stats">
                                 <ul>
-                                    <li><span class="stat-label"><?php echo translate('admin_dashboard_total_website_users', 'Total Website Users'); ?>:</span> <span class="stat-value"><?php echo htmlspecialchars($total_users); ?></span></li>
-                                    <li><span class="stat-label"><?php echo translate('admin_dashboard_total_ingame_accounts', 'Total In-Game Accounts'); ?>:</span> <span class="stat-value"><?php echo htmlspecialchars($total_accounts); ?></span></li>
-                                    <li><span class="stat-label"><?php echo translate('admin_dashboard_total_characters', 'Total Characters'); ?>:</span> <span class="stat-value"><?php echo htmlspecialchars($total_chars); ?></span></li>
-                                    <li><span class="stat-label"><?php echo translate('admin_dashboard_active_bans', 'Active Bans'); ?>:</span> <span class="stat-value"><?php echo htmlspecialchars($total_bans); ?></span></li>
+                                    <li><span
+                                            class="stat-label"><?php echo translate('admin_dashboard_total_website_users', 'Total Website Users'); ?>:</span>
+                                        <span class="stat-value"><?php echo htmlspecialchars($total_users); ?></span>
+                                    </li>
+                                    <li><span
+                                            class="stat-label"><?php echo translate('admin_dashboard_total_ingame_accounts', 'Total In-Game Accounts'); ?>:</span>
+                                        <span class="stat-value"><?php echo htmlspecialchars($total_accounts); ?></span>
+                                    </li>
+                                    <li><span
+                                            class="stat-label"><?php echo translate('admin_dashboard_total_characters', 'Total Characters'); ?>:</span>
+                                        <span class="stat-value"><?php echo htmlspecialchars($total_chars); ?></span>
+                                    </li>
+                                    <li><span
+                                            class="stat-label"><?php echo translate('admin_dashboard_active_bans', 'Active Bans'); ?>:</span>
+                                        <span class="stat-value"><?php echo htmlspecialchars($total_bans); ?></span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <!-- Recent Admins & Moderators -->
                     <div class="card">
-                        <div class="card-header"><?php echo translate('admin_dashboard_recent_staff_header', 'Recent Admins & Moderators'); ?></div>
+                        <div class="card-header">
+                            <?php echo translate('admin_dashboard_recent_staff_header', 'Recent Admins & Moderators'); ?>
+                        </div>
                         <div class="card-body">
                             <!-- Search and Filter Form -->
                             <form class="search-form" method="GET" action="<?php echo $base_path; ?>admin/dashboard">
                                 <div class="row mb-3">
                                     <div class="col-md-4">
-                                        <input type="text" name="search_username" class="form-control" placeholder="<?php echo translate('admin_dashboard_search_username_placeholder', 'Search by username'); ?>" value="<?php echo htmlspecialchars($search_username); ?>">
+                                        <input type="text" name="search_username" class="form-control"
+                                            placeholder="<?php echo translate('admin_dashboard_search_username_placeholder', 'Search by username'); ?>"
+                                            value="<?php echo htmlspecialchars($search_username); ?>">
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" name="search_email" class="form-control" placeholder="<?php echo translate('admin_dashboard_search_email_placeholder', 'Search by email'); ?>" value="<?php echo htmlspecialchars($search_email); ?>">
+                                        <input type="text" name="search_email" class="form-control"
+                                            placeholder="<?php echo translate('admin_dashboard_search_email_placeholder', 'Search by email'); ?>"
+                                            value="<?php echo htmlspecialchars($search_email); ?>">
                                     </div>
                                     <div class="col-md-4">
                                         <select name="role_filter" class="form-select">
-                                            <option value="" <?php echo $role_filter === '' ? 'selected' : ''; ?>><?php echo translate('admin_dashboard_all_staff_roles', 'All Staff Roles'); ?></option>
-                                            <option value="moderator" <?php echo $role_filter === 'moderator' ? 'selected' : ''; ?>><?php echo translate('admin_dashboard_role_moderator', 'Moderator'); ?></option>
-                                            <option value="admin" <?php echo $role_filter === 'admin' ? 'selected' : ''; ?>><?php echo translate('admin_dashboard_role_admin', 'Admin'); ?></option>
+                                            <option value="" <?php echo $role_filter === '' ? 'selected' : ''; ?>>
+                                                <?php echo translate('admin_dashboard_all_staff_roles', 'All Staff Roles'); ?>
+                                            </option>
+                                            <option value="moderator" <?php echo $role_filter === 'moderator' ? 'selected' : ''; ?>>
+                                                <?php echo translate('admin_dashboard_role_moderator', 'Moderator'); ?>
+                                            </option>
+                                            <option value="admin" <?php echo $role_filter === 'admin' ? 'selected' : ''; ?>><?php echo translate('admin_dashboard_role_admin', 'Admin'); ?>
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="input-group mb-3 justify-content-center">
-                                    <button class="btn" type="submit"><?php echo translate('admin_dashboard_apply_button', 'Apply'); ?></button>
+                                    <button class="btn"
+                                        type="submit"><?php echo translate('admin_dashboard_apply_button', 'Apply'); ?></button>
                                 </div>
                             </form>
                             <div class="table-wrapper">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th><?php echo translate('admin_dashboard_table_username', 'Username'); ?></th>
+                                            <th><?php echo translate('admin_dashboard_table_username', 'Username'); ?>
+                                            </th>
                                             <th><?php echo translate('admin_dashboard_table_email', 'Email'); ?></th>
                                             <th><?php echo translate('admin_dashboard_table_points', 'Points'); ?></th>
                                             <th><?php echo translate('admin_dashboard_table_tokens', 'Tokens'); ?></th>
                                             <th><?php echo translate('admin_dashboard_table_role', 'Role'); ?></th>
                                             <th><?php echo translate('admin_dashboard_table_online', 'Online'); ?></th>
-                                            <th><?php echo translate('admin_dashboard_table_ban_status', 'Ban Status'); ?></th>
-                                            <th><?php echo translate('admin_dashboard_table_last_updated', 'Last Updated'); ?></th>
+                                            <th><?php echo translate('admin_dashboard_table_ban_status', 'Ban Status'); ?>
+                                            </th>
+                                            <th><?php echo translate('admin_dashboard_table_last_updated', 'Last Updated'); ?>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php if (empty($users)): ?>
                                             <tr>
-                                                <td colspan="8"><?php echo translate('admin_dashboard_no_staff_found', 'No admins or moderators found.'); ?></td>
+                                                <td colspan="8">
+                                                    <?php echo translate('admin_dashboard_no_staff_found', 'No admins or moderators found.'); ?>
+                                                </td>
                                             </tr>
                                         <?php else: ?>
                                             <?php foreach ($users as $user): ?>
                                                 <tr>
                                                     <td><?php echo htmlspecialchars($user['username']); ?></td>
-                                                    <td><?php echo htmlspecialchars($user['email'] ?? translate('admin_dashboard_email_not_set', 'Not set')); ?></td>
+                                                    <td><?php echo htmlspecialchars($user['email'] ?? translate('admin_dashboard_email_not_set', 'Not set')); ?>
+                                                    </td>
                                                     <td><?php echo htmlspecialchars($user['points']); ?></td>
                                                     <td><?php echo htmlspecialchars($user['tokens']); ?></td>
                                                     <td><span class="status-<?php echo htmlspecialchars($user['role']); ?>">
-                                                        <?php echo ucfirst(translate('admin_dashboard_role_' . $user['role'], ucfirst($user['role']))); ?>
-                                                    </span></td>
+                                                            <?php echo ucfirst(translate('admin_dashboard_role_' . $user['role'], ucfirst($user['role']))); ?>
+                                                        </span></td>
                                                     <td><?php echo getOnlineStatus($user['online'] ?? 0); ?></td>
-                                                    <td><?php echo getAccountStatus($user['locked'] ?? 0, $user['banInfo'] ?? []); ?></td>
-                                                    <td><?php echo $user['last_updated'] ? date('M j, Y H:i', strtotime($user['last_updated'])) : translate('admin_dashboard_never', 'Never'); ?></td>
+                                                    <td><?php echo getAccountStatus($user['locked'] ?? 0, $user['banInfo'] ?? []); ?>
+                                                    </td>
+                                                    <td><?php echo $user['last_updated'] ? date('M j, Y H:i', strtotime($user['last_updated'])) : translate('admin_dashboard_never', 'Never'); ?>
+                                                    </td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
@@ -270,35 +310,47 @@ $bans_result = $auth_db->query($bans_query);
                     </div>
                     <!-- Recent Bans -->
                     <div class="card">
-                        <div class="card-header"><?php echo translate('admin_dashboard_recent_bans_header', 'Recent Bans'); ?></div>
+                        <div class="card-header">
+                            <?php echo translate('admin_dashboard_recent_bans_header', 'Recent Bans'); ?></div>
                         <div class="card-body">
                             <div class="table-wrapper">
                                 <table class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th><?php echo translate('admin_dashboard_table_account_id', 'Account ID'); ?></th>
-                                            <th><?php echo translate('admin_dashboard_table_username', 'Username'); ?></th>
-                                            <th><?php echo translate('admin_dashboard_table_ban_reason', 'Ban Reason'); ?></th>
-                                            <th><?php echo translate('admin_dashboard_table_ban_date', 'Ban Date'); ?></th>
-                                            <th><?php echo translate('admin_dashboard_table_unban_date', 'Unban Date'); ?></th>
+                                            <th><?php echo translate('admin_dashboard_table_account_id', 'Account ID'); ?>
+                                            </th>
+                                            <th><?php echo translate('admin_dashboard_table_username', 'Username'); ?>
+                                            </th>
+                                            <th><?php echo translate('admin_dashboard_table_ban_reason', 'Ban Reason'); ?>
+                                            </th>
+                                            <th><?php echo translate('admin_dashboard_table_ban_date', 'Ban Date'); ?>
+                                            </th>
+                                            <th><?php echo translate('admin_dashboard_table_unban_date', 'Unban Date'); ?>
+                                            </th>
                                             <th><?php echo translate('admin_dashboard_table_action', 'Action'); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php if ($bans_result->num_rows === 0): ?>
                                             <tr>
-                                                <td colspan="6"><?php echo translate('admin_dashboard_no_bans_found', 'No bans found.'); ?></td>
+                                                <td colspan="6">
+                                                    <?php echo translate('admin_dashboard_no_bans_found', 'No bans found.'); ?>
+                                                </td>
                                             </tr>
                                         <?php else: ?>
                                             <?php while ($ban = $bans_result->fetch_assoc()): ?>
                                                 <tr>
                                                     <td><?php echo htmlspecialchars($ban['id']); ?></td>
                                                     <td><?php echo htmlspecialchars($ban['username']); ?></td>
-                                                    <td><?php echo htmlspecialchars($ban['banreason'] ?? translate('admin_dashboard_no_reason_provided', 'No reason provided')); ?></td>
-                                                    <td><?php echo $ban['bandate'] ? date('M j, Y H:i', strtotime($ban['bandate'])) : translate('admin_dashboard_na', 'N/A'); ?></td>
-                                                    <td><?php echo $ban['unbandate'] ? date('M j, Y H:i', strtotime($ban['unbandate'])) : translate('admin_dashboard_permanent', 'Permanent'); ?></td>
+                                                    <td><?php echo htmlspecialchars($ban['banreason'] ?? translate('admin_dashboard_no_reason_provided', 'No reason provided')); ?>
+                                                    </td>
+                                                    <td><?php echo $ban['bandate'] ? date('M j, Y H:i', strtotime($ban['bandate'])) : translate('admin_dashboard_na', 'N/A'); ?>
+                                                    </td>
+                                                    <td><?php echo $ban['unbandate'] ? date('M j, Y H:i', strtotime($ban['unbandate'])) : translate('admin_dashboard_permanent', 'Permanent'); ?>
+                                                    </td>
                                                     <td>
-                                                        <a href="<?php echo $base_path; ?>admin/users#user-<?php echo $ban['id']; ?>" class="btn"><?php echo translate('admin_dashboard_manage_button', 'Manage'); ?></a>
+                                                        <a href="<?php echo $base_path; ?>admin/users#user-<?php echo $ban['id']; ?>"
+                                                            class="btn"><?php echo translate('admin_dashboard_manage_button', 'Manage'); ?></a>
                                                     </td>
                                                 </tr>
                                             <?php endwhile; ?>
@@ -316,8 +368,9 @@ $bans_result = $auth_db->query($bans_query);
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
-<?php 
+<?php
 $site_db->close();
 $auth_db->close();
 if (isset($char_db)) {
