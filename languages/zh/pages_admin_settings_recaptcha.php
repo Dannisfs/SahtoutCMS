@@ -1,0 +1,25 @@
+<?php
+return [
+    'page_title_recaptcha' => '验证码设置',
+    'settings_recaptcha' => '验证码设置',
+    'msg_recaptcha_enabled' => '验证码当前已启用。',
+    'msg_recaptcha_disabled' => '验证码当前已禁用。',
+    'err_fix_errors' => '请修复以下错误：',
+    'msg_recaptcha_saved' => '验证码设置保存成功！',
+    'label_captcha_type' => '验证码类型',
+    'option_recaptcha' => 'reCAPTCHA',
+    'option_hcaptcha' => 'hCaptcha（即将推出）',
+    'option_other' => '其他（即将推出）',
+    'label_recaptcha_enabled' => '启用验证码',
+    'label_recaptcha_site_key' => '站点密钥',
+    'label_recaptcha_secret_key' => '安全密钥',
+    'placeholder_recaptcha_default' => '留空使用默认值',
+    'note_recaptcha_empty' => '启用时留空验证码字段将使用默认密钥',
+    'btn_save_recaptcha' => '保存验证码设置',
+    'error_direct_access' => '不允许直接访问。',
+    'err_invalid_captcha_type' => '选择了无效的验证码类型。仅支持reCAPTCHA。',
+    'err_recaptcha_keys_required' => '启用reCAPTCHA时需要站点密钥和安全密钥。',
+    'err_cap_dir_not_writable' => '验证码配置目录不可写：%s',
+    'err_failed_write_cap' => '写入验证码配置文件失败：%s',
+];
+?>

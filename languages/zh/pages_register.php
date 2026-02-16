@@ -1,0 +1,31 @@
+<?php
+return [
+    'page_title' => ' - 创建账户',
+    'meta_description' => '创建账户，加入我们的魔兽世界服务器冒险！',
+    'register_title' => '创建您的账户',
+    'username_placeholder' => '用户名',
+    'email_placeholder' => '邮箱',
+    'password_placeholder' => '密码',
+    'password_confirm_placeholder' => '确认密码',
+    'register_button' => '注册',
+    'login_link_text' => '点击此处登录',
+    'login_link_text_alt' => '已有账户？<a href="%s">登录</a>',
+    'email_subject' => '激活您的账户',
+    'email_greeting' => '欢迎，{username}！',
+    'email_body' => '感谢您的注册。请点击下面的按钮激活您的账户：',
+    'email_activate_button' => '激活账户',
+    'email_ignore' => '如果您没有注册，请忽略此邮件。',
+    'error_recaptcha_empty' => '请完成验证码。',
+    'error_recaptcha_failed' => '验证码验证失败。',
+    'error_username_invalid_length' => '用户名长度必须在3到16个字符之间。',
+    'error_username_invalid_chars' => '用户名只能包含字母和数字。',
+    'error_email_invalid' => '无效的邮箱地址。',
+    'error_password_short' => '密码长度至少6个字符。',
+    'error_password_mismatch' => '两次输入的密码不一致。',
+    'error_account_pending' => '该用户名或邮箱已存在待激活或已注册的账户。请使用其他用户名或邮箱，或激活现有账户。',
+    'error_username_exists' => '用户名已存在，请选择其他用户名。',
+    'error_email_exists' => '邮箱已被使用，请选择其他邮箱。',
+    'error_registration_failed' => '存储待激活账户失败。',
+    'error_email_failed' => '发送激活邮件失败，请联系客服。'
+];
+?>
