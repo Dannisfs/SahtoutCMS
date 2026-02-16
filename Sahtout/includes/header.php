@@ -217,10 +217,8 @@ $current_lang_flag = $languages[$current_lang]['flag_url'];
     <?php endif; ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Global font: Microsoft YaHei */
-        *,
-        *::before,
-        *::after {
+        /* Global font: Microsoft YaHei (exclude icon fonts) */
+        *:not(i):not(.fa):not(.fas):not(.fab):not(.far):not(.fal):not(.fad) {
             font-family: 'Microsoft YaHei', '微软雅黑', 'PingFang SC', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif !important;
         }
     </style>
