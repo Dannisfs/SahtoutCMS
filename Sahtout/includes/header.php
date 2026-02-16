@@ -1,5 +1,5 @@
 <?php
-    ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 // Include paths.php to access $project_root and $base_path
@@ -37,7 +37,8 @@ $currentUrl = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $currentUrl = rtrim($currentUrl, '/');
 
 // Function to generate language URLs
-function getLanguageUrl($lang) {
+function getLanguageUrl($lang)
+{
     global $currentUrl;
 
     // Get current query parameters (excluding the path)
@@ -66,7 +67,7 @@ if (isset($_SESSION['user_id'])) {
         $avatar_filename = $_SESSION['avatar'] !== '' ? $_SESSION['avatar'] : 'user.jpg';
         $avatar = $base_path . 'img/accountimg/profile_pics/' . $avatar_filename;
     }
-    
+
     // Query site_db for points, tokens, avatar, and role
     $stmt_site = $site_db->prepare("
         SELECT points, tokens, avatar, role 
@@ -79,27 +80,27 @@ if (isset($_SESSION['user_id'])) {
         FROM account 
         WHERE id = ?
     ");
-    
+
     if ($stmt_site && $stmt_auth) {
         // Bind and execute site_db query
         $stmt_site->bind_param('i', $_SESSION['user_id']);
         $stmt_site->execute();
         $result_site = $stmt_site->get_result();
-        
+
         // Bind and execute auth_db query
         $stmt_auth->bind_param('i', $_SESSION['user_id']);
         $stmt_auth->execute();
         $result_auth = $stmt_auth->get_result();
-        
+
         if ($result_site && $result_site->num_rows > 0 && $result_auth && $result_auth->num_rows > 0) {
             $row_site = $result_site->fetch_assoc();
             $row_auth = $result_auth->fetch_assoc();
-            
-            $points = (int)$row_site['points'];
-            $tokens = (int)$row_site['tokens'];
+
+            $points = (int) $row_site['points'];
+            $tokens = (int) $row_site['tokens'];
             $email = htmlspecialchars($row_auth['email'] ?? 'user@example.com', ENT_QUOTES, 'UTF-8');
             $role = $row_site['role'] ?? 'player';
-            
+
             // Check if avatar is valid in profile_avatars
             if (!empty($row_site['avatar'])) {
                 $stmt_check = $site_db->prepare("SELECT filename FROM profile_avatars WHERE filename = ? AND active = 1");
@@ -132,7 +133,7 @@ if (isset($_SESSION['user_id'])) {
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             $gmData = $result->fetch_assoc();
-            $gmlevel = (int)$gmData['gmlevel'];
+            $gmlevel = (int) $gmData['gmlevel'];
         }
         $stmt->close();
     } else {
@@ -193,16 +194,19 @@ $current_lang_flag = $languages[$current_lang]['flag_url'];
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $current_lang; ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="<?php echo $base_path; ?>">
     <?php if ($page_class === "how_to_play"): ?>
-        <title><?php echo $site_title_name . translate('how_to_play_title', 'How to Play');?> </title> 
-        <?php endif; ?>
+        <title><?php echo $site_title_name . translate('how_to_play_title', 'How to Play'); ?> </title>
+    <?php endif; ?>
     <link rel="icon" href="<?php echo $base_path . $site_logo; ?>" type="image/x-icon">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/header.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=UnifrakturCook:wght@700&display=swap"
+        rel="stylesheet">
     <?php if (file_exists($project_root . "assets/css/{$page_class}.css")): ?>
         <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/<?php echo $page_class; ?>.css">
     <?php endif; ?>
@@ -210,27 +214,31 @@ $current_lang_flag = $languages[$current_lang]['flag_url'];
 </head>
 <style>
     :root {
-    --point-wow-gif: url('<?php echo $base_path; ?>img/pointer_wow.gif');
-    --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
-}
+        --point-wow-gif: url('<?php echo $base_path; ?>img/pointer_wow.gif');
+        --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
+    }
 </style>
 
 
 <body class="<?php echo $page_class; ?>">
     <header>
-        <a href="<?php echo $base_path; ?>"><img src="<?php echo $base_path . $site_logo; ?>" alt="Sahtout Server Logo" height="80"></a>
+        <a href="<?php echo $base_path; ?>"><img src="<?php echo $base_path . $site_logo; ?>" alt="Sahtout Server Logo"
+                height="80"></a>
         <button class="nav-toggle" aria-label="Toggle navigation">
             <span class="hamburger"></span>
         </button>
         <nav class="<?php echo empty($_SESSION['user_id']) ? 'no-session' : ''; ?>">
             <button class="nav-close" aria-label="Close navigation">✖</button>
             <a href=""><?php echo translate('nav_home', 'Home'); ?></a>
-            <a href="<?php echo $base_path; ?>how_to_play"><?php echo translate('nav_how_to_play', 'How to Play'); ?></a>
+            <a
+                href="<?php echo $base_path; ?>how_to_play"><?php echo translate('nav_how_to_play', 'How to Play'); ?></a>
             <a href="<?php echo $base_path; ?>news"><?php echo translate('nav_news', 'News'); ?></a>
             <a href="<?php echo $base_path; ?>armory/solo_pvp"><?php echo translate('nav_armory', 'Armory'); ?></a>
             <a href="<?php echo $base_path; ?>shop"><?php echo translate('nav_shop', 'Shop'); ?></a>
+            <a href="<?php echo $base_path; ?>playermap/" target="_blank"><?php echo translate('nav_map', 'Map'); ?></a>
             <?php if (empty($_SESSION['user_id'])): ?>
-                <a href="<?php echo $base_path; ?>register" class="register"><?php echo translate('nav_register', 'Register'); ?></a>
+                <a href="<?php echo $base_path; ?>register"
+                    class="register"><?php echo translate('nav_register', 'Register'); ?></a>
                 <a href="<?php echo $base_path; ?>login" class="login"><?php echo translate('nav_login', 'Login'); ?></a>
             <?php else: ?>
                 <a href="<?php echo $base_path; ?>account"><?php echo translate('nav_account', 'Account'); ?></a>
@@ -250,17 +258,21 @@ $current_lang_flag = $languages[$current_lang]['flag_url'];
                         <div class="dropdown-header">
                             <img src="<?php echo $avatar; ?>" alt="User Profile" class="dropdown-image">
                             <div class="user-info">
-                                <span class="username"><?php echo htmlspecialchars($_SESSION['username'] ?? 'User', ENT_QUOTES, 'UTF-8'); ?></span>
+                                <span
+                                    class="username"><?php echo htmlspecialchars($_SESSION['username'] ?? 'User', ENT_QUOTES, 'UTF-8'); ?></span>
                                 <span class="email"><?php echo $email; ?></span>
                                 <div class="dropdown-currency">
-                                    <span class="points"><i class="fas fa-coins"></i> <?php echo translate('points', 'Points'); ?>: <?php echo $points; ?></span>
-                                    <span class="tokens"><i class="fas fa-gem"></i> <?php echo translate('tokens', 'Tokens'); ?>: <?php echo $tokens; ?></span>
+                                    <span class="points"><i class="fas fa-coins"></i>
+                                        <?php echo translate('points', 'Points'); ?>: <?php echo $points; ?></span>
+                                    <span class="tokens"><i class="fas fa-gem"></i>
+                                        <?php echo translate('tokens', 'Tokens'); ?>: <?php echo $tokens; ?></span>
                                 </div>
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
                         <a style="color: #ffffff;" href="<?php echo $base_path; ?>account" class="dropdown-item">
-                            <i class="fas fa-user-circle"></i> <?php echo translate('account_settings', 'Account Settings'); ?>
+                            <i class="fas fa-user-circle"></i>
+                            <?php echo translate('account_settings', 'Account Settings'); ?>
                         </a>
                         <?php if ($gmlevel > 0 || $role === 'admin' || $role === 'moderator'): ?>
                             <a href="<?php echo $base_path; ?>admin/dashboard" class="dropdown-item admin-panel">
@@ -307,4 +319,5 @@ $current_lang_flag = $languages[$current_lang]['flag_url'];
     </header>
     <script src="<?php echo $base_path; ?>assets/js/includes/header.js"></script>
 </body>
+
 </html>
