@@ -1,0 +1,216 @@
+/* ========================================
+   Server Status & Top Players Widget
+   ======================================== */
+
+.server-status-widget,
+.top-players-widget {
+    padding: 40px 20px;
+    margin: 0 auto;
+    max-width: 960px;
+}
+
+.status-container {
+    background: rgba(10, 10, 25, 0.85);
+    border: 1px solid rgba(100, 80, 40, 0.4);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 215, 0, 0.05);
+    backdrop-filter: blur(10px);
+}
+
+.status-title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #EABA28;
+    text-align: center;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 2px 8px rgba(234, 186, 40, 0.3);
+}
+
+.status-title i {
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.status-subtitle {
+    text-align: center;
+    color: #8a8a9a;
+    font-size: 14px;
+    margin: 0 0 5px 0;
+}
+
+.realm-info {
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+.realm-name {
+    color: #4da6ff;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.player-count {
+    color: #8a8a9a;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+/* Table Styles */
+.status-table-wrap {
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.status-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.status-table thead th {
+    background: rgba(30, 30, 50, 0.9);
+    color: #bbb;
+    padding: 12px 16px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+    border-bottom: 2px solid rgba(100, 80, 40, 0.4);
+}
+
+.status-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s;
+}
+
+.status-table tbody tr:hover {
+    background: rgba(234, 186, 40, 0.08);
+}
+
+.status-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.status-table tbody tr:nth-child(even):hover {
+    background: rgba(234, 186, 40, 0.08);
+}
+
+.status-table td {
+    padding: 10px 16px;
+    text-align: center;
+    color: #ccc;
+    vertical-align: middle;
+}
+
+.status-table td img {
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+}
+
+.status-table .player-name {
+    color: #e0e0e0;
+    font-weight: 600;
+    text-align: left;
+}
+
+.status-table .player-level {
+    color: #EABA28;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.no-players {
+    text-align: center;
+    color: #4da6ff;
+    padding: 30px;
+    font-size: 14px;
+}
+
+/* Top Players Tabs */
+.top-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+.top-tab {
+    background: linear-gradient(135deg, #1a5276, #1a3c5e);
+    color: #e0e0e0;
+    border: 1px solid rgba(77, 166, 255, 0.3);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.top-tab:hover {
+    background: linear-gradient(135deg, #1f6da0, #1a5276);
+    border-color: rgba(77, 166, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(77, 166, 255, 0.2);
+}
+
+.top-tab.active {
+    background: linear-gradient(135deg, #2980b9, #1a5276);
+    border-color: #4da6ff;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(77, 166, 255, 0.3);
+}
+
+.top-tab i {
+    margin-right: 6px;
+}
+
+/* Top Panels */
+.top-panel {
+    display: none;
+    animation: fadeInPanel 0.3s ease;
+}
+
+.top-panel.active {
+    display: block;
+}
+
+@keyframes fadeInPanel {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .status-container {
+        padding: 20px 15px;
+    }
+
+    .status-title {
+        font-size: 22px;
+        letter-spacing: 1px;
+    }
+
+    .top-tab {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+
+    .status-table {
+        font-size: 12px;
+    }
+
+    .status-table thead th,
+    .status-table td {
+        padding: 8px 10px;
+    }
+}
