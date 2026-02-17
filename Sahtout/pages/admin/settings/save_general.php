@@ -40,24 +40,19 @@ if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
     $file_type = $_FILES['logo']['type'];
     $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
     $allowed_exts = ['png', 'svg', 'jpg', 'jpeg'];
-    $max_size = 3 * 1024 * 1024;
+    $max_size = 1073741824;
 
     if ($file_size > $max_size) {
-        $errors[] = translate('error_file_too_large', 'File size exceeds 3MB.');
-    }
-    elseif (!in_array($file_ext, $allowed_exts)) {
+        $errors[] = translate('error_file_too_large', 'File size exceeds 1GB.');
+    } elseif (!in_array($file_ext, $allowed_exts)) {
         $errors[] = translate('error_invalid_file_type', 'Invalid file type. Only PNG, SVG, or JPG allowed.');
-    }
-    elseif ($file_ext === 'png' && $file_type !== 'image/png') {
+    } elseif ($file_ext === 'png' && $file_type !== 'image/png') {
         $errors[] = translate('error_invalid_file_type', 'Invalid PNG file. MIME type must be image/png.');
-    }
-    elseif (in_array($file_ext, ['jpg', 'jpeg']) && !in_array($file_type, ['image/jpeg', 'image/jpg'])) {
+    } elseif (in_array($file_ext, ['jpg', 'jpeg']) && !in_array($file_type, ['image/jpeg', 'image/jpg'])) {
         $errors[] = translate('error_invalid_file_type', 'Invalid JPG file. MIME type must be image/jpeg or image/jpg.');
-    }
-    elseif ($file_ext === 'svg' && $file_type !== 'image/svg+xml') {
+    } elseif ($file_ext === 'svg' && $file_type !== 'image/svg+xml') {
         $errors[] = translate('error_invalid_file_type', 'Invalid SVG file. MIME type must be image/svg+xml.');
-    }
-    else {
+    } else {
         $upload_dir = $project_root . 'img/';
         if (!is_dir($upload_dir) || !is_writable($upload_dir)) {
             $errors[] = translate('error_file_upload_failed', 'Upload directory is not accessible or writable.');
@@ -76,10 +71,10 @@ if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
     // Your full upload error handling (kept 100% intact)
     switch ($_FILES['logo']['error']) {
         case UPLOAD_ERR_INI_SIZE:
-            $errors[] = translate('error_file_too_large', 'Logo file exceeds server upload limit (3MB).');
+            $errors[] = translate('error_file_too_large', 'Logo file exceeds server upload limit (1GB).');
             break;
         case UPLOAD_ERR_FORM_SIZE:
-            $errors[] = translate('error_file_too_large', 'Logo file exceeds form limit (3MB).');
+            $errors[] = translate('error_file_too_large', 'Logo file exceeds form limit (1GB).');
             break;
         case UPLOAD_ERR_PARTIAL:
             $errors[] = translate('error_file_upload_failed', 'Logo file was only partially uploaded.');
@@ -95,18 +90,24 @@ if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
+// Handle BugTracker URL
+$bugtracker_url_new = trim($_POST['bugtracker_url'] ?? '');
+if (!empty($bugtracker_url_new) && !filter_var($bugtracker_url_new, FILTER_VALIDATE_URL)) {
+    $errors[] = translate('error_invalid_bugtracker_url', 'Invalid BugTracker URL format.');
+}
+
 // Handle social links (YOUR ORIGINAL CODE - UNTOUCHED)
 $social_links_new = [
-    'facebook'  => filter_input(INPUT_POST, 'facebook', FILTER_VALIDATE_URL) ?: '',
-    'twitter'   => filter_input(INPUT_POST, 'twitter', FILTER_VALIDATE_URL) ?: '',
-    'tiktok'    => filter_input(INPUT_POST, 'tiktok', FILTER_VALIDATE_URL) ?: '',
-    'youtube'   => filter_input(INPUT_POST, 'youtube', FILTER_VALIDATE_URL) ?: '',
-    'discord'   => filter_input(INPUT_POST, 'discord', FILTER_VALIDATE_URL) ?: '',
-    'twitch'    => filter_input(INPUT_POST, 'twitch', FILTER_VALIDATE_URL) ?: '',
-    'kick'      => filter_input(INPUT_POST, 'kick', FILTER_VALIDATE_URL) ?: '',
+    'facebook' => filter_input(INPUT_POST, 'facebook', FILTER_VALIDATE_URL) ?: '',
+    'twitter' => filter_input(INPUT_POST, 'twitter', FILTER_VALIDATE_URL) ?: '',
+    'tiktok' => filter_input(INPUT_POST, 'tiktok', FILTER_VALIDATE_URL) ?: '',
+    'youtube' => filter_input(INPUT_POST, 'youtube', FILTER_VALIDATE_URL) ?: '',
+    'discord' => filter_input(INPUT_POST, 'discord', FILTER_VALIDATE_URL) ?: '',
+    'twitch' => filter_input(INPUT_POST, 'twitch', FILTER_VALIDATE_URL) ?: '',
+    'kick' => filter_input(INPUT_POST, 'kick', FILTER_VALIDATE_URL) ?: '',
     'instagram' => filter_input(INPUT_POST, 'instagram', FILTER_VALIDATE_URL) ?: '',
-    'github'    => filter_input(INPUT_POST, 'github', FILTER_VALIDATE_URL) ?: '',
-    'linkedin'  => filter_input(INPUT_POST, 'linkedin', FILTER_VALIDATE_URL) ?: '',
+    'github' => filter_input(INPUT_POST, 'github', FILTER_VALIDATE_URL) ?: '',
+    'linkedin' => filter_input(INPUT_POST, 'linkedin', FILTER_VALIDATE_URL) ?: '',
 ];
 
 // Update config.settings.php only if no errors
@@ -128,6 +129,10 @@ if (empty($errors)) {
         // === Logo ===
         $config_content .= "// Logo\n";
         $config_content .= "\$site_logo = " . var_export($logo_path, true) . ";\n\n";
+
+        // === BugTracker URL ===
+        $config_content .= "// BugTracker URL\n";
+        $config_content .= "\$bugtracker_url = " . var_export($bugtracker_url_new, true) . ";\n\n";
 
         // === Social Links ===
         $config_content .= "// Social links\n";

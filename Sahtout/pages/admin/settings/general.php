@@ -16,6 +16,7 @@ require_once $project_root . 'includes/header.php';
 
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langCode); ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,8 +30,9 @@ require_once $project_root . 'includes/header.php';
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
 </head>
+
 <body>
-    <div class="container-fluid">
+    <div class="dashboard-container">
         <div class="row">
             <?php include $project_root . 'includes/admin_sidebar.php'; ?>
 
@@ -44,7 +46,8 @@ require_once $project_root . 'includes/header.php';
                     <?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>
                         <div class="success-box mb-3 col-md-6 mx-auto">
                             <span class="db-status-icon db-status-success">Success</span>
-                            <span class="success"><?php echo translate('msg_settings_saved', 'Settings updated successfully!'); ?></span>
+                            <span
+                                class="success"><?php echo translate('msg_settings_saved', 'Settings updated successfully!'); ?></span>
                         </div>
                     <?php elseif (isset($_GET['status']) && $_GET['status'] === 'error'): ?>
                         <div class="error-box mb-3 col-md-6 mx-auto">
@@ -58,23 +61,23 @@ require_once $project_root . 'includes/header.php';
 
                     <!-- General Settings Form -->
                     <div class="row justify-content-center">
-                        <form action="<?php echo $base_path; ?>pages/admin/settings/save_general.php" method="POST" enctype="multipart/form-data" class="col-md-7">
+                        <form action="<?php echo $base_path; ?>pages/admin/settings/save_general.php" method="POST"
+                            enctype="multipart/form-data" class="col-md-7">
 
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
-                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728">
+                            <input type="hidden" name="csrf_token"
+                                value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="1073741824">
 
                             <!-- Website Title -->
                             <div class="mb-4">
                                 <label for="site_title_name" class="form-label fw-bold">
                                     <?php echo translate('label_website_title', 'Website Title'); ?>
                                 </label>
-                                <input type="text"
-                                       id="site_title_name"
-                                       name="site_title_name"
-                                       class="form-control form-control-lg"
-                                       value="<?php echo htmlspecialchars($site_title_name); ?>"
-                                       placeholder="<?php echo translate('placeholder_site_title', 'e.g. My Awesome Site'); ?>"
-                                       required>
+                                <input type="text" id="site_title_name" name="site_title_name"
+                                    class="form-control form-control-lg"
+                                    value="<?php echo htmlspecialchars($site_title_name); ?>"
+                                    placeholder="<?php echo translate('placeholder_site_title', 'e.g. My Awesome Site'); ?>"
+                                    required>
                                 <div class="form-text">
                                     <?php echo translate('help_site_title', 'This title appears in the browser tab, site header, and SEO.'); ?>
                                 </div>
@@ -82,36 +85,54 @@ require_once $project_root . 'includes/header.php';
 
                             <!-- Logo Upload -->
                             <div class="mb-4">
-                                <label for="logo" class="form-label fw-bold"><?php echo translate('label_website_logo', 'Website Logo'); ?></label>
+                                <label for="logo"
+                                    class="form-label fw-bold"><?php echo translate('label_website_logo', 'Website Logo'); ?></label>
                                 <div class="mb-3">
-                                    <img src="<?php echo $base_path . htmlspecialchars($site_logo); ?>" alt="Current Logo" class="img-fluid rounded" style="max-height: 120px;">
+                                    <img src="<?php echo $base_path . htmlspecialchars($site_logo); ?>"
+                                        alt="Current Logo" class="img-fluid rounded" style="max-height: 120px;">
                                 </div>
                                 <div class="custom-file-upload">
                                     <input type="file" id="logo" name="logo" accept=".png,.jpg,.jpeg,.svg">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="document.getElementById('logo').click();">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        onclick="document.getElementById('logo').click();">
                                         <?php echo translate('btn_choose_file', 'Choose File'); ?>
                                     </button>
                                     <div class="file-name mt-2 text-muted" id="file-name">
-                                        <?php echo translate('placeholder_logo', 'No file chosen – PNG, JPG or SVG (max 3MB)'); ?>
+                                        <?php echo translate('placeholder_logo', 'No file chosen – PNG, JPG or SVG (max 1GB)'); ?>
                                     </div>
+                                </div>
+                            </div>
+
+                            <!-- BugTracker URL -->
+                            <div class="mb-4">
+                                <label for="bugtracker_url" class="form-label fw-bold">
+                                    <?php echo translate('label_bugtracker_url', 'BugTracker URL'); ?>
+                                </label>
+                                <input type="url" id="bugtracker_url" name="bugtracker_url"
+                                    class="form-control form-control-lg"
+                                    value="<?php echo htmlspecialchars($bugtracker_url ?? ''); ?>"
+                                    placeholder="<?php echo translate('placeholder_bugtracker_url', 'e.g. https://github.com/your-repo/issues'); ?>">
+                                <div class="form-text">
+                                    <?php echo translate('help_bugtracker_url', 'The URL where users can report bugs (e.g., GitHub Issues).'); ?>
                                 </div>
                             </div>
 
                             <!-- Social Links -->
                             <div class="mb-4">
-                                <label class="form-label fw-bold"><?php echo translate('label_social_media', 'Social Media Links'); ?></label>
+                                <label
+                                    class="form-label fw-bold"><?php echo translate('label_social_media', 'Social Media Links'); ?></label>
 
                                 <?php
                                 $icons = [
-                                    'facebook'  => 'fab fa-facebook-f',
-                                    'twitter'   => 'fab fa-x-twitter',
-                                    'tiktok'    => 'fab fa-tiktok',
-                                    'youtube'   => 'fab fa-youtube',
-                                    'discord'   => 'fab fa-discord',
-                                    'twitch'    => 'fab fa-twitch',
-                                    'kick'      => 'custom', // we'll use image
+                                    'facebook' => 'fab fa-facebook-f',
+                                    'twitter' => 'fab fa-x-twitter',
+                                    'tiktok' => 'fab fa-tiktok',
+                                    'youtube' => 'fab fa-youtube',
+                                    'discord' => 'fab fa-discord',
+                                    'twitch' => 'fab fa-twitch',
+                                    'kick' => 'custom', // we'll use image
                                     'instagram' => 'fab fa-instagram',
-                                    'github'    => 'fab fa-github',
+                                    'github' => 'fab fa-github',
                                     'linkedin' => 'fab fa-linkedin-in',
                                 ];
 
@@ -119,16 +140,15 @@ require_once $project_root . 'includes/header.php';
                                     <div class="input-group mb-2">
                                         <span class="input-group-text social-icon">
                                             <?php if ($platform === 'kick'): ?>
-                                                <img src="<?php echo $base_path; ?>img/icons/kick-logo.png" alt="Kick" style="width:16px;">
+                                                <img src="<?php echo $base_path; ?>img/icons/kick-logo.png" alt="Kick"
+                                                    style="width:16px;">
                                             <?php else: ?>
                                                 <i class="<?php echo $icon; ?>"></i>
                                             <?php endif; ?>
                                         </span>
-                                        <input type="url"
-                                               name="<?php echo $platform; ?>"
-                                               class="form-control"
-                                               placeholder="<?php echo translate("placeholder_{$platform}", ucfirst($platform) . ' URL'); ?>"
-                                               value="<?php echo htmlspecialchars($social_links[$platform] ?? ''); ?>">
+                                        <input type="url" name="<?php echo $platform; ?>" class="form-control"
+                                            placeholder="<?php echo translate("placeholder_{$platform}", ucfirst($platform) . ' URL'); ?>"
+                                            value="<?php echo htmlspecialchars($social_links[$platform] ?? ''); ?>">
                                     </div>
                                 <?php endforeach; ?>
                             </div>
@@ -150,12 +170,13 @@ require_once $project_root . 'includes/header.php';
     <?php require_once $project_root . 'includes/footer.php'; ?>
 
     <script>
-        document.getElementById('logo').addEventListener('change', function() {
-            const fileName = this.files.length > 0 
-                ? this.files[0].name 
-                : '<?php echo translate('placeholder_logo', 'No file chosen – PNG, JPG or SVG (max 3MB)'); ?>';
+        document.getElementById('logo').addEventListener('change', function () {
+            const fileName = this.files.length > 0
+                ? this.files[0].name
+                : '<?php echo translate('placeholder_logo', 'No file chosen – PNG, JPG or SVG (max 1GB)'); ?>';
             document.getElementById('file-name').textContent = fileName;
         });
     </script>
 </body>
+
 </html>

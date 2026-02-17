@@ -1,0 +1,361 @@
+/* Warmane-inspired Theme for SahtoutCMS */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
+:root {
+    --gold-primary: #ffbd4a;
+    --gold-hover: #ffffff;
+    --bg-dark: rgba(14, 14, 14, 0.9);
+    /* Darker Glass */
+    --border-bronze: #5c3a16;
+    --text-main: #cecece;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+html {
+    overflow-y: scroll;
+    /* Always show scrollbar to prevent layout shift */
+}
+
+body {
+    background: #000 url('../../img/backgrounds/bg-woltk.jpg') no-repeat center top fixed;
+    background-size: cover;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Top Navigation --- */
+.warmane-nav {
+    width: 100%;
+    height: 70px;
+    background: rgba(10, 5, 2, 0.95);
+    /* Nearly opaque dark background */
+    border-bottom: 3px solid var(--border-bronze);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.warmane-nav::before {
+    /* Texture overlay */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjgzjIHFBmAAxxDSwAF0Q2AAA4+Qf5z8nO2AAAAABJRU5ErkJggg==');
+    /* Simple noise pattern */
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    position: relative;
+    z-index: 2;
+}
+
+.nav-links li {
+    margin: 0 30px;
+    position: relative;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #bfa57d;
+    /* Antique Gold */
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px #000;
+    transition: all 0.3s ease;
+    padding: 10px 0;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-links a:hover {
+    color: var(--gold-hover);
+    text-shadow: 0 0 15px rgba(255, 189, 74, 0.6);
+    border-bottom: 2px solid var(--gold-primary);
+}
+
+/* --- Logo --- */
+.warmane-logo-container {
+    position: fixed;
+    top: 0;
+    left: 10%;
+    /* Warmane position */
+    z-index: 1001;
+    /* Optional: Add a background plate visual behind logo if possible, for now just image */
+}
+
+.warmane-logo-img {
+    height: 140px;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.9));
+    transition: transform 0.3s;
+}
+
+.warmane-logo-img:hover {
+    transform: scale(1.05);
+}
+
+/* --- Layout --- */
+.warmane-wrapper {
+    max-width: 1600px;
+    width: 100%;
+    margin: 120px auto 50px;
+    /* Top margin to clear fixed header */
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 30px;
+    padding: 0 20px;
+    flex: 1;
+}
+
+.left-column {
+    flex: 1 1 0%;
+    min-width: 0;
+    padding: 40px;
+    background: var(--bg-dark);
+    border: 1px solid rgba(139, 94, 50, 0.2);
+    /* Subtle bronze border */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    border-radius: 2px;
+    position: relative;
+}
+
+/* Top decorative border for main content */
+.left-column::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--border-bronze), transparent);
+}
+
+.warmane-wrapper.no-sidebar .left-column {
+    flex: 100%;
+    max-width: 100%;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.warmane-wrapper.no-sidebar .left-column::before {
+    display: none;
+}
+
+.warmane-wrapper.no-sidebar .right-column {
+    display: none;
+}
+
+.right-column {
+    flex: 0 0 300px;
+    min-width: 300px;
+}
+
+/* --- Sidebar Boxes --- */
+.sidebox {
+    background: rgba(10, 10, 10, 0.85);
+    border: 1px solid #3a2510;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebox-header {
+    background: linear-gradient(to right, rgba(92, 58, 22, 0.3), rgba(0, 0, 0, 0));
+    padding: 12px 20px;
+    border-bottom: 1px solid #3a2510;
+}
+
+.sidebox-header h3 {
+    margin: 0;
+    color: var(--gold-primary);
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    padding: 0;
+}
+
+.sidebox-body {
+    padding: 20px;
+}
+
+/* --- Content Styling --- */
+h1,
+h2,
+h3,
+h4 {
+    color: var(--gold-primary);
+    font-family: 'Cinzel', serif;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+p {
+    margin-bottom: 20px;
+    font-size: 15px;
+    color: #ccc;
+}
+
+.nice_button {
+    display: inline-block;
+    background: linear-gradient(to bottom, #7d521f 0%, #4a2e0e 100%);
+    border: 1px solid #8e6530;
+    color: #ffdcb3;
+    padding: 10px 25px;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.nice_button:hover {
+    background: linear-gradient(to bottom, #946328 0%, #603d15 100%);
+    color: #fff;
+    border-color: #ba8c4f;
+    box-shadow: 0 0 10px rgba(255, 189, 74, 0.3);
+}
+
+/* --- Input Fields --- */
+.input_field {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #444;
+    color: #fff;
+    padding: 10px;
+    border-radius: 2px;
+    font-family: sans-serif;
+    transition: border-color 0.3s;
+}
+
+.input_field:focus {
+    border-color: var(--gold-primary);
+    outline: none;
+}
+
+/* --- Realm Status List --- */
+.realm-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.realm-row:last-child {
+    border-bottom: none;
+}
+
+.realm-name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.realm-icon {
+    width: 24px;
+    height: 24px;
+    background: url('../../img/icons/icon_wow.png');
+    /* Placeholder if needed, or fallback */
+    background-size: cover;
+    opacity: 0.8;
+}
+
+.realm-info {
+    text-align: right;
+}
+
+.realm-pop {
+    font-size: 12px;
+    color: #888;
+}
+
+.status-online {
+    color: #4caf50;
+    font-weight: bold;
+}
+
+.status-offline {
+    color: #f44336;
+    font-weight: bold;
+}
+
+/* --- Footer --- */
+footer {
+    background: #080808;
+    border-top: 3px solid var(--border-bronze);
+    padding: 40px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: 50px;
+}
+
+footer a {
+    color: #888;
+    margin: 0 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+footer a:hover {
+    color: var(--gold-primary);
+}
+
+/* --- Chinese Language Adjustments --- */
+html[lang="zh"] .nav-links {
+    padding-left: 0px !important;
+    margin-left: -60px;
+}
+
+html[lang="zh"] .nav-links li {
+    margin: 0 30px;
+}
+
+/* --- End of File --- */

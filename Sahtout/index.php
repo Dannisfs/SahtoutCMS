@@ -2,9 +2,7 @@
 define('ALLOWED_ACCESS', true);
 
 require_once __DIR__ . '/includes/paths.php';
-require_once $project_root . 'includes/session.php';
-require_once $project_root . 'languages/language.php'; // Include language file for translations
-require_once $project_root . 'includes/config.settings.php'; // Load socials
+
 $page_class = "home";
 $header_file = $project_root . 'includes/header.php';
 
@@ -12,172 +10,180 @@ $header_file = $project_root . 'includes/header.php';
 if (file_exists($header_file)) {
     include $header_file;
 } else {
-    die(translate('error_header_not_found', 'Error: Header file not found.'));
+    die('Error: Header file not found.');
 }
 
-// Query to fetch the 4 most recent news items
+// News pagination
+$news_per_page = 4;
+$news_page = isset($_GET['news_page']) ? max(1, intval($_GET['news_page'])) : 1;
+$news_offset = ($news_page - 1) * $news_per_page;
+
+// Count total news
+$count_query = "SELECT COUNT(*) as total FROM server_news";
+$count_result = $site_db->query($count_query);
+$total_news = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_news / $news_per_page);
+
+// Query to fetch news with pagination
 $query = "SELECT id, title, slug, image_url, post_date 
           FROM server_news 
           ORDER BY is_important DESC, post_date DESC 
-          LIMIT 4";
+          LIMIT $news_per_page OFFSET $news_offset";
 $result = $site_db->query($query);
 ?>
-<!DOCTYPE html>
-<html lang="<?php echo htmlspecialchars($_SESSION['lang'] ?? 'en'); ?>">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="<?php echo translate('home_meta_description', 'Welcome to our World of Warcraft server. Join our Discord, YouTube, Instagram, create an account, or download the game now!'); ?>">
-    <meta name="robots" content="index">
-    <title><?php echo $site_title_name . " " . translate('home_page_title', 'Home'); ?></title>
-    <style>
-        :root {
-            --bg-home: url("<?php echo $base_path; ?>img/backgrounds/bg-home.jpg");
-        }
-    </style>
-    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/server_status_top.css">
-</head>
+<!-- Home Page Content -->
+<div class="home-container">
 
-<body class="home">
-    <main>
-        <!-- Discord Widget -->
-        <section class="discord-widget">
-            <h2><?php echo translate('home_discord_title', 'Join Our Discord'); ?></h2>
-            <iframe src="https://discord.com/widget?id=1405755152085815337&theme=dark" width="350" height="400"
-                allowtransparency="true" frameborder="0"
-                sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-        </section>
-
-        <!-- Intro Container -->
-        <section class="intro-container">
-            <h1 class="intro-title"><?php echo translate('home_intro_title', 'Welcome to ') . " " . $site_title_name; ?>
-            </h1>
-            <p class="intro-tagline">
-                <?php echo translate('home_intro_tagline', 'Join our epic World of Warcraft server adventure today!'); ?>
-            </p>
-            <div class="intro-buttons">
-                <a href="<?php echo $base_path; ?>register"
-                    class="intro-button"><?php echo translate('home_create_account', 'Create Account'); ?></a>
-                <a href="<?php echo $base_path; ?>download"
-                    class="intro-button"><?php echo translate('home_download', 'Download'); ?></a>
-            </div>
-            <div class="social-container">
-                <hr class="social-line">
-                <a href="<?php echo $social_links['youtube']; ?>" class="youtube-button"
-                    aria-label="<?php echo translate('youtube_alt', 'YouTube'); ?>">
-                    <img src="<?php echo $base_path; ?>img/homeimg/youtube-logo1.png"
-                        alt="<?php echo translate('youtube_alt', 'YouTube'); ?>" class="youtube-logo">
-                </a>
-                <hr class="social-line">
-                <a href="<?php echo $social_links['discord']; ?>" class="discord-button"
-                    aria-label="<?php echo translate('discord_alt', 'Discord'); ?>">
-                    <img src="<?php echo $base_path; ?>img/homeimg/discordlogo.png"
-                        alt="<?php echo translate('discord_alt', 'Discord'); ?>" class="discord-logo">
-                </a>
-                <hr class="social-line">
-                <a href="<?php echo $social_links['instagram']; ?>" class="instagram-button"
-                    aria-label="<?php echo translate('instagram_alt', 'Instagram'); ?>">
-                    <img src="<?php echo $base_path; ?>img/homeimg/insta-logo.png"
-                        alt="<?php echo translate('instagram_alt', 'Instagram'); ?>" class="instagram-logo">
-                </a>
-                <hr class="social-line">
-            </div>
-        </section>
-
-        <!-- 🔁 Image Gallery Slider -->
-        <section class="hero-gallery">
-            <div class="slider" id="slider">
-                <div class="slide"><img src="<?php echo $base_path; ?>img/homeimg/slide1.jpg"
-                        alt="<?php echo translate('slider_alt_1', 'World of Warcraft Scene 1'); ?>"></div>
-                <div class="slide"><img src="<?php echo $base_path; ?>img/homeimg/slide2.jpg"
-                        alt="<?php echo translate('slider_alt_2', 'World of Warcraft Scene 2'); ?>"></div>
-                <div class="slide"><img src="<?php echo $base_path; ?>img/homeimg/slide3.jpg"
-                        alt="<?php echo translate('slider_alt_3', 'World of Warcraft Scene 3'); ?>"></div>
-            </div>
-            <button class="slider-nav prev"
-                aria-label="<?php echo translate('slider_prev', 'Previous Slide'); ?>">❮</button>
-            <button class="slider-nav next"
-                aria-label="<?php echo translate('slider_next', 'Next Slide'); ?>">❯</button>
-            <div class="slider-dots">
-                <span class="dot active" data-slide="0"></span>
-                <span class="dot" data-slide="1"></span>
-                <span class="dot" data-slide="2"></span>
-            </div>
-        </section>
-
-        <!-- 📰 News Preview Section -->
-        <section class="news-preview">
-            <div class="news-grid">
-                <?php if ($result->num_rows === 0): ?>
-                    <p><?php echo translate('home_no_news', 'No news available at the time.'); ?></p>
-                <?php else: ?>
-                    <?php while ($news = $result->fetch_assoc()): ?>
-                        <div class="news-item">
-                            <a href="<?php echo $base_path; ?>news?slug=<?php echo htmlspecialchars($news['slug']); ?>">
-                                <div class="news-image">
-                                    <img src="<?php echo $base_path . htmlspecialchars($news['image_url']); ?>"
-                                        alt="<?php echo htmlspecialchars($news['title']); ?>">
-                                    <span class="news-title"><?php echo htmlspecialchars($news['title']); ?></span>
-                                </div>
-                                <p class="news-date"><?php echo date('M j, Y', strtotime($news['post_date'])); ?></p>
-                            </a>
-                        </div>
-                    <?php endwhile; ?>
-                <?php endif; ?>
-            </div>
-        </section>
-
-        <!-- 🔲 Menubar Tabs -->
-        <section class="tabs-container">
-            <div class="tabs">
-                <button class="tab active"
-                    data-tab="bugtracker"><?php echo translate('home_tab_bugtracker', 'Bugtracker'); ?></button>
-                <button class="tab" data-tab="stream"><?php echo translate('home_tab_stream', 'Stream'); ?></button>
-            </div>
-            <div class="tab-content" id="tab-content">
-                <h2><?php echo translate('home_bugtracker_title', 'Bugtracker'); ?></h2>
-                <p><?php echo translate('home_bugtracker_content', 'View and report issues with the server to help us improve your experience.'); ?>
-                </p>
-            </div>
-        </section>
-
-        <!-- Server Status -->
-        <div class="server-status">
-            <?php
-            $realm_status_file = $project_root . 'includes/realm_status.php';
-            if (file_exists($realm_status_file)) {
-                include $realm_status_file;
-            } else {
-                echo "<p>" . translate('home_realm_status_error', 'Error: Realm status unavailable.') . "</p>";
-            }
-            ?>
+    <!-- 🔁 Image Gallery Slider -->
+    <section class="hero-gallery"
+        style="margin-bottom: 30px; position: relative; overflow: hidden; border: 1px solid #5c3a16; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
+        <div class="slider" id="slider">
+            <div class="slide fade"><img src="<?php echo $base_path; ?>img/homeimg/slide1.jpg" alt="Slide 1"
+                    style="width:100%; display:block;"></div>
+            <div class="slide fade"><img src="<?php echo $base_path; ?>img/homeimg/slide2.jpg" alt="Slide 2"
+                    style="width:100%; display:block;"></div>
+            <div class="slide fade"><img src="<?php echo $base_path; ?>img/homeimg/slide3.jpg" alt="Slide 3"
+                    style="width:100%; display:block;"></div>
         </div>
 
-        <!-- Server Status & Top Players Widget -->
-        <?php
-        $status_top_file = $project_root . 'includes/server_status_top.php';
-        if (file_exists($status_top_file)) {
-            include $status_top_file;
-        }
-        ?>
-    </main>
+        <!-- Slider Controls -->
+        <button class="slider-nav prev" onclick="plusSlides(-1)"
+            style="position: absolute; top: 50%; left: 0; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; font-size: 24px; padding: 15px; cursor: pointer; transition: 0.3s; z-index: 10;">&#10094;</button>
+        <button class="slider-nav next" onclick="plusSlides(1)"
+            style="position: absolute; top: 50%; right: 0; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; font-size: 24px; padding: 15px; cursor: pointer; transition: 0.3s; z-index: 10;">&#10095;</button>
 
-    <?php
-    $footer_file = $project_root . 'includes/footer.php';
-    if (file_exists($footer_file)) {
-        include $footer_file;
-    } else {
-        die(translate('error_footer_not_found', 'Error: Footer file not found.'));
-    }
-    ?>
-    <script src="<?php echo $base_path; ?>assets/js/home.js"></script>
-</body>
+        <!-- Dots -->
+        <div style="text-align:center; position: absolute; bottom: 15px; width: 100%; z-index: 10;">
+            <span class="dot" onclick="currentSlide(1)"
+                style="cursor:pointer; height: 12px; width: 12px; margin: 0 5px; background-color: rgba(255,255,255,0.5); border-radius: 50%; display: inline-block;"></span>
+            <span class="dot" onclick="currentSlide(2)"
+                style="cursor:pointer; height: 12px; width: 12px; margin: 0 5px; background-color: rgba(255,255,255,0.5); border-radius: 50%; display: inline-block;"></span>
+            <span class="dot" onclick="currentSlide(3)"
+                style="cursor:pointer; height: 12px; width: 12px; margin: 0 5px; background-color: rgba(255,255,255,0.5); border-radius: 50%; display: inline-block;"></span>
+        </div>
+    </section>
 
-</html>
+    <!-- 📰 News Preview Section -->
+    <section class="news-preview">
+        <h2
+            style="color: #ecc05b; font-family: 'Cinzel', serif; border-bottom: 1px solid #443322; padding-bottom: 10px; margin-bottom: 20px; text-transform: uppercase;">
+            Latest News</h2>
+
+        <div class="news-grid-warmane">
+            <?php if ($result->num_rows === 0): ?>
+                <p style="color: #888; text-align: center; padding: 20px;">
+                    <?php echo translate('home_no_news', 'No news available at the time.'); ?></p>
+            <?php else: ?>
+                <?php while ($news = $result->fetch_assoc()): ?>
+                    <div class="news-item"
+                        style="display: flex; gap: 20px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid rgba(255,255,255,0.05); transition: background 0.3s;">
+                        <a href="<?php echo $base_path; ?>news?slug=<?php echo htmlspecialchars($news['slug']); ?>"
+                            style="display: flex; text-decoration: none; color: inherit; width: 100%;">
+                            <div class="news-image"
+                                style="flex-shrink: 0; width: 200px; height: 120px; overflow: hidden; border: 1px solid #333; position: relative;">
+                                <img src="<?php echo $base_path . htmlspecialchars($news['image_url']); ?>"
+                                    alt="<?php echo htmlspecialchars($news['title']); ?>"
+                                    style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                            </div>
+                            <div class="news-content" style="margin-left: 20px; flex-grow: 1;">
+                                <h3 class="news-title"
+                                    style="margin: 0 0 8px 0; font-size: 18px; color: #ecc05b; font-family: 'Cinzel', serif;">
+                                    <?php echo htmlspecialchars($news['title']); ?></h3>
+                                <p class="news-date" style="font-size: 12px; color: #888; margin: 0 0 10px 0;"><i
+                                        class="far fa-clock"></i> <?php echo date('M j, Y', strtotime($news['post_date'])); ?>
+                                </p>
+                                <span style="font-size: 13px; color: #ccc; border-bottom: 1px dotted #666;">Read more...</span>
+                            </div>
+                        </a>
+                    </div>
+                <?php endwhile; ?>
+            <?php endif; ?>
+        </div>
+
+        <?php if ($total_pages > 1): ?>
+        <div class="news-pagination" style="display: flex; justify-content: center; gap: 8px; margin-top: 20px; padding: 15px 0;">
+            <?php if ($news_page > 1): ?>
+                <a href="?news_page=<?php echo $news_page - 1; ?>" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(0,0,0,0.5); border: 1px solid #5c3a16; color: #ecc05b; text-decoration: none; border-radius: 4px; font-size: 14px; transition: all 0.3s;">&laquo;</a>
+            <?php endif; ?>
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <a href="?news_page=<?php echo $i; ?>" 
+                   style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: <?php echo $i === $news_page ? 'linear-gradient(135deg, #5c3a16, #8b6914)' : 'rgba(0,0,0,0.5)'; ?>; border: 1px solid <?php echo $i === $news_page ? '#ecc05b' : '#5c3a16'; ?>; color: <?php echo $i === $news_page ? '#fff' : '#ecc05b'; ?>; text-decoration: none; border-radius: 4px; font-family: 'Cinzel', serif; font-size: 14px; font-weight: <?php echo $i === $news_page ? '700' : '400'; ?>; transition: all 0.3s;">
+                    <?php echo $i; ?>
+                </a>
+            <?php endfor; ?>
+            <?php if ($news_page < $total_pages): ?>
+                <a href="?news_page=<?php echo $news_page + 1; ?>" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(0,0,0,0.5); border: 1px solid #5c3a16; color: #ecc05b; text-decoration: none; border-radius: 4px; font-size: 14px; transition: all 0.3s;">&raquo;</a>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+    </section>
+
+</div>
+
 <?php
-// Close database connection
+$footer_file = $project_root . 'includes/footer.php';
+if (file_exists($footer_file)) {
+    include $footer_file;
+} else {
+    die('Error: Footer file not found.');
+}
+?>
+
+<!-- Slider Script -->
+<script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("slide");
+        let dots = document.getElementsByClassName("dot");
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+            dots[i].style.backgroundColor = "rgba(255,255,255,0.5)";
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        dots[slideIndex - 1].style.backgroundColor = "#ecc05b";
+    }
+
+    // Auto Advance
+    setInterval(function () { plusSlides(1); }, 6000);
+</script>
+
+<!-- Fade Animation CSS -->
+<style>
+    .fade {
+        animation-name: fade;
+        animation-duration: 1.5s;
+    }
+
+    @keyframes fade {
+        from {
+            opacity: .4
+        }
+
+        to {
+            opacity: 1
+        }
+    }
+</style>
+
+<?php
 if (isset($site_db)) {
     $site_db->close();
 }

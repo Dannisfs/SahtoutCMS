@@ -3,8 +3,8 @@
 return [
     // Navigation
     'nav_home' => '主页',
+    'nav_bugtracker' => 'BUG追踪',
     'nav_how_to_play' => '游戏指南',
-    'nav_news' => '新闻',
     'nav_armory' => '英雄榜',
     'nav_shop' => '商店',
     'nav_map' => '地图',
@@ -96,6 +96,17 @@ return [
     'rating' => '评级',
     'captain' => '队长',
     'rank' => '排名',
+    'bugtracker_guidelines' => '报告指南',
+    'bugtracker_content' => '查看并报告服务器问题，帮助我们改善您的游戏体验。',
+
+    // Admin Settings - BugTracker
+    'label_bugtracker_url' => 'BugTracker 链接',
+    'placeholder_bugtracker_url' => '例如：https://github.com/your-repo/issues',
+    'help_bugtracker_url' => '用户报告错误的页面链接（如 GitHub Issues）。',
+    'error_invalid_bugtracker_url' => 'BugTracker 链接格式无效。',
+    'btn_report_issue' => '报告问题',
+    'msg_no_bugtracker_configured' => '暂未配置 BugTracker 链接。',
+
     'no_data' => '暂无数据。',
 ];
 ?>
