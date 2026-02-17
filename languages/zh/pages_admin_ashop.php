@@ -20,7 +20,7 @@ return [
     'admin_shop_upload_err_extension' => 'PHP扩展阻止了上传',
     'admin_shop_upload_err_unknown' => '未知上传错误',
     'admin_shop_invalid_file_type' => '无效的文件类型。仅允许JPG、PNG、GIF',
-    'admin_shop_file_size_exceeded' => '文件大小超过2MB限制',
+    'admin_shop_file_size_exceeded' => '文件大小超过1GB限制',
     'admin_shop_tmp_file_missing' => '临时文件缺失或不可读',
     'admin_shop_file_move_failed' => '文件移动成功但未找到文件',
     'admin_shop_upload_failed' => '移动上传文件失败',
@@ -58,7 +58,7 @@ return [
     'admin_shop_label_is_item' => '是否为物品？',
     'admin_shop_yes' => '是',
     'admin_shop_no' => '否',
-    'admin_shop_label_image' => '图片上传（JPG、PNG、GIF，最大2MB）',
+    'admin_shop_label_image' => '图片上传（JPG、PNG、GIF，最大1GB）',
     'admin_shop_image_help' => '编辑时留空将保留现有图片。',
     'admin_shop_image_preview_alt' => '图片预览',
     'admin_shop_label_description' => '描述',
@@ -90,7 +90,7 @@ return [
     'admin_shop_previous' => '上一页',
     'admin_shop_next' => '下一页',
     'admin_shop_js_invalid_file_type' => '无效的文件类型。仅允许JPG、PNG或GIF。',
-    'admin_shop_js_file_size_exceeded' => '文件大小超过2MB限制。',
+    'admin_shop_js_file_size_exceeded' => '文件大小超过1GB限制。',
     'admin_shop_js_required_fields' => '请填写所有必填项。',
     'admin_shop_js_invalid_level_boost' => '等级提升必须在2到255之间。'
 ];

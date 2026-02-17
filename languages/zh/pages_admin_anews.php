@@ -14,7 +14,7 @@ return [
     'admin_news_upload_err_extension' => 'PHP扩展阻止了上传。',
     'admin_news_upload_err_unknown' => '未知上传错误。',
     'admin_news_invalid_file_type' => '无效的文件类型。仅允许JPG、PNG、GIF。',
-    'admin_news_file_size_exceeded' => '文件大小超过2MB限制。',
+    'admin_news_file_size_exceeded' => '文件大小超过1GB限制。',
     'admin_news_upload_dir_not_writable' => '上传目录不可写。',
     'admin_news_upload_failed' => '移动上传文件失败。',
     'admin_news_add_success' => '新闻添加成功。',
@@ -34,7 +34,7 @@ return [
     'admin_news_category_event' => '活动',
     'admin_news_category_maintenance' => '维护',
     'admin_news_category_other' => '其他',
-    'admin_news_label_image' => '图片上传（JPG、PNG、GIF，最大2MB，可选）',
+    'admin_news_label_image' => '图片上传（JPG、PNG、GIF，最大1GB，可选）',
     'admin_news_image_help' => '留空将使用默认图片（news.png）。',
     'admin_news_image_edit_help' => '留空将保留现有图片（默认：news.png）。',
     'admin_news_image_preview_alt' => '图片预览',
@@ -65,6 +65,6 @@ return [
     'admin_news_no' => '否',
     'admin_news_image_alt' => '新闻图片',
     'admin_news_js_invalid_file_type' => '无效的文件类型。仅允许JPG、PNG或GIF。',
-    'admin_news_js_file_size_exceeded' => '文件大小超过2MB限制。'
+    'admin_news_js_file_size_exceeded' => '文件大小超过1GB限制。'
 ];
 ?>

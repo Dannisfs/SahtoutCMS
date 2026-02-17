@@ -9,7 +9,7 @@ return [
     'label_realm_port' => '服务器端口',
     'label_realm_logo' => '服务器Logo',
     'placeholder_realm_name' => '输入服务器名称',
-    'placeholder_realm_logo' => '上传PNG、SVG、JPG或WebP图片（最大2MB）作为服务器Logo。',
+    'placeholder_realm_logo' => '上传PNG、SVG、JPG或WebP图片（最大1GB）作为服务器Logo。',
     'btn_choose_file' => '选择文件',
     'btn_save_realm' => '保存服务器配置',
     'note_realm_config' => '注意：此处配置单个服务器的设置。',
@@ -20,7 +20,7 @@ return [
     'err_update_realm_config' => '更新服务器配置失败：$realmlist未找到或无效。',
     'err_config_dir_not_writable' => '配置目录不可写：%s',
     'err_write_realm_config' => '无法写入服务器配置文件：%s',
-    'error_realm_logo_too_large' => '服务器Logo大小超过2MB。',
+    'error_realm_logo_too_large' => '服务器Logo大小超过1GB。',
     'error_invalid_realm_logo_type' => '无效的文件类型。仅允许PNG、SVG、JPG或WebP。',
     'error_realm_logo_upload_failed' => '服务器Logo上传失败。请检查服务器权限。',
 ];

@@ -20,7 +20,7 @@ return [
     'placeholder_instagram' => 'Instagram链接',
     'placeholder_github' => 'GitHub链接',
     'placeholder_linkedin' => 'LinkedIn链接',
-    'placeholder_logo' => '上传PNG、SVG或JPG图片（最大3MB）作为网站Logo。',
+    'placeholder_logo' => '上传PNG、SVG或JPG图片（最大1GB）作为网站Logo。',
 
     // Social media alt text
     'footer_logo_alt' => '服务器Logo',
@@ -39,7 +39,7 @@ return [
     'error_csrf_invalid' => '无效的CSRF令牌。',
     'error_access_denied' => '访问被拒绝。',
     'error_direct_access' => '不允许直接访问。',
-    'error_file_too_large' => '文件大小超过3MB。',
+    'error_file_too_large' => '文件大小超过1GB。',
     'error_invalid_file_type' => '无效的文件类型。仅允许PNG、SVG或JPG。',
     'error_file_upload_failed' => 'Logo上传失败。请检查服务器权限。',
     'error_file_write_failed' => '配置文件不可写。',
