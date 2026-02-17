@@ -118,15 +118,15 @@ if (isset($_SESSION['user_id'])) {
         <ul class="nav-links" style="padding-left: 120px; display: flex; align-items: center;">
             <li><a href="<?php echo $base_path; ?>"><?php echo translate('nav_home', 'Home'); ?></a></li>
             <li><a
-                    href="<?php echo $base_path; ?>bugtracker"><?php echo translate('nav_bugtracker', 'BugTracker'); ?></a>
-            </li>
-            <li><a
                     href="<?php echo $base_path; ?>how_to_play"><?php echo translate('nav_how_to_play', 'Download'); ?></a>
             </li>
             <li><a href="<?php echo $base_path; ?>map"><?php echo translate('nav_map', 'Map'); ?></a></li>
             <li><a href="<?php echo $base_path; ?>armory/solo_pvp"><?php echo translate('nav_armory', 'Armory'); ?></a>
             </li>
             <li><a href="<?php echo $base_path; ?>shop"><?php echo translate('nav_shop', 'Shop'); ?></a></li>
+            <li><a
+                    href="<?php echo $base_path; ?>bugtracker"><?php echo translate('nav_bugtracker', 'BugTracker'); ?></a>
+            </li>
             <li><a
                     href="<?php echo $base_path; ?>register"><?php echo translate('nav_register', 'Create Account'); ?></a>
             </li>
