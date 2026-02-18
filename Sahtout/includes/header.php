@@ -115,7 +115,7 @@ if (isset($_SESSION['user_id'])) {
     <!-- Top Navigation Bar -->
     <nav class="warmane-nav">
         <!-- Added padding-left to push menu items away from the logo area -->
-        <ul class="nav-links" style="padding-left: 180px; display: flex; align-items: center;">
+        <ul class="nav-links" style="padding-left: 230px; display: flex; align-items: center;">
             <li><a href="<?php echo $base_path; ?>"><?php echo translate('nav_home', 'Home'); ?></a></li>
             <li><a
                     href="<?php echo $base_path; ?>how_to_play"><?php echo translate('nav_how_to_play', 'Download'); ?></a>
