@@ -5,10 +5,18 @@ if (!defined('ALLOWED_ACCESS')) {
 }
 
 // Site Title (Editable from Admin Panel)
-$site_title_name = 'SahtoutCMS';
+$site_title_name = 'rebornWOW';
 
 // Logo
 $site_logo = 'img/logo.png';
+
+// BugTracker URL
+$bugtracker_url = 'https://github.com/wowshub/AzerothCore-wotlk-with-PlayerBots-NPCBots/issues';
+
+// Server Status Info
+$server_realmlist = 'yangyanghub.com:8088';
+$server_version = '3.3.5a';
+$server_status_text = 'Stable';
 
 // Social links
 $social_links = [

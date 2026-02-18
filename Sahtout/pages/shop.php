@@ -116,155 +116,172 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="<?php echo htmlspecialchars($_SESSION['lang'] ?? 'en'); ?>">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?php echo translate('shop_meta_description', 'Browse and purchase items, mounts, pets, gold, and services for '.$site_title_name . ' WoW Server'); ?>">
-    <title><?php echo $site_title_name ." ".translate('shop_page_title', '- Shop'); ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/footer.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body class="shop">
-    <div class="shop-container">
-        <h1><?php echo $site_title_name ." ". translate('shop_title', 'Server Shop'); ?></h1>
-        <?php if (!empty($_SESSION['user_id'])): ?>
-            <div class="user-balance">
-                <span class="points"><i class="fas fa-coins"></i> <?php echo translate('shop_points', 'Points'); ?>: <?php echo $points; ?></span>
-                <span class="tokens"><i class="fas fa-gem"></i> <?php echo translate('shop_tokens', 'Tokens'); ?>: <?php echo $tokens; ?></span>
-            </div>
-        <?php else: ?>
-            <p class="login-prompt"><?php echo str_replace('{base_path}', $base_path, translate('shop_login_prompt', 'Please <a href="{base_path}login">log in</a> to purchase items.')); ?></p>
-        <?php endif; ?>
+<link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/footer.css">
+<style>
+    :root {
+        --bg-shop: url('<?php echo $base_path; ?>img/backgrounds/bg-shop.jpg');
+    }
 
-        <?php echo $status_message; ?>
+    body.shop {
+        background: var(--bg-shop) no-repeat center center fixed;
+        background-size: cover;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+</style>
 
-        <nav class="shop-nav">
-            <?php foreach ($valid_categories as $category): ?>
-                <a href="#" 
-                   class="category-button <?php echo $selected_category === $category ? 'active' : ''; ?>" 
-                   data-category="<?php echo htmlspecialchars($category); ?>">
-                    <?php if (isset($category_images[$category])): ?>
-                        <img src="<?php echo $base_path . $category_images[$category]; ?>" alt="<?php echo translate('shop_category_' . strtolower($category) . '_icon', htmlspecialchars($category) . ' Icon'); ?>" class="category-icon">
-                    <?php endif; ?>
-                    <?php echo translate('shop_category_' . strtolower($category), htmlspecialchars($category)); ?>
-                </a>
-            <?php endforeach; ?>
-        </nav>
+<div class="shop-container">
+    <h1><?php echo $site_title_name . " " . translate('shop_title', 'Server Shop'); ?></h1>
+    <?php if (!empty($_SESSION['user_id'])): ?>
+        <div class="user-balance">
+            <span class="points"><i class="fas fa-coins"></i> <?php echo translate('shop_points', 'Points'); ?>:
+                <?php echo $points; ?></span>
+            <span class="tokens"><i class="fas fa-gem"></i> <?php echo translate('shop_tokens', 'Tokens'); ?>:
+                <?php echo $tokens; ?></span>
+        </div>
+    <?php else: ?>
+        <p class="login-prompt">
+            <?php echo str_replace('{base_path}', $base_path, translate('shop_login_prompt', 'Please <a href="{base_path}login">log in</a> to purchase items.')); ?>
+        </p>
+    <?php endif; ?>
 
-        <?php if (empty($items)): ?>
-            <p class="no-items"><?php echo translate('shop_no_items', 'No items available.'); ?></p>
-        <?php else: ?>
-            <?php foreach ($items as $category => $category_items): ?>
-                <section class="shop-category" data-category="<?php echo htmlspecialchars($category); ?>" 
-                         style="display: <?php echo ($selected_category === 'All' || $selected_category === $category) ? 'block' : 'none'; ?>">
-                    <h2><?php echo translate('shop_category_' . strtolower($category), htmlspecialchars($category)); ?></h2>
-                    <div class="item-grid">
-                        <?php foreach ($category_items as $item): ?>
-                            <div class="item-card" data-entry="<?php echo $item['sit_entry'] ? htmlspecialchars($item['sit_entry']) : ''; ?>">
-                                <img src="<?php echo $base_path . ($item['image'] ?? 'img/shop/placeholder.png'); ?>" alt="<?php echo str_replace('{name}', htmlspecialchars($item['name']), translate('shop_item_image_alt', '{name}')); ?>">
-                                <h3><?php echo htmlspecialchars($item['name']); ?></h3>
-                                <p><?php echo htmlspecialchars($item['description'] ?? translate('shop_no_description', 'No description available.')); ?></p>
-                                <?php if ($category === 'Service'): ?>
-                                    <?php if ($item['level_boost'] !== null): ?>
-                                        <p class="level-boost"><?php echo translate('shop_level_boost', 'Level Boost'); ?>: <?php echo $item['level_boost']; ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($item['at_login_flags'] & 1): ?>
-                                        <p class="rename-character"><?php echo translate('shop_rename_character', 'Character Rename'); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($item['at_login_flags'] & 2): ?>
-                                        <p class="reset-spells"><?php echo translate('shop_reset_spells', 'Reset Spells'); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($item['at_login_flags'] & 4): ?>
-                                        <p class="reset-talents"><?php echo translate('shop_reset_talents', 'Reset Talents'); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($item['at_login_flags'] & 8): ?>
-                                        <p class="customize-character"><?php echo translate('shop_customize_character', 'Character Customization'); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($item['at_login_flags'] & 16): ?>
-                                        <p class="reset-pet-talents"><?php echo translate('shop_reset_pet_talents', 'Reset Pet Talents'); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($item['at_login_flags'] & 32): ?>
-                                        <p class="first-login"><?php echo translate('shop_first_login', 'First Login'); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($item['at_login_flags'] & 64): ?>
-                                        <p class="faction-change"><?php echo translate('shop_faction_change', 'Faction Change'); ?></p>
-                                    <?php endif; ?>
-                                    <?php if ($item['at_login_flags'] & 128): ?>
-                                        <p class="race-change"><?php echo translate('shop_race_change', 'Race Change'); ?></p>
-                                    <?php endif; ?>
+    <?php echo $status_message; ?>
+
+    <nav class="shop-nav">
+        <?php foreach ($valid_categories as $category): ?>
+            <a href="#" class="category-button <?php echo $selected_category === $category ? 'active' : ''; ?>"
+                data-category="<?php echo htmlspecialchars($category); ?>">
+                <?php if (isset($category_images[$category])): ?>
+                    <img src="<?php echo $base_path . $category_images[$category]; ?>"
+                        alt="<?php echo translate('shop_category_' . strtolower($category) . '_icon', htmlspecialchars($category) . ' Icon'); ?>"
+                        class="category-icon">
+                <?php endif; ?>
+                <?php echo translate('shop_category_' . strtolower($category), htmlspecialchars($category)); ?>
+            </a>
+        <?php endforeach; ?>
+    </nav>
+
+    <?php if (empty($items)): ?>
+        <p class="no-items"><?php echo translate('shop_no_items', 'No items available.'); ?></p>
+    <?php else: ?>
+        <?php foreach ($items as $category => $category_items): ?>
+            <section class="shop-category" data-category="<?php echo htmlspecialchars($category); ?>"
+                style="display: <?php echo ($selected_category === 'All' || $selected_category === $category) ? 'block' : 'none'; ?>">
+                <h2><?php echo translate('shop_category_' . strtolower($category), htmlspecialchars($category)); ?></h2>
+                <div class="item-grid">
+                    <?php foreach ($category_items as $item): ?>
+                        <div class="item-card"
+                            data-entry="<?php echo $item['sit_entry'] ? htmlspecialchars($item['sit_entry']) : ''; ?>">
+                            <img src="<?php echo $base_path . ($item['image'] ?? 'img/shop/placeholder.png'); ?>"
+                                alt="<?php echo str_replace('{name}', htmlspecialchars($item['name']), translate('shop_item_image_alt', '{name}')); ?>">
+                            <h3><?php echo htmlspecialchars($item['name']); ?></h3>
+                            <p><?php echo htmlspecialchars($item['description'] ?? translate('shop_no_description', 'No description available.')); ?>
+                            </p>
+                            <?php if ($category === 'Service'): ?>
+                                <?php if ($item['level_boost'] !== null): ?>
+                                    <p class="level-boost"><?php echo translate('shop_level_boost', 'Level Boost'); ?>:
+                                        <?php echo $item['level_boost']; ?>
+                                    </p>
                                 <?php endif; ?>
-                                <div class="item-tooltip">
-                                    <?php
-                                    if (in_array($category, ['Stuff', 'Pet', 'Mount']) && $item['sit_entry']) {
-                                        $stmt_tooltip = $site_db->prepare("SELECT * FROM site_items WHERE entry = ?");
-                                        $stmt_tooltip->bind_param("i", $item['sit_entry']);
-                                        $stmt_tooltip->execute();
-                                        $result_tooltip = $stmt_tooltip->get_result();
-                                        if ($tooltip_data = $result_tooltip->fetch_assoc()) {
-                                            echo generateTooltip($tooltip_data);
-                                        }
-                                        $stmt_tooltip->close();
+                                <?php if ($item['at_login_flags'] & 1): ?>
+                                    <p class="rename-character"><?php echo translate('shop_rename_character', 'Character Rename'); ?></p>
+                                <?php endif; ?>
+                                <?php if ($item['at_login_flags'] & 2): ?>
+                                    <p class="reset-spells"><?php echo translate('shop_reset_spells', 'Reset Spells'); ?></p>
+                                <?php endif; ?>
+                                <?php if ($item['at_login_flags'] & 4): ?>
+                                    <p class="reset-talents"><?php echo translate('shop_reset_talents', 'Reset Talents'); ?></p>
+                                <?php endif; ?>
+                                <?php if ($item['at_login_flags'] & 8): ?>
+                                    <p class="customize-character">
+                                        <?php echo translate('shop_customize_character', 'Character Customization'); ?>
+                                    </p>
+                                <?php endif; ?>
+                                <?php if ($item['at_login_flags'] & 16): ?>
+                                    <p class="reset-pet-talents"><?php echo translate('shop_reset_pet_talents', 'Reset Pet Talents'); ?></p>
+                                <?php endif; ?>
+                                <?php if ($item['at_login_flags'] & 32): ?>
+                                    <p class="first-login"><?php echo translate('shop_first_login', 'First Login'); ?></p>
+                                <?php endif; ?>
+                                <?php if ($item['at_login_flags'] & 64): ?>
+                                    <p class="faction-change"><?php echo translate('shop_faction_change', 'Faction Change'); ?></p>
+                                <?php endif; ?>
+                                <?php if ($item['at_login_flags'] & 128): ?>
+                                    <p class="race-change"><?php echo translate('shop_race_change', 'Race Change'); ?></p>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <div class="item-tooltip">
+                                <?php
+                                if (in_array($category, ['Stuff', 'Pet', 'Mount']) && $item['sit_entry']) {
+                                    $stmt_tooltip = $site_db->prepare("SELECT * FROM site_items WHERE entry = ?");
+                                    $stmt_tooltip->bind_param("i", $item['sit_entry']);
+                                    $stmt_tooltip->execute();
+                                    $result_tooltip = $stmt_tooltip->get_result();
+                                    if ($tooltip_data = $result_tooltip->fetch_assoc()) {
+                                        echo generateTooltip($tooltip_data);
                                     }
-                                    ?>
-                                </div>
-                                <div class="item-cost">
-                                    <?php if ($item['point_cost'] > 0): ?>
-                                        <span class="points"><i class="fas fa-coins"></i> <?php echo $item['point_cost']; ?></span>
-                                    <?php endif; ?>
-                                    <?php if ($item['token_cost'] > 0): ?>
-                                        <span class="tokens"><i class="fas fa-gem"></i> <?php echo $item['token_cost']; ?></span>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="item-stock">
-                                    <?php if ($item['stock'] !== null): ?>
-                                        <span><?php echo translate('shop_stock', 'Stock'); ?>: <?php echo $item['stock']; ?></span>
-                                    <?php else: ?>
-                                        <span><?php echo translate('shop_unlimited_stock', 'Unlimited Stock'); ?></span>
-                                    <?php endif; ?>
-                                </div>
-                                <?php if (!empty($_SESSION['user_id'])): ?>
-                                    <form action="<?php echo $base_path; ?>buy_item" method="POST" class="purchase-form">
-                                        <input type="hidden" name="item_id" value="<?php echo $item['item_id']; ?>">
-                                        <?php if (!empty($characters)): ?>
-                                            <select name="character_id" class="character-select" required>
-                                                <option value=""><?php echo translate('shop_select_character', 'Select a Character'); ?></option>
-                                                <?php foreach ($characters as $char): ?>
-                                                    <option value="<?php echo htmlspecialchars($char['id']); ?>">
-                                                        <?php echo htmlspecialchars($char['name']); ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        <?php else: ?>
-                                            <p class="no-characters"><?php echo translate('shop_no_characters', 'No characters available.'); ?></p>
-                                        <?php endif; ?>
-                                        <button type="submit" class="buy-button" 
-                                                <?php echo ($item['stock'] === 0 && $item['stock'] !== null) || empty($characters) || $cooldown_active ? 'disabled' : ''; ?>
-                                                data-item-id="<?php echo $item['item_id']; ?>">
-                                            <?php echo $cooldown_active ? str_replace('{seconds}', $remaining_cooldown, translate('shop_wait_cooldown', 'Wait {seconds}s')) : translate('shop_buy_now', 'Buy Now'); ?>
-                                        </button>
-                                    </form>
-                                <?php else: ?>
-                                    <a href="<?php echo $base_path; ?>login" class="buy-button"><?php echo translate('shop_login_to_buy', 'Log in to Buy'); ?></a>
+                                    $stmt_tooltip->close();
+                                }
+                                ?>
+                            </div>
+                            <div class="item-cost">
+                                <?php if ($item['point_cost'] > 0): ?>
+                                    <span class="points"><i class="fas fa-coins"></i> <?php echo $item['point_cost']; ?></span>
+                                <?php endif; ?>
+                                <?php if ($item['token_cost'] > 0): ?>
+                                    <span class="tokens"><i class="fas fa-gem"></i> <?php echo $item['token_cost']; ?></span>
                                 <?php endif; ?>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
-                </section>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+                            <div class="item-stock">
+                                <?php if ($item['stock'] !== null): ?>
+                                    <span><?php echo translate('shop_stock', 'Stock'); ?>: <?php echo $item['stock']; ?></span>
+                                <?php else: ?>
+                                    <span><?php echo translate('shop_unlimited_stock', 'Unlimited Stock'); ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <?php if (!empty($_SESSION['user_id'])): ?>
+                                <form action="<?php echo $base_path; ?>buy_item" method="POST" class="purchase-form">
+                                    <input type="hidden" name="item_id" value="<?php echo $item['item_id']; ?>">
+                                    <?php if (!empty($characters)): ?>
+                                        <select name="character_id" class="character-select" required>
+                                            <option value=""><?php echo translate('shop_select_character', 'Select a Character'); ?>
+                                            </option>
+                                            <?php foreach ($characters as $char): ?>
+                                                <option value="<?php echo htmlspecialchars($char['id']); ?>">
+                                                    <?php echo htmlspecialchars($char['name']); ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    <?php else: ?>
+                                        <p class="no-characters"><?php echo translate('shop_no_characters', 'No characters available.'); ?>
+                                        </p>
+                                    <?php endif; ?>
+                                    <button type="submit" class="buy-button" <?php echo ($item['stock'] === 0 && $item['stock'] !== null) || empty($characters) || $cooldown_active ? 'disabled' : ''; ?>
+                                        data-item-id="<?php echo $item['item_id']; ?>">
+                                        <?php echo $cooldown_active ? str_replace('{seconds}', $remaining_cooldown, translate('shop_wait_cooldown', 'Wait {seconds}s')) : translate('shop_buy_now', 'Buy Now'); ?>
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <a href="<?php echo $base_path; ?>login"
+                                    class="buy-button"><?php echo translate('shop_login_to_buy', 'Log in to Buy'); ?></a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
         const buttons = document.querySelectorAll('.category-button');
         const categories = document.querySelectorAll('.shop-category');
         const noItemsMessage = document.querySelector('.no-items');
 
         buttons.forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function (e) {
                 e.preventDefault();
                 const selectedCategory = this.getAttribute('data-category');
                 buttons.forEach(btn => btn.classList.remove('active'));
@@ -321,7 +338,7 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         }
 
         purchaseForms.forEach(form => {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 const characterSelect = this.querySelector('.character-select');
                 if (characterSelect && !characterSelect.value) {
                     e.preventDefault();
@@ -338,7 +355,7 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
 
         const loginButtons = document.querySelectorAll('.buy-button[href]');
         loginButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
+            button.addEventListener('click', function (e) {
                 alert('<?php echo translate('shop_js_login_required', 'Please log in to purchase items.'); ?>');
             });
         });
@@ -346,28 +363,26 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         const buyButtons = document.querySelectorAll('.buy-button:not([href])');
         buyButtons.forEach(button => {
             if (<?php echo json_encode(empty($characters)); ?>) {
-                button.addEventListener('click', function(e) {
+                button.addEventListener('click', function (e) {
                     e.preventDefault();
                     alert('<?php echo translate('shop_js_no_characters', 'You have no characters available. Please create a character first.'); ?>');
                 });
             }
         });
     });
-    </script>
+</script>
 
-    <style>
-    body {
-        background: url('<?php echo $base_path; ?>img/backgrounds/bg-shop.jpg') no-repeat center center fixed;
-        background-size: cover;
-    }
-   .shop-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-        min-height: calc(100vh - 150px); /* Adjust 150px based on header/footer height */
+<style>
+    .shop-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        min-height: calc(100vh - 150px);
         display: flex;
         flex-direction: column;
     }
+
     .shop-container h1 {
         text-align: center;
         color: #ffd700;
@@ -375,6 +390,7 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         font-size: 2.5rem;
         margin-bottom: 2rem;
     }
+
     .user-balance {
         display: flex;
         justify-content: center;
@@ -385,6 +401,7 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
+
     .user-balance span {
         display: inline-flex;
         align-items: center;
@@ -395,29 +412,36 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         font-weight: 600;
         transition: all 0.3s ease;
     }
+
     .user-balance .points {
         background: linear-gradient(135deg, #ffd700 0%, #f1c40f 100%);
         color: #1a1a1a;
         border: 2px solid #e6c200;
     }
+
     .user-balance .points:hover {
         background: linear-gradient(135deg, #e6c200 0%, #d4ac0d 100%);
         transform: translateY(-2px);
         box-shadow: 0 4px 10px rgba(241, 196, 15, 0.5);
     }
+
     .user-balance .tokens {
         background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
         color: #fff;
         border: 2px solid #8e44ad;
     }
+
     .user-balance .tokens:hover {
         background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
         transform: translateY(-2px);
         box-shadow: 0 4px 10px rgba(155, 89, 182, 0.5);
     }
-    .user-balance .points i, .user-balance .tokens i {
+
+    .user-balance .points i,
+    .user-balance .tokens i {
         font-size: 1.3rem;
     }
+
     .login-prompt {
         text-align: center;
         color: #fff;
@@ -427,13 +451,16 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         background: rgba(0, 0, 0, 0.8);
         border-radius: 8px;
     }
+
     .login-prompt a {
         color: #ffd700;
         text-decoration: none;
     }
+
     .login-prompt a:hover {
         text-decoration: underline;
     }
+
     .shop-nav {
         display: flex;
         justify-content: center;
@@ -445,6 +472,7 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
+
     .shop-nav a.category-button {
         display: flex;
         align-items: center;
@@ -461,12 +489,14 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         position: relative;
         overflow: hidden;
     }
+
     .shop-nav a.category-button:hover {
         background: linear-gradient(135deg, #e6c200 0%, #d4ac0d 100%);
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(241, 196, 15, 0.5);
         color: #fff;
     }
+
     .shop-nav a.category-button.active {
         background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
         color: #fff;
@@ -474,6 +504,7 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         box-shadow: 0 4px 15px rgba(211, 84, 0, 0.5);
         transform: scale(1.05);
     }
+
     .shop-nav a.category-button .category-icon {
         width: 50px;
         height: 50px;
@@ -483,9 +514,11 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         transition: transform 0.3s ease;
     }
+
     .shop-nav a.category-button:hover .category-icon {
         transform: scale(1.1);
     }
+
     .shop-nav a.category-button::after {
         content: '';
         position: absolute;
@@ -498,23 +531,28 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         transform: translate(-50%, -50%);
         transition: width 0.4s ease, height 0.4s ease;
     }
+
     .shop-nav a.category-button:hover::after {
         width: 200%;
         height: 200%;
     }
-     .no-items {
+
+    .no-items {
         text-align: center;
         color: #fff;
         font-size: 1.2rem;
         padding: 1rem;
         background: rgba(0, 0, 0, 0.8);
         border-radius: 8px;
-        flex-grow: 1; /* Ensure no-items expands to push footer */
+        flex-grow: 1;
+        /* Ensure no-items expands to push footer */
         display: flex;
         align-items: center;
         justify-content: center;
-        min-height: 200px; /* Minimum height for visibility */
+        min-height: 200px;
+        /* Minimum height for visibility */
     }
+
     .status {
         text-align: center;
         font-size: 1.2rem;
@@ -524,24 +562,36 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         border-radius: 8px;
         animation: fadeIn 0.5s ease-in-out;
     }
+
     .status.success {
         background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
         color: #fff;
         border: 2px solid #27ae60;
         box-shadow: 0 4px 15px rgba(46, 204, 113, 0.5);
     }
+
     .status.error {
         background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
         border: 2px solid #c0392b;
         box-shadow: 0 4px 15px rgba(231, 76, 60, 0.5);
     }
+
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
+
     .shop-category {
         margin-bottom: 3rem;
     }
+
     .shop-category h2 {
         color: #ffd700;
         font-size: 1.8rem;
@@ -549,11 +599,13 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         border-bottom: 1px solid #ffd700;
         padding-bottom: 0.5rem;
     }
+
     .item-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 1.5rem;
     }
+
     .item-card {
         background: rgba(0, 0, 0, 0.8);
         border: 1px solid #ffd700;
@@ -563,13 +615,16 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         transition: transform 0.3s ease;
         position: relative;
     }
+
     .item-card:hover {
         border: #00ff00 solid 2px;
         cursor: pointer;
     }
+
     .item-card:hover .item-tooltip {
         display: block;
     }
+
     .item-card img {
         width: 100%;
         max-width: 110%;
@@ -579,41 +634,55 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         border-radius: 5px;
         margin-bottom: 1rem;
     }
+
     .item-card h3 {
         color: #fff;
         font-size: 1.2rem;
         margin: 0.5rem 0;
     }
+
     .item-card p {
         color: #ccc;
         font-size: 0.9rem;
         margin-bottom: 1rem;
     }
-    .item-card .level-boost, .item-card .rename-character, .item-card .reset-spells, 
-    .item-card .reset-talents, .item-card .customize-character, .item-card .reset-pet-talents, 
-    .item-card .first-login, .item-card .faction-change, .item-card .race-change {
+
+    .item-card .level-boost,
+    .item-card .rename-character,
+    .item-card .reset-spells,
+    .item-card .reset-talents,
+    .item-card .customize-character,
+    .item-card .reset-pet-talents,
+    .item-card .first-login,
+    .item-card .faction-change,
+    .item-card .race-change {
         color: #00ff00;
         font-size: 0.9rem;
         font-weight: bold;
         margin-bottom: 1rem;
     }
+
     .item-cost {
         display: flex;
         justify-content: center;
         gap: 1rem;
         margin-bottom: 1rem;
     }
+
     .item-cost .points {
         color: #f1c40f;
     }
+
     .item-cost .tokens {
         color: #9b59b6;
     }
+
     .item-stock {
         color: #fff;
         font-size: 0.9rem;
         margin-bottom: 1rem;
     }
+
     .buy-button {
         background: #ffd700;
         color: #000;
@@ -626,13 +695,16 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         width: 100%;
         margin-top: 0.5rem;
     }
+
     .buy-button:hover {
         background: #e6c200;
     }
+
     .buy-button:disabled {
         background: #666;
         cursor: not-allowed;
     }
+
     .character-select {
         width: 100%;
         margin-bottom: 0.75rem;
@@ -641,11 +713,13 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         border-radius: 5px;
         border: 1px solid #ccc;
     }
+
     .no-characters {
         color: #e74c3c;
         font-size: 0.9rem;
         margin-bottom: 0.5rem;
     }
+
     .item-tooltip {
         display: none;
         position: absolute;
@@ -655,44 +729,56 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
         z-index: 100;
         margin-left: 10px;
     }
+
     @media (max-width: 768px) {
         .item-grid {
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         }
+
         .shop-container h1 {
             font-size: 2rem;
         }
+
         .shop-category h2 {
             font-size: 1.5rem;
         }
+
         .user-balance {
             flex-direction: column;
             gap: 0.8rem;
             padding: 0.8rem;
         }
+
         .user-balance span {
             font-size: 1rem;
             padding: 0.5rem 1rem;
         }
-        .user-balance .points i, .user-balance .tokens i {
+
+        .user-balance .points i,
+        .user-balance .tokens i {
             font-size: 1.1rem;
         }
+
         .shop-nav {
             gap: 0.8rem;
             padding: 0.8rem;
         }
+
         .shop-nav a.category-button {
             font-size: 1rem;
             padding: 0.6rem 1.2rem;
         }
+
         .shop-nav .category-icon {
             width: 32px;
             height: 32px;
         }
+
         .status {
             font-size: 1rem;
             padding: 0.6rem 1rem;
         }
+
         .item-tooltip {
             width: 250px;
             left: 50%;
@@ -702,12 +788,10 @@ if (!empty($_SESSION['user_id']) && isset($_SESSION['last_purchase_time'])) {
             margin-top: 10px;
         }
     }
-    </style>
+</style>
 
-    <?php include_once $project_root . 'includes/footer.php'; ?>
-</body>
-</html>
-<?php 
+<?php include_once $project_root . 'includes/footer.php'; ?>
+<?php
 $site_db->close();
 $char_db->close();
 ?>

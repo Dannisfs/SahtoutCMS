@@ -1,13 +1,21 @@
         body {
-            background-color: #212529;
+            background-color: #ffffff;
+            color: #333;
+            font-family: 'Roboto', Arial, sans-serif;
         }
-        /* Main content */
+
+        .dashboard-container {
+            flex-grow: 1;
+            max-width: 1000px;
+            width: 95vw;
+            margin: 1rem auto;
+            padding: 0 1rem 20px;
+        }
+
         .main-content {
-            padding-top: 80px; /* Clear header */
-            min-height: calc(100vh - 80px);
+            padding-bottom: 2rem;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Center content vertically */
         }
 
         .content {
@@ -15,14 +23,15 @@
             background: #ffffff;
             border: 1px solid #dee2e6;
             border-radius: 6px;
-            margin: 1rem;
+            margin-top: 1rem;
             color: #212529;
-            text-align: center; /* Center content horizontally */
-            flex-grow: 1; /* Allow content to expand */
+            text-align: center;
         }
 
         /* Status, error, and success messages */
-        .status-box, .error-box, .success-box {
+        .status-box,
+        .error-box,
+        .success-box {
             padding: 1rem;
             border-radius: 6px;
             margin-bottom: 1rem;
@@ -72,7 +81,8 @@
             font-weight: 500;
         }
 
-        .success, .text-success {
+        .success,
+        .text-success {
             color: #28a745;
             font-weight: 500;
         }
@@ -133,7 +143,8 @@
             transform: translateY(-50%);
             width: 2.5rem;
             height: 1.25rem;
-            background: #6c757d; /* Gray when unchecked */
+            background: #6c757d;
+            /* Gray when unchecked */
             border-radius: 1rem;
             transition: background-color 0.3s ease;
         }
@@ -154,22 +165,26 @@
         }
 
         /* Checked state */
-        .form-check-input:checked + .form-check-label::before {
-            background: #007bff; /* Blue when checked */
+        .form-check-input:checked+.form-check-label::before {
+            background: #007bff;
+            /* Blue when checked */
         }
 
-        .form-check-input:checked + .form-check-label::after {
-            left: 1.3rem; /* Slide circle to the right */
+        .form-check-input:checked+.form-check-label::after {
+            left: 1.3rem;
+            /* Slide circle to the right */
         }
 
         /* Hover effect */
         .form-check-label:hover::before {
-            background: #0056b3; /* Darker blue on hover */
+            background: #0056b3;
+            /* Darker blue on hover */
         }
 
         /* Focus state */
-        .form-check-input:focus + .form-check-label::before {
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Bootstrap-style focus ring */
+        .form-check-input:focus+.form-check-label::before {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            /* Bootstrap-style focus ring */
         }
 
         /* Constrain form select */
@@ -182,7 +197,8 @@
         /* Mobile adjustments */
         @media (max-width: 768px) {
             .main-content {
-                padding-top: 60px; /* Adjust for mobile header and navbar */
+                padding-top: 60px;
+                /* Adjust for mobile header and navbar */
                 padding-left: 0;
                 padding-right: 0;
             }
@@ -192,11 +208,14 @@
                 padding: 1rem;
             }
 
-            .form-select, .form-check {
+            .form-select,
+            .form-check {
                 max-width: 100%;
             }
 
-            .status-box, .error-box, .success-box {
+            .status-box,
+            .error-box,
+            .success-box {
                 max-width: 100%;
             }
         }

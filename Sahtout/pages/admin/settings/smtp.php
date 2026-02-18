@@ -116,7 +116,7 @@ function getMailer(): PHPMailer {
         \$mail->Username   = '" . addslashes($smtpUser) . "';
         \$mail->Password   = '" . addslashes($smtpPass) . "';
         \$mail->SMTPSecure = '" . addslashes($smtpSecure) . "';
-        \$mail->Port       = " . (int)$smtpPort . ";
+        \$mail->Port       = " . (int) $smtpPort . ";
         \$mail->setFrom('" . addslashes($smtpFrom) . "', '" . addslashes($smtpName) . "');
         \$mail->isHTML(true);
     } catch (Exception \$e) {}
@@ -168,34 +168,40 @@ function getMailer(): PHPMailer {
 
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langCode); ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo translate('page_title_smtp', 'SMTP Settings'); ?></title>
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
     <!-- Roboto font -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=block" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/smtp.css">
-     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
-     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
 </head>
+
 <body>
-    <div class="container-fluid">
+    <div class="dashboard-container">
         <div class="row">
             <!-- Admin Sidebar -->
             <?php include $project_root . 'includes/admin_sidebar.php'; ?>
-            
+
             <!-- Main Content with Settings Navbar -->
             <main class="col-md-10 main-content">
                 <?php include $project_root . 'pages/admin/settings/settings_navbar.php'; ?>
                 <div class="content">
                     <h2><?php echo translate('settings_smtp', 'SMTP Settings'); ?></h2>
-                    
+
                     <!-- Status Message -->
                     <div class="status-box mb-3 col-md-6 mx-auto">
-                        <span class="db-status-icon <?php echo $smtp_status === 'enabled' ? 'db-status-success' : 'db-status-muted'; ?>">
+                        <span
+                            class="db-status-icon <?php echo $smtp_status === 'enabled' ? 'db-status-success' : 'db-status-muted'; ?>">
                             <?php echo $smtp_status === 'enabled' ? '✔' : '✖'; ?>
                         </span>
                         <span class="<?php echo $smtp_status === 'enabled' ? 'text-success' : 'text-muted'; ?>">
@@ -220,7 +226,8 @@ function getMailer(): PHPMailer {
                     <?php if ($success): ?>
                         <div class="success-box mb-3 col-md-6 mx-auto">
                             <span class="db-status-icon db-status-success">✔</span>
-                            <span class="success"><?php echo translate('msg_smtp_saved', 'SMTP settings saved successfully!'); ?></span>
+                            <span
+                                class="success"><?php echo translate('msg_smtp_saved', 'SMTP settings saved successfully!'); ?></span>
                         </div>
                     <?php endif; ?>
 
@@ -228,51 +235,77 @@ function getMailer(): PHPMailer {
                         <div class="row justify-content-center">
                             <div class="col-md-6">
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" id="smtp_enabled" name="smtp_enabled" class="form-check-input" <?php echo isset($_POST['smtp_enabled']) || $smtp_status === 'enabled' ? 'checked' : ''; ?>>
-                                    <label for="smtp_enabled" class="form-check-label"><?php echo translate('label_smtp_enabled', 'Enable SMTP'); ?></label>
+                                    <input type="checkbox" id="smtp_enabled" name="smtp_enabled"
+                                        class="form-check-input" <?php echo isset($_POST['smtp_enabled']) || $smtp_status === 'enabled' ? 'checked' : ''; ?>>
+                                    <label for="smtp_enabled"
+                                        class="form-check-label"><?php echo translate('label_smtp_enabled', 'Enable SMTP'); ?></label>
                                 </div>
 
-                                <div class="smtp-fields <?php echo isset($_POST['smtp_enabled']) || $smtp_status === 'enabled' ? 'active' : ''; ?>">
+                                <div
+                                    class="smtp-fields <?php echo isset($_POST['smtp_enabled']) || $smtp_status === 'enabled' ? 'active' : ''; ?>">
                                     <div class="mb-3">
-                                        <label for="smtp_host" class="form-label"><?php echo translate('label_smtp_host', 'SMTP Host'); ?></label>
-                                        <input type="text" id="smtp_host" name="smtp_host" class="form-control" placeholder="<?php echo translate('placeholder_smtp_host', 'e.g., smtp.gmail.com'); ?>" value="<?php echo htmlspecialchars($_POST['smtp_host'] ?? $current_smtp_host); ?>">
+                                        <label for="smtp_host"
+                                            class="form-label"><?php echo translate('label_smtp_host', 'SMTP Host'); ?></label>
+                                        <input type="text" id="smtp_host" name="smtp_host" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_smtp_host', 'e.g., smtp.gmail.com'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['smtp_host'] ?? $current_smtp_host); ?>">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="smtp_user" class="form-label"><?php echo translate('label_email_address', 'Email Address'); ?></label>
-                                        <input type="email" id="smtp_user" name="smtp_user" class="form-control" placeholder="<?php echo translate('placeholder_email', 'e.g., yourname@gmail.com'); ?>" value="<?php echo htmlspecialchars($_POST['smtp_user'] ?? $current_smtp_user); ?>">
+                                        <label for="smtp_user"
+                                            class="form-label"><?php echo translate('label_email_address', 'Email Address'); ?></label>
+                                        <input type="email" id="smtp_user" name="smtp_user" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_email', 'e.g., yourname@gmail.com'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['smtp_user'] ?? $current_smtp_user); ?>">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="smtp_pass" class="form-label"><?php echo translate('label_app_password', 'App Password / SMTP Password'); ?></label>
-                                        <input type="password" id="smtp_pass" name="smtp_pass" class="form-control" placeholder="<?php echo translate('placeholder_app_password', 'App password for Gmail/Outlook'); ?>" value="<?php echo htmlspecialchars($_POST['smtp_pass'] ?? $current_smtp_pass); ?>">
+                                        <label for="smtp_pass"
+                                            class="form-label"><?php echo translate('label_app_password', 'App Password / SMTP Password'); ?></label>
+                                        <input type="password" id="smtp_pass" name="smtp_pass" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_app_password', 'App password for Gmail/Outlook'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['smtp_pass'] ?? $current_smtp_pass); ?>">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="smtp_from" class="form-label"><?php echo translate('label_from_email', 'From Email'); ?></label>
-                                        <input type="email" id="smtp_from" name="smtp_from" class="form-control" placeholder="<?php echo translate('placeholder_from_email', 'e.g., noreply@yourdomain.com'); ?>" value="<?php echo htmlspecialchars($_POST['smtp_from'] ?? $current_smtp_from); ?>">
+                                        <label for="smtp_from"
+                                            class="form-label"><?php echo translate('label_from_email', 'From Email'); ?></label>
+                                        <input type="email" id="smtp_from" name="smtp_from" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_from_email', 'e.g., noreply@yourdomain.com'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['smtp_from'] ?? $current_smtp_from); ?>">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="smtp_name" class="form-label"><?php echo translate('label_from_name', 'From Name'); ?></label>
-                                        <input type="text" id="smtp_name" name="smtp_name" class="form-control" placeholder="<?php echo translate('placeholder_from_name', 'e.g., Sahtout Account'); ?>" value="<?php echo htmlspecialchars($_POST['smtp_name'] ?? $current_smtp_name); ?>">
+                                        <label for="smtp_name"
+                                            class="form-label"><?php echo translate('label_from_name', 'From Name'); ?></label>
+                                        <input type="text" id="smtp_name" name="smtp_name" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_from_name', 'e.g., Sahtout Account'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['smtp_name'] ?? $current_smtp_name); ?>">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="smtp_port" class="form-label"><?php echo translate('label_port', 'Port'); ?></label>
-                                        <input type="number" id="smtp_port" name="smtp_port" class="form-control" placeholder="<?php echo translate('placeholder_port_tls_ssl', '587 for TLS, 465 for SSL'); ?>" value="<?php echo htmlspecialchars($_POST['smtp_port'] ?? $current_smtp_port); ?>">
+                                        <label for="smtp_port"
+                                            class="form-label"><?php echo translate('label_port', 'Port'); ?></label>
+                                        <input type="number" id="smtp_port" name="smtp_port" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_port_tls_ssl', '587 for TLS, 465 for SSL'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['smtp_port'] ?? $current_smtp_port); ?>">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="smtp_secure" class="form-label"><?php echo translate('label_encryption', 'Encryption (tls or ssl)'); ?></label>
-                                        <input type="text" id="smtp_secure" name="smtp_secure" class="form-control" placeholder="<?php echo translate('placeholder_tls_or_ssl', 'tls or ssl'); ?>" value="<?php echo htmlspecialchars($_POST['smtp_secure'] ?? $current_smtp_secure); ?>">
+                                        <label for="smtp_secure"
+                                            class="form-label"><?php echo translate('label_encryption', 'Encryption (tls or ssl)'); ?></label>
+                                        <input type="text" id="smtp_secure" name="smtp_secure" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_tls_or_ssl', 'tls or ssl'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['smtp_secure'] ?? $current_smtp_secure); ?>">
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary"><?php echo translate('btn_save_test_smtp', 'Save & Test SMTP'); ?></button>
+                                <button type="submit"
+                                    class="btn btn-primary"><?php echo translate('btn_save_test_smtp', 'Save & Test SMTP'); ?></button>
                             </div>
                         </div>
                     </form>
 
-                   <script src="<?php echo $base_path; ?>assets/js/pages/admin/settings/smtp.js"></script>
+                    <script src="<?php echo $base_path; ?>assets/js/pages/admin/settings/smtp.js"></script>
                 </div>
             </main>
         </div>
     </div>
     <?php require_once $project_root . 'includes/footer.php'; ?>
 </body>
+
 </html>

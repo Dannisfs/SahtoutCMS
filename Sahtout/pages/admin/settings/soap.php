@@ -102,97 +102,123 @@ if (!defined('ALLOWED_ACCESS')) {
     }
 }
 
-require_once $project_root . 'includes/header.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langCode); ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo translate('title_soap_settings', 'SOAP Settings'); ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/soap.css">
-     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
-     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
-   <script src="<?php echo $base_path; ?>assets/js/pages/admin/settings/soap.js"></script>
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
+    <script src="<?php echo $base_path; ?>assets/js/pages/admin/settings/soap.js"></script>
 </head>
+
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <?php include $project_root . 'includes/admin_sidebar.php'; ?>
-            <main class="col-md-10 main-content">
-                <?php include $project_root . 'pages/admin/settings/settings_navbar.php'; ?>
-                <div class="content">
-                    <h2><?php echo translate('header_soap_settings', 'SOAP Settings'); ?></h2>
+    <div class="wrapper">
+        <?php include $project_root . 'includes/header.php'; ?>
+        <div class="dashboard-container">
+            <div class="row">
+                <?php include $project_root . 'includes/admin_sidebar.php'; ?>
+                <main class="col-md-10 main-content">
+                    <?php include $project_root . 'pages/admin/settings/settings_navbar.php'; ?>
+                    <div class="content">
+                        <h2><?php echo translate('header_soap_settings', 'SOAP Settings'); ?></h2>
 
-                    <!-- Status Message -->
-                    <div class="status-box mb-3">
-                        <span class="db-status-icon <?php echo $soap_status === 'configured' ? 'db-status-success' : 'db-status-muted'; ?>">
-                            <?php echo $soap_status === 'configured' ? '✔' : '✖'; ?>
-                        </span>
-                        <span class="<?php echo $soap_status === 'configured' ? 'text-success' : 'text-muted'; ?>">
-                            <?php echo $soap_status === 'configured' ? translate('status_soap_configured', 'SOAP is currently configured.') : translate('status_soap_not_configured', 'SOAP is not configured.'); ?>
-                        </span>
-                    </div>
-
-                    <?php if (!empty($errors)): ?>
-                        <div class="error-box mb-3">
-                            <strong><?php echo translate('error_box_title', 'Please fix the following errors:'); ?></strong>
-                            <?php foreach ($errors as $err): ?>
-                                <div class="db-status">
-                                    <span class="db-status-icon db-status-error">❌</span>
-                                    <span class="error"><?php echo htmlspecialchars($err); ?></span>
-                                </div>
-                            <?php endforeach; ?>
+                        <!-- Status Message -->
+                        <div class="status-box mb-3">
+                            <span
+                                class="db-status-icon <?php echo $soap_status === 'configured' ? 'db-status-success' : 'db-status-muted'; ?>">
+                                <?php echo $soap_status === 'configured' ? '✔' : '✖'; ?>
+                            </span>
+                            <span class="<?php echo $soap_status === 'configured' ? 'text-success' : 'text-muted'; ?>">
+                                <?php echo $soap_status === 'configured' ? translate('status_soap_configured', 'SOAP is currently configured.') : translate('status_soap_not_configured', 'SOAP is not configured.'); ?>
+                            </span>
                         </div>
-                    <?php endif; ?>
 
-                    <?php if ($success): ?>
-                        <div class="success-box mb-3">
-                            <span class="db-status-icon db-status-success">✔</span>
-                            <span class="success"><?php echo translate('success_soap_settings_saved', 'SOAP settings saved successfully!'); ?></span>
-                        </div>
-                    <?php endif; ?>
+                        <?php if (!empty($errors)): ?>
+                            <div class="error-box mb-3">
+                                <strong><?php echo translate('error_box_title', 'Please fix the following errors:'); ?></strong>
+                                <?php foreach ($errors as $err): ?>
+                                    <div class="db-status">
+                                        <span class="db-status-icon db-status-error">❌</span>
+                                        <span class="error"><?php echo htmlspecialchars($err); ?></span>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
 
-                    <form method="post">
-                        <div class="row justify-content-center">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="soap_url" class="form-label"><?php echo translate('label_soap_url', 'SOAP URL'); ?></label>
-                                    <input type="text" id="soap_url" name="soap_url" class="form-control" placeholder="<?php echo translate('placeholder_soap_url', 'e.g., http://127.0.0.1:7878'); ?>" value="<?php echo htmlspecialchars($soapUrl); ?>" required>
+                        <?php if ($success): ?>
+                            <div class="success-box mb-3">
+                                <span class="db-status-icon db-status-success">✔</span>
+                                <span
+                                    class="success"><?php echo translate('success_soap_settings_saved', 'SOAP settings saved successfully!'); ?></span>
+                            </div>
+                        <?php endif; ?>
+
+                        <form method="post">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="soap_url"
+                                            class="form-label"><?php echo translate('label_soap_url', 'SOAP URL'); ?></label>
+                                        <input type="text" id="soap_url" name="soap_url" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_soap_url', 'e.g., http://127.0.0.1:7878'); ?>"
+                                            value="<?php echo htmlspecialchars($soapUrl); ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="soap_user"
+                                            class="form-label"><?php echo translate('label_soap_user', 'GM Account Username'); ?></label>
+                                        <input type="text" id="soap_user" name="soap_user" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_soap_user', 'Must be GM level 3'); ?>"
+                                            value="<?php echo htmlspecialchars($soapUser); ?>" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="soap_pass"
+                                            class="form-label"><?php echo translate('label_soap_pass', 'SOAP Password'); ?></label>
+                                        <input type="password" id="soap_pass" name="soap_pass" class="form-control"
+                                            placeholder="<?php echo translate('placeholder_soap_pass', 'SOAP password=Account password'); ?>"
+                                            value="<?php echo htmlspecialchars($soapPass); ?>" required>
+                                    </div>
+                                    <button type="submit"
+                                        class="btn btn-primary"><?php echo translate('button_save_verify_soap', 'Save & Verify SOAP'); ?></button>
+                                    <p class="form-text mt-2">
+                                        <?php echo translate('note_soap_config', 'Note: Ensure the account has GM level 3 and SOAP is enabled in your worldserver.conf.'); ?>
+                                    </p>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="soap_user" class="form-label"><?php echo translate('label_soap_user', 'GM Account Username'); ?></label>
-                                    <input type="text" id="soap_user" name="soap_user" class="form-control" placeholder="<?php echo translate('placeholder_soap_user', 'Must be GM level 3'); ?>" value="<?php echo htmlspecialchars($soapUser); ?>" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="soap_pass" class="form-label"><?php echo translate('label_soap_pass', 'SOAP Password'); ?></label>
-                                    <input type="password" id="soap_pass" name="soap_pass" class="form-control" placeholder="<?php echo translate('placeholder_soap_pass', 'SOAP password=Account password'); ?>" value="<?php echo htmlspecialchars($soapPass); ?>" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary"><?php echo translate('button_save_verify_soap', 'Save & Verify SOAP'); ?></button>
-                                <p class="form-text mt-2"><?php echo translate('note_soap_config', 'Note: Ensure the account has GM level 3 and SOAP is enabled in your worldserver.conf.'); ?></p>
+                            </div>
+                        </form>
+
+                        <div class="info-box mb-3">
+                            <div class="info-title" onclick="toggleInfo(this)">
+                                <?php echo translate('info_box_title', 'Important Steps (Click to expand)'); ?>
+                            </div>
+                            <div class="info-content">
+                                <ul>
+                                    <li><?php echo translate('info_step_1', 'Make sure the GM account exists in your Auth DB and has GM level 3 in <code>account_access</code> with <code>RealmID = -1</code>.'); ?>
+                                    </li>
+                                    <li><?php echo translate('info_step_2', 'Open your <code>worldserver.conf</code> file and set: <strong>SOAP.Enabled = 1</strong>'); ?>
+                                    </li>
+                                    <li><?php echo translate('info_step_3', 'Ensure the SOAP port in <code>soap_url</code> is correct and accessible.'); ?>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                    </form>
-
-                    <div class="info-box mb-3">
-                        <div class="info-title" onclick="toggleInfo(this)">
-                            <?php echo translate('info_box_title', 'Important Steps (Click to expand)'); ?>
-                        </div>
-                        <div class="info-content">
-                            <ul>
-                                <li><?php echo translate('info_step_1', 'Make sure the GM account exists in your Auth DB and has GM level 3 in <code>account_access</code> with <code>RealmID = -1</code>.'); ?></li>
-                                <li><?php echo translate('info_step_2', 'Open your <code>worldserver.conf</code> file and set: <strong>SOAP.Enabled = 1</strong>'); ?></li>
-                                <li><?php echo translate('info_step_3', 'Ensure the SOAP port in <code>soap_url</code> is correct and accessible.'); ?></li>
-                            </ul>
-                        </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
+        <?php include $project_root . 'includes/footer.php'; ?>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <?php include $project_root . 'includes/footer.php'; ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

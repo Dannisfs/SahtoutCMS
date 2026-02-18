@@ -183,13 +183,15 @@ $bans_result = $auth_db->query($bans_query);
                 <!-- Sidebar -->
                 <?php include $project_root . 'includes/admin_sidebar.php'; ?>
                 <!-- Main Content -->
-                <div class="col-md-9">
+                <div class="col-md-10">
                     <h1 class="dashboard-title">
-                        <?php echo translate('admin_dashboard_title', 'Admin & Moderator Dashboard'); ?></h1>
+                        <?php echo translate('admin_dashboard_title', 'Admin & Moderator Dashboard'); ?>
+                    </h1>
                     <!-- Server Status -->
                     <div class="card server-status">
                         <div class="card-header">
-                            <?php echo translate('admin_dashboard_server_status_header', 'Server Status'); ?></div>
+                            <?php echo translate('admin_dashboard_server_status_header', 'Server Status'); ?>
+                        </div>
                         <div class="card-body">
                             <?php
                             include $project_root . 'includes/realm_status.php';
@@ -199,7 +201,8 @@ $bans_result = $auth_db->query($bans_query);
                     <!-- Quick Stats -->
                     <div class="card quick-stats">
                         <div class="card-header">
-                            <?php echo translate('admin_dashboard_quick_stats_header', 'Quick Stats'); ?></div>
+                            <?php echo translate('admin_dashboard_quick_stats_header', 'Quick Stats'); ?>
+                        </div>
                         <div class="card-body">
                             <div class="quick-stats">
                                 <ul>
@@ -311,7 +314,8 @@ $bans_result = $auth_db->query($bans_query);
                     <!-- Recent Bans -->
                     <div class="card">
                         <div class="card-header">
-                            <?php echo translate('admin_dashboard_recent_bans_header', 'Recent Bans'); ?></div>
+                            <?php echo translate('admin_dashboard_recent_bans_header', 'Recent Bans'); ?>
+                        </div>
                         <div class="card-body">
                             <div class="table-wrapper">
                                 <table class="table table-striped">

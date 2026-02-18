@@ -412,7 +412,7 @@ require_once $project_root . 'includes/header.php';
                         <div class="slot-icon">
                             <?php
                             $icon = isset($items[$slot]) && !empty($items[$slot]['icon']) ? $items[$slot]['icon'] : ($defaultIcons[$slot] ?? 'inv_misc_questionmark');
-                            $iconSrc = isset($items[$slot]) && !empty($items[$slot]['icon']) ? "https://wow.zamimg.com/images/wow/icons/large/$icon.jpg" : "{$base_path}img/characterarmor/$icon";
+                            $iconSrc = isset($items[$slot]) && !empty($items[$slot]['icon']) ? "https://render.worldofwarcraft.com/us/icons/56/$icon.jpg" : "{$base_path}img/characterarmor/$icon";
                             ?>
                             <img src="<?= htmlspecialchars($iconSrc) ?>" alt="<?= htmlspecialchars($slotLabels[$slot]) ?>"
                                 loading="lazy">
@@ -448,13 +448,13 @@ require_once $project_root . 'includes/header.php';
                             alt="<?php echo translate('default_character_image', 'Default Character Image'); ?>"
                             class="default-image">
                         <script type="importmap">
-                                                {
-                                                    "imports": {
-                                                        "three": "https://esm.sh/three@0.167.1",
-                                                        "three/addons/": "https://esm.sh/three@0.167.1/examples/jsm/"
+                                                    {
+                                                        "imports": {
+                                                            "three": "https://esm.sh/three@0.167.1",
+                                                            "three/addons/": "https://esm.sh/three@0.167.1/examples/jsm/"
+                                                        }
                                                     }
-                                                }
-                                            </script>
+                                                </script>
                         <script type="module">
                             import * as THREE from 'three';
                             import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -556,7 +556,7 @@ require_once $project_root . 'includes/header.php';
                                 <div class="slot-icon">
                                     <?php
                                     $icon = isset($items[$slot]) && !empty($items[$slot]['icon']) ? $items[$slot]['icon'] : ($defaultIcons[$slot] ?? 'inv_misc_questionmark');
-                                    $iconSrc = isset($items[$slot]) && !empty($items[$slot]['icon']) ? "https://wow.zamimg.com/images/wow/icons/large/$icon.jpg" : "{$base_path}img/characterarmor/$icon";
+                                    $iconSrc = isset($items[$slot]) && !empty($items[$slot]['icon']) ? "https://render.worldofwarcraft.com/us/icons/56/$icon.jpg" : "{$base_path}img/characterarmor/$icon";
                                     ?>
                                     <img src="<?= htmlspecialchars($iconSrc) ?>"
                                         alt="<?= htmlspecialchars($slotLabels[$slot]) ?>" loading="lazy">
@@ -583,7 +583,7 @@ require_once $project_root . 'includes/header.php';
                         <div class="slot-icon">
                             <?php
                             $icon = isset($items[$slot]) && !empty($items[$slot]['icon']) ? $items[$slot]['icon'] : ($defaultIcons[$slot] ?? 'inv_misc_questionmark');
-                            $iconSrc = isset($items[$slot]) && !empty($items[$slot]['icon']) ? "https://wow.zamimg.com/images/wow/icons/large/$icon.jpg" : "{$base_path}img/characterarmor/$icon";
+                            $iconSrc = isset($items[$slot]) && !empty($items[$slot]['icon']) ? "https://render.worldofwarcraft.com/us/icons/56/$icon.jpg" : "{$base_path}img/characterarmor/$icon";
                             ?>
                             <img src="<?= htmlspecialchars($iconSrc) ?>" alt="<?= htmlspecialchars($slotLabels[$slot]) ?>"
                                 loading="lazy">

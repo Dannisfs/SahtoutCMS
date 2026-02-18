@@ -7,7 +7,8 @@ require_once $project_root . 'languages/language.php';
 require_once $project_root . 'includes/config.settings.php';
 
 // Redirect helper function
-function redirect_with_params(string $base, array $params = []) {
+function redirect_with_params(string $base, array $params = [])
+{
     $url = $base . ($params ? '?' . http_build_query($params) : '');
     header("Location: $url");
     exit;
@@ -19,7 +20,7 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'mode
 }
 
 // Initialize variables
-$site_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$site_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $site_data = [
     'callback_file_name' => '',
     'site_name' => '',
@@ -51,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Handle Delete Image
 if (isset($_GET['delete_image']) && is_numeric($_GET['delete_image'])) {
-    $delete_id = (int)$_GET['delete_image'];
+    $delete_id = (int) $_GET['delete_image'];
     try {
         if (!isset($_GET['csrf_token']) || $_GET['csrf_token'] !== $_SESSION['csrf_token']) {
             $errors[] = translate('err_invalid_csrf', 'Invalid CSRF token.');
@@ -94,7 +95,7 @@ if (isset($_GET['delete_image']) && is_numeric($_GET['delete_image'])) {
 
 // Handle Delete Site
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $delete_id = (int)$_GET['delete'];
+    $delete_id = (int) $_GET['delete'];
     try {
         if (!isset($_GET['csrf_token']) || $_GET['csrf_token'] !== $_SESSION['csrf_token']) {
             $errors[] = translate('err_invalid_csrf', 'Invalid CSRF token.');
@@ -138,14 +139,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         $errors[] = translate('err_invalid_csrf', 'Invalid CSRF token.');
     } else {
-        $site_id = isset($_POST['site_id']) ? (int)$_POST['site_id'] : 0;
+        $site_id = isset($_POST['site_id']) ? (int) $_POST['site_id'] : 0;
         $callback_file_name = trim($_POST['callback_file_name'] ?? '');
         $site_name = trim($_POST['site_name'] ?? '');
         $siteid = trim($_POST['siteid'] ?? '');
         $url_format = trim($_POST['url_format'] ?? '');
         $button_image_url = trim($_POST['button_image_url'] ?? '');
-        $cooldown_hours = (int)($_POST['cooldown_hours'] ?? 12);
-        $reward_points = (int)($_POST['reward_points'] ?? 1);
+        $cooldown_hours = (int) ($_POST['cooldown_hours'] ?? 12);
+        $reward_points = (int) ($_POST['reward_points'] ?? 1);
         $uses_callback = isset($_POST['uses_callback']) && $_POST['uses_callback'] == 1 ? 1 : 0;
         $callback_secret = trim(strip_tags($_POST['callback_secret'] ?? ''));
 
@@ -185,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_FILES['button_image']) && $_FILES['button_image']['error'] !== UPLOAD_ERR_NO_FILE) {
             $upload_dir = $project_root . 'img/voteimg/';
             $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-            $max_size = 1 * 1024 * 1024; // 1MB
+            $max_size = 1073741824; // 1GB
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0755, true);
             }
@@ -373,21 +374,26 @@ require_once $project_root . 'includes/header.php';
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langCode); ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo translate('page_title_manage_vote_sites', 'Manage Vote Sites'); ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/vote_sites.css">
-     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
-     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
-    
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
+
 </head>
+
 <body>
-    <div class="container-fluid">
+    <div class="dashboard-container">
         <div class="row">
             <?php include $project_root . 'includes/admin_sidebar.php'; ?>
             <main class="col-md-10 main-content">
@@ -397,7 +403,8 @@ require_once $project_root . 'includes/header.php';
                     <?php if ($status === 'success' || (isset($_GET['status']) && $_GET['status'] === 'success')): ?>
                         <div class="success-box mb-3 col-md-6 mx-auto">
                             <span class="db-status-icon db-status-success">✔</span>
-                            <span class="success"><?php echo htmlspecialchars($message ?: urldecode($_GET['message'])); ?></span>
+                            <span
+                                class="success"><?php echo htmlspecialchars($message ?: urldecode($_GET['message'])); ?></span>
                         </div>
                     <?php elseif (!empty($errors) || (isset($_GET['status']) && $_GET['status'] === 'error')): ?>
                         <div class="error-box mb-3 col-md-6 mx-auto">
@@ -418,74 +425,131 @@ require_once $project_root . 'includes/header.php';
                         </div>
                     <?php endif; ?>
                     <div class="row justify-content-center mb-4">
-                        <form action="<?php echo $base_path; ?>admin/settings/vote_sites" method="POST" enctype="multipart/form-data" class="col-md-6">
-                            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
+                        <form action="<?php echo $base_path; ?>admin/settings/vote_sites" method="POST"
+                            enctype="multipart/form-data" class="col-md-6">
+                            <input type="hidden" name="csrf_token"
+                                value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
                             <input type="hidden" name="site_id" value="<?php echo $site_id; ?>">
-                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="1073741824">
                             <div class="mb-3">
-                                <label for="callback_file_name" class="form-label"><?php echo translate('label_callback_file_name', 'Callback File Name'); ?></label>
-                                <input type="text" name="callback_file_name" id="callback_file_name" class="form-control" placeholder="<?php echo translate('placeholder_callback_file_name', 'Enter callback file name (e.g., arenaTop100)'); ?>" value="<?php echo htmlspecialchars($site_data['callback_file_name']); ?>" required maxlength="50">
-                                <small class="form-text text-muted"><?php echo translate('label_callback_file_name_info', 'Name for identifying the voting site in callbacks.gtop100,top100arena,etc'); ?></small>
+                                <label for="callback_file_name"
+                                    class="form-label"><?php echo translate('label_callback_file_name', 'Callback File Name'); ?></label>
+                                <input type="text" name="callback_file_name" id="callback_file_name"
+                                    class="form-control"
+                                    placeholder="<?php echo translate('placeholder_callback_file_name', 'Enter callback file name (e.g., arenaTop100)'); ?>"
+                                    value="<?php echo htmlspecialchars($site_data['callback_file_name']); ?>" required
+                                    maxlength="50">
+                                <small
+                                    class="form-text text-muted"><?php echo translate('label_callback_file_name_info', 'Name for identifying the voting site in callbacks.gtop100,top100arena,etc'); ?></small>
                             </div>
                             <div class="mb-3">
-                                <label for="site_name" class="form-label"><?php echo translate('label_site_name', 'Site Name'); ?></label>
-                                <input type="text" name="site_name" id="site_name" class="form-control" placeholder="<?php echo translate('placeholder_site_name', 'Enter site name'); ?>" value="<?php echo htmlspecialchars($site_data['site_name']); ?>" required maxlength="50">
+                                <label for="site_name"
+                                    class="form-label"><?php echo translate('label_site_name', 'Site Name'); ?></label>
+                                <input type="text" name="site_name" id="site_name" class="form-control"
+                                    placeholder="<?php echo translate('placeholder_site_name', 'Enter site name'); ?>"
+                                    value="<?php echo htmlspecialchars($site_data['site_name']); ?>" required
+                                    maxlength="50">
                             </div>
                             <div class="mb-3">
-                                <label for="siteid" class="form-label"><?php echo translate('label_siteid', 'Site ID'); ?></label>
-                                <input type="text" name="siteid" id="siteid" class="form-control" placeholder="<?php echo translate('placeholder_siteid', 'Enter server ID on the voting site'); ?>" value="<?php echo htmlspecialchars($site_data['siteid']); ?>" required maxlength="255">
-                                <small class="form-text text-muted"><?php echo translate('label_siteid_info', 'Your server’s unique ID on the voting site (e.g., SahtoutServer, 12345).'); ?></small>
+                                <label for="siteid"
+                                    class="form-label"><?php echo translate('label_siteid', 'Site ID'); ?></label>
+                                <input type="text" name="siteid" id="siteid" class="form-control"
+                                    placeholder="<?php echo translate('placeholder_siteid', 'Enter server ID on the voting site'); ?>"
+                                    value="<?php echo htmlspecialchars($site_data['siteid']); ?>" required
+                                    maxlength="255">
+                                <small
+                                    class="form-text text-muted"><?php echo translate('label_siteid_info', 'Your server’s unique ID on the voting site (e.g., SahtoutServer, 12345).'); ?></small>
                             </div>
                             <div class="mb-3">
-                                <label for="url_format" class="form-label"><?php echo translate('label_url_format', 'Vote URL Format'); ?></label>
-                                <input type="text" name="url_format" id="url_format" class="form-control" placeholder="<?php echo translate('placeholder_url_format', 'e.g., https://site.com/vote/{siteid}/{userid}'); ?>" value="<?php echo htmlspecialchars($site_data['url_format']); ?>" required maxlength="255">
-                                <small class="form-text text-muted"><?php echo translate('label_url_format_info', 'Use {siteid}, {userid}, or {username} as placeholders.'); ?></small>
+                                <label for="url_format"
+                                    class="form-label"><?php echo translate('label_url_format', 'Vote URL Format'); ?></label>
+                                <input type="text" name="url_format" id="url_format" class="form-control"
+                                    placeholder="<?php echo translate('placeholder_url_format', 'e.g., https://site.com/vote/{siteid}/{userid}'); ?>"
+                                    value="<?php echo htmlspecialchars($site_data['url_format']); ?>" required
+                                    maxlength="255">
+                                <small
+                                    class="form-text text-muted"><?php echo translate('label_url_format_info', 'Use {siteid}, {userid}, or {username} as placeholders.'); ?></small>
                             </div>
                             <div class="mb-3">
-                                <label for="button_image" class="form-label"><?php echo translate('label_button_image', 'Upload Button Image'); ?></label>
+                                <label for="button_image"
+                                    class="form-label"><?php echo translate('label_button_image', 'Upload Button Image'); ?></label>
                                 <?php if ($site_data['button_image_url']): ?>
                                     <div class="mb-2">
-                                        <img src="<?php echo htmlspecialchars($site_data['button_image_url']); ?>" alt="<?php echo translate('label_button_image', 'Button Image'); ?>" class="img-fluid" style="max-width: 150px;">
+                                        <img src="<?php echo htmlspecialchars($site_data['button_image_url']); ?>"
+                                            alt="<?php echo translate('label_button_image', 'Button Image'); ?>"
+                                            class="img-fluid" style="max-width: 150px;">
                                     </div>
                                     <a href="<?php echo $base_path; ?>admin/settings/vote_sites?delete_image=<?php echo $site_id; ?>&csrf_token=<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>"
-                                       class="btn btn-danger mb-2"
-                                       onclick="return confirm('<?php echo translate('confirm_delete_image', 'Are you sure you want to delete this image?'); ?>');">
-                                       <i class="fas fa-trash"></i> <?php echo translate('btn_delete_image', 'Delete Image'); ?>
+                                        class="btn btn-danger mb-2"
+                                        onclick="return confirm('<?php echo translate('confirm_delete_image', 'Are you sure you want to delete this image?'); ?>');">
+                                        <i class="fas fa-trash"></i>
+                                        <?php echo translate('btn_delete_image', 'Delete Image'); ?>
                                     </a>
                                 <?php endif; ?>
                                 <div class="custom-file-upload">
-                                    <input type="file" id="button_image" name="button_image" accept="image/jpeg,image/png,image/gif">
-                                    <button type="button" class="btn" onclick="document.getElementById('button_image').click();"><?php echo translate('btn_choose_file', 'Choose File'); ?></button>
-                                    <div class="file-name" id="file-name-button"><?php echo translate('placeholder_button_image', 'Upload a JPEG, PNG, or GIF image (max 1MB).'); ?></div>
+                                    <input type="file" id="button_image" name="button_image"
+                                        accept="image/jpeg,image/png,image/gif">
+                                    <button type="button" class="btn"
+                                        onclick="document.getElementById('button_image').click();"><?php echo translate('btn_choose_file', 'Choose File'); ?></button>
+                                    <div class="file-name" id="file-name-button">
+                                        <?php echo translate('placeholder_button_image', 'Upload a JPEG, PNG, or GIF image (max 1GB).'); ?>
+                                    </div>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="button_image_url" class="form-label"><?php echo translate('label_button_image_url', 'Button Image URL (Optional)'); ?></label>
-                                <input type="text" name="button_image_url" id="button_image_url" class="form-control" placeholder="<?php echo translate('placeholder_button_image_url', 'Enter button image URL (optional)'); ?>" value="<?php echo htmlspecialchars($site_data['button_image_url']); ?>" maxlength="255">
-                                <small class="form-text text-muted"><?php echo translate('label_image_url_info', 'Enter an image URL if you prefer not to upload an image. Leave empty to clear the image.'); ?></small>
+                                <label for="button_image_url"
+                                    class="form-label"><?php echo translate('label_button_image_url', 'Button Image URL (Optional)'); ?></label>
+                                <input type="text" name="button_image_url" id="button_image_url" class="form-control"
+                                    placeholder="<?php echo translate('placeholder_button_image_url', 'Enter button image URL (optional)'); ?>"
+                                    value="<?php echo htmlspecialchars($site_data['button_image_url']); ?>"
+                                    maxlength="255">
+                                <small
+                                    class="form-text text-muted"><?php echo translate('label_image_url_info', 'Enter an image URL if you prefer not to upload an image. Leave empty to clear the image.'); ?></small>
                             </div>
                             <div class="mb-3">
-                                <label for="cooldown_hours" class="form-label"><?php echo translate('label_cooldown_hours', 'Cooldown Hours'); ?></label>
-                                <input type="number" name="cooldown_hours" id="cooldown_hours" class="form-control compact-input" placeholder="<?php echo translate('placeholder_cooldown_hours', 'Enter cooldown hours'); ?>" value="<?php echo htmlspecialchars($site_data['cooldown_hours']); ?>" required min="1" max="999">
+                                <label for="cooldown_hours"
+                                    class="form-label"><?php echo translate('label_cooldown_hours', 'Cooldown Hours'); ?></label>
+                                <input type="number" name="cooldown_hours" id="cooldown_hours"
+                                    class="form-control compact-input"
+                                    placeholder="<?php echo translate('placeholder_cooldown_hours', 'Enter cooldown hours'); ?>"
+                                    value="<?php echo htmlspecialchars($site_data['cooldown_hours']); ?>" required
+                                    min="1" max="999">
                             </div>
                             <div class="mb-3">
-                                <label for="reward_points" class="form-label"><?php echo translate('label_reward_points', 'Reward Points'); ?></label>
-                                <input type="number" name="reward_points" id="reward_points" class="form-control compact-input" placeholder="<?php echo translate('placeholder_reward_points', 'Enter reward points'); ?>" value="<?php echo htmlspecialchars($site_data['reward_points']); ?>" required min="1" max="255">
+                                <label for="reward_points"
+                                    class="form-label"><?php echo translate('label_reward_points', 'Reward Points'); ?></label>
+                                <input type="number" name="reward_points" id="reward_points"
+                                    class="form-control compact-input"
+                                    placeholder="<?php echo translate('placeholder_reward_points', 'Enter reward points'); ?>"
+                                    value="<?php echo htmlspecialchars($site_data['reward_points']); ?>" required
+                                    min="1" max="255">
                             </div>
                             <div class="mb-3">
-                                <label for="uses_callback" class="form-label"><?php echo translate('label_uses_callback', 'Uses Callback'); ?></label>
+                                <label for="uses_callback"
+                                    class="form-label"><?php echo translate('label_uses_callback', 'Uses Callback'); ?></label>
                                 <select name="uses_callback" id="uses_callback" class="form-control compact-input">
-                                    <option value="0" <?php echo $site_data['uses_callback'] == 0 ? 'selected' : ''; ?>><?php echo translate('option_no', 'No'); ?></option>
-                                    <option value="1" <?php echo $site_data['uses_callback'] == 1 ? 'selected' : ''; ?>><?php echo translate('option_yes', 'Yes'); ?></option>
+                                    <option value="0" <?php echo $site_data['uses_callback'] == 0 ? 'selected' : ''; ?>>
+                                        <?php echo translate('option_no', 'No'); ?>
+                                    </option>
+                                    <option value="1" <?php echo $site_data['uses_callback'] == 1 ? 'selected' : ''; ?>>
+                                        <?php echo translate('option_yes', 'Yes'); ?>
+                                    </option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="callback_secret" class="form-label"><?php echo translate('label_callback_secret', 'Callback Secret'); ?></label>
-                                <input type="text" name="callback_secret" id="callback_secret" class="form-control compact-input" placeholder="<?php echo translate('placeholder_callback_secret', 'Enter callback secret (optional)'); ?>" value="<?php echo htmlspecialchars($site_data['callback_secret'] ?? ''); ?>" maxlength="64">
+                                <label for="callback_secret"
+                                    class="form-label"><?php echo translate('label_callback_secret', 'Callback Secret'); ?></label>
+                                <input type="text" name="callback_secret" id="callback_secret"
+                                    class="form-control compact-input"
+                                    placeholder="<?php echo translate('placeholder_callback_secret', 'Enter callback secret (optional)'); ?>"
+                                    value="<?php echo htmlspecialchars($site_data['callback_secret'] ?? ''); ?>"
+                                    maxlength="64">
                             </div>
-                            <button type="submit" class="btn btn-primary"><?php echo translate('btn_save_vote_site', 'Save Vote Site'); ?></button>
+                            <button type="submit"
+                                class="btn btn-primary"><?php echo translate('btn_save_vote_site', 'Save Vote Site'); ?></button>
                             <?php if ($site_id > 0): ?>
-                                <a href="<?php echo $base_path; ?>admin/settings/vote_sites" class="btn btn-reset"><?php echo translate('btn_reset', 'Reset Form'); ?></a>
+                                <a href="<?php echo $base_path; ?>admin/settings/vote_sites"
+                                    class="btn btn-reset"><?php echo translate('btn_reset', 'Reset Form'); ?></a>
                             <?php endif; ?>
                         </form>
                     </div>
@@ -507,7 +571,9 @@ require_once $project_root . 'includes/header.php';
                             <tbody>
                                 <?php if (empty($voteSites)): ?>
                                     <tr>
-                                        <td colspan="9" class="text-center"><?php echo translate('msg_no_vote_sites', 'No vote sites available.'); ?></td>
+                                        <td colspan="9" class="text-center">
+                                            <?php echo translate('msg_no_vote_sites', 'No vote sites available.'); ?>
+                                        </td>
                                     </tr>
                                 <?php else: ?>
                                     <?php foreach ($voteSites as $site): ?>
@@ -518,23 +584,26 @@ require_once $project_root . 'includes/header.php';
                                             <td><?php echo htmlspecialchars($site['url_format']); ?></td>
                                             <td>
                                                 <?php if ($site['button_image_url']): ?>
-                                                    <img src="<?php echo htmlspecialchars($site['button_image_url']); ?>" alt="<?php echo htmlspecialchars($site['site_name']); ?>">
+                                                    <img src="<?php echo htmlspecialchars($site['button_image_url']); ?>"
+                                                        alt="<?php echo htmlspecialchars($site['site_name']); ?>">
                                                 <?php else: ?>
                                                     <?php echo translate('label_no_image', 'No Image'); ?>
                                                 <?php endif; ?>
                                             </td>
                                             <td><?php echo htmlspecialchars($site['cooldown_hours']); ?></td>
                                             <td><?php echo htmlspecialchars($site['reward_points']); ?></td>
-                                            <td><?php echo $site['uses_callback'] ? translate('option_yes', 'Yes') : translate('option_no', 'No'); ?></td>
+                                            <td><?php echo $site['uses_callback'] ? translate('option_yes', 'Yes') : translate('option_no', 'No'); ?>
+                                            </td>
                                             <td>
                                                 <a href="<?php echo $base_path; ?>admin/settings/vote_sites?id=<?php echo $site['id']; ?>"
-                                                   class="btn btn-primary px-3 py-2">
-                                                   <i class="fas fa-edit"></i> <?php echo translate('btn_edit', 'Edit'); ?>
+                                                    class="btn btn-primary px-3 py-2">
+                                                    <i class="fas fa-edit"></i> <?php echo translate('btn_edit', 'Edit'); ?>
                                                 </a>
                                                 <a href="<?php echo $base_path; ?>admin/settings/vote_sites?delete=<?php echo $site['id']; ?>&csrf_token=<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>"
-                                                   class="btn btn-sm btn-danger"
-                                                   onclick="return confirm('<?php echo translate('confirm_delete', 'Are you sure you want to delete this vote site?'); ?>');">
-                                                   <i class="fas fa-trash"></i> <?php echo translate('btn_delete', 'Delete'); ?>
+                                                    class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('<?php echo translate('confirm_delete', 'Are you sure you want to delete this vote site?'); ?>');">
+                                                    <i class="fas fa-trash"></i>
+                                                    <?php echo translate('btn_delete', 'Delete'); ?>
                                                 </a>
                                             </td>
                                         </tr>
@@ -549,10 +618,11 @@ require_once $project_root . 'includes/header.php';
     </div>
     <?php require_once $project_root . 'includes/footer.php'; ?>
     <script>
-        document.getElementById('button_image').addEventListener('change', function() {
-            const fileName = this.files.length > 0 ? this.files[0].name : '<?php echo translate('placeholder_button_image', 'Upload a JPEG, PNG, or GIF image (max 1MB).'); ?>';
+        document.getElementById('button_image').addEventListener('change', function () {
+            const fileName = this.files.length > 0 ? this.files[0].name : '<?php echo translate('placeholder_button_image', 'Upload a JPEG, PNG, or GIF image (max 1GB).'); ?>';
             document.getElementById('file-name-button').textContent = fileName;
         });
     </script>
 </body>
+
 </html>

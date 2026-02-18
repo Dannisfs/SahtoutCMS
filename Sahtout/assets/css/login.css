@@ -1,46 +1,11 @@
-        * {
-            box-sizing: border-box;
-        }
+        /* Login styles - warmane.css handles global resets */
 
-        html, body {
-            width: 100%;
-            overflow-x: hidden;
-            margin: 0;
-            background: var(--bg-login) no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'UnifrakturCook', 'Arial', sans-serif;
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        body::before {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 1;
-        }
-
-        .wrapper {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            width: 100%;
-            position: relative;
-            z-index: 2;
-        }
+        /* Login form container - sits inside left-column from warmane-wrapper */
 
         .form-container {
             max-width: 480px;
             width: calc(100% - 2rem);
+            margin: 0 auto;
             background: #1a1a1a88;
             border: 3px solid #f1c40f;
             border-radius: 12px;
@@ -55,8 +20,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 8px 24px rgba(241, 196, 15, 0.4), 0 0 40px rgba(0, 0, 0, 0.8); }
-            50% { box-shadow: 0 8px 32px rgba(241, 196, 15, 0.6), 0 0 48px rgba(0, 0, 0, 0.9); }
+
+            0%,
+            100% {
+                box-shadow: 0 8px 24px rgba(241, 196, 15, 0.4), 0 0 40px rgba(0, 0, 0, 0.8);
+            }
+
+            50% {
+                box-shadow: 0 8px 32px rgba(241, 196, 15, 0.6), 0 0 48px rgba(0, 0, 0, 0.9);
+            }
         }
 
         .form-section {
@@ -173,7 +145,8 @@
             color: #fff;
         }
 
-        .form-section .register-link, .form-section .forgot-password-link {
+        .form-section .register-link,
+        .form-section .forgot-password-link {
             text-align: center;
             font-size: 1.1rem;
             font-family: 'UnifrakturCook', sans-serif;
@@ -181,19 +154,23 @@
             margin-top: 1.2rem;
         }
 
-        .form-section .register-link a, .form-section .forgot-password-link a {
+        .form-section .register-link a,
+        .form-section .forgot-password-link a {
             color: #f1c40f;
             text-decoration: none;
             transition: all 0.3s ease;
         }
 
-        .form-section .register-link a:hover, .form-section .forgot-password-link a:hover {
+        .form-section .register-link a:hover,
+        .form-section .forgot-password-link a:hover {
             color: #ffe600;
             text-decoration: underline;
         }
 
         @media (max-width: 767px) {
-            html, body {
+
+            html,
+            body {
                 width: 100%;
                 overflow-x: hidden;
             }
@@ -234,7 +211,10 @@
                 transform-origin: center;
             }
 
-            .form-section .resend-link, .form-section .register-link, .form-section .forgot-password-link, .form-section .attempts-info {
+            .form-section .resend-link,
+            .form-section .register-link,
+            .form-section .forgot-password-link,
+            .form-section .attempts-info {
                 font-size: 1rem;
                 margin-top: 1rem;
             }
@@ -263,7 +243,10 @@
                 transform: scale(0.77);
             }
 
-            .form-section .resend-link, .form-section .register-link, .form-section .forgot-password-link, .form-section .attempts-info {
+            .form-section .resend-link,
+            .form-section .register-link,
+            .form-section .forgot-password-link,
+            .form-section .attempts-info {
                 font-size: 0.95rem;
             }
 

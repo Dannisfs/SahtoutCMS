@@ -3,20 +3,169 @@
             height: 24px;
             vertical-align: middle;
         }
+
         .table-wrapper {
             overflow-x: auto;
         }
+
         .alert {
             margin-bottom: 1rem;
         }
+
         .search-form {
             margin-bottom: 1.5rem;
         }
+
         .pagination {
             justify-content: center;
             margin-top: 1.5rem;
         }
+
         .dashboard-container {
-            min-height: calc(100vh - 150px); /* Adjusts for header (~100px) and footer (~50px) */
-            padding-bottom: 20px; /* Prevents content from touching footer */
+            flex-grow: 1;
+            max-width: 1000px;
+            width: 95vw;
+            margin: 1rem auto;
+            padding: 0 1rem 20px;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-title {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .card {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .card-header {
+            background: rgba(230, 230, 230, 0.9);
+            border-bottom: 1px solid #ccc;
+            color: #333;
+            font-size: 1.25rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .table {
+            color: #333;
+            background: none;
+            width: 100%;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #ccc;
+            padding: 0.5rem;
+            vertical-align: middle;
+            transition: all 0.3s ease;
+        }
+
+        .table th {
+            background: rgba(240, 240, 240, 0.9);
+            color: #000;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(200, 200, 200, 0.2);
+            cursor: pointer;
+        }
+
+        .table tbody tr:hover td {
+            color: #000;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control,
+        .form-select {
+            background: #f9f9f9;
+            color: #333;
+            border: 1px solid #999;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: #fff;
+            color: #000;
+            border-color: #666;
+            box-shadow: none;
+        }
+
+        .form-control::placeholder {
+            color: #666;
+            font-weight: bold;
+            opacity: 1;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            border: 2px solid #0056b3;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            border-color: #003087;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            border: 2px solid #5a6268;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            border-color: #4b5257;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                width: calc(100% - 2rem);
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+
+            .dashboard-title {
+                font-size: 2rem;
+            }
+
+            .card-header {
+                font-size: 1.1rem;
+            }
+
+            .table {
+                font-size: 0.9rem;
+            }
         }

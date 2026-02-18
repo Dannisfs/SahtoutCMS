@@ -3,13 +3,23 @@
 require_once("defines.php");
 require_once("pomm_conf.php");
 require_once("func.php");
-require_once("map_english.php");
+
+// Detect language from session
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
+$mapLang = $_SESSION['lang'] ?? 'en';
+if ($mapLang === 'zh' && file_exists(__DIR__ . '/map_chinese.php')) {
+  require_once("map_chinese.php");
+} else {
+  require_once("map_english.php");
+}
 
 ?>
 <HTML>
 
 <HEAD>
-  <title>Online Playermap</title>
+  <title><?php echo $lang_defs['page_title']; ?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <style type="text/css">
     <!--
@@ -920,7 +930,8 @@ require_once("map_english.php");
     </center>
   </div>
   <div id="home_link">
-    <a href="/" onclick="if(window.top !== window.self){ window.top.location.href='/'; return false; }">🏠 返回主页</a>
+    <a href="/"
+      onclick="if(window.top !== window.self){ window.top.location.href='/'; return false; }"><?php echo $lang_defs['home_button']; ?></a>
   </div>
 
 </BODY>

@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'mode
 }
 
 $page_class = 'gm_cmd';
-include $project_root . 'includes/header.php';
+
 
 $result = null; // Initialize result
 
@@ -64,75 +64,76 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title><?php echo translate('page_title_soap', 'SOAP Command Executor'); ?></title>
     
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/gm_cmd.css">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/footer.css">
 </head>
-<body>
-    <div class="d-flex flex-grow-1">
-        <!-- Sidebar/Navbar -->
-        <?php include $project_root . 'includes/admin_sidebar.php'; ?>
+<body class="gm_cmd">
+    <div class="wrapper">
+        <?php include $project_root . 'includes/header.php'; ?>
+        <div class="dashboard-container">
+            <div class="row">
+                <!-- Sidebar -->
+                <?php include $project_root . 'includes/admin_sidebar.php'; ?>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8 form-container">
-                        <h1 class="text-center mb-4"><?php echo translate('soap_title', 'Execute SOAP Command'); ?></h1>
+                <!-- Main Content -->
+                <div class="col-md-10">
+                    <h1 class="dashboard-title"><?php echo translate('soap_title', 'Execute SOAP Command'); ?></h1>
 
-                        <!-- Instruction Box -->
-                        <div class="alert alert-info mb-4">
-                            <i class="fa-solid fa-circle-info"></i>
-                            <?php echo translate(
-                                'gm_command_instructions', 
-                                'Enter your GM commands in the box below. For example: <code>.character level PlayerName 80</code>.'
-                            ); ?>
-                            <br>
-                            <?php echo translate(
-                                'gm_command_docs', 
-                                'For a full list of commands, check the <a href="https://www.azerothcore.org/wiki/gm-commands" target="_blank">AzerothCore GM Commands Wiki</a>.'
-                            ); ?>
-                        </div>
-                        
-                        <form method="post" class="mb-4">
-                            <div class="input-group">
-                                <input 
-                                    type="text" 
-                                    name="command" 
-                                    class="form-control" 
-                                    style="color: #000000ff; background:#eee" 
-                                    placeholder="<?php echo translate('command_placeholder', '.character level PlayerName 80'); ?>" 
-                                    required
-                                >
-                                <button type="submit" class="btn btn-primary">
-                                    <?php echo translate('run_command', 'Run'); ?>
-                                </button>
-                            </div>
-                        </form>
-                        
-                        <?php if ($result !== null): ?>
-                            <div class="card bg-dark border-secondary">
-                                <div class="card-header">
-                                    <h2 class="h5 mb-0"><?php echo translate('response_label', 'Response:'); ?></h2>
-                                </div>
-                                <div class="card-body p-0">
-                                    <pre class="m-0 p-3"><?= $result ?></pre>
-                                </div>
-                            </div>
-                        <?php endif; ?>
+                    <!-- Instruction Box -->
+                    <div class="alert alert-info mb-4">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <?php echo translate(
+                            'gm_command_instructions', 
+                            'Enter your GM commands in the box below. For example: <code>.character level PlayerName 80</code>.'
+                        ); ?>
+                        <br>
+                        <?php echo translate(
+                            'gm_command_docs', 
+                            'For a full list of commands, check the <a href="https://www.azerothcore.org/wiki/gm-commands" target="_blank">AzerothCore GM Commands Wiki</a>.'
+                        ); ?>
                     </div>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="post" class="mb-0">
+                                <div class="input-group">
+                                    <input 
+                                        type="text" 
+                                        name="command" 
+                                        class="form-control" 
+                                        style="color: #000; background:#fff" 
+                                        placeholder="<?php echo translate('command_placeholder', '.character level PlayerName 80'); ?>" 
+                                        required
+                                    >
+                                    <button type="submit" class="btn btn-primary">
+                                        <?php echo translate('run_command', 'Run'); ?>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <?php if ($result !== null): ?>
+                        <div class="card mt-4 bg-dark border-secondary">
+                            <div class="card-header">
+                                <h2 class="h5 mb-0 text-white"><?php echo translate('response_label', 'Response:'); ?></h2>
+                            </div>
+                            <div class="card-body p-0">
+                                <pre class="m-0 p-3 text-white"><?= $result ?></pre>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
+        <?php include $project_root . 'includes/footer.php'; ?>
     </div>
 
-    <!-- Footer -->
-    <?php include $project_root . 'includes/footer.php'; ?>
-
     <!-- Bootstrap 5 JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

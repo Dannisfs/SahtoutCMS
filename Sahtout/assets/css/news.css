@@ -1,16 +1,10 @@
-html, body {
-    height: 100%;
-    margin: 0;
-}
+/* News page styles - warmane.css handles global resets */
 
 body.news {
     background: var(--bg-news) no-repeat center center fixed;
     background-size: cover;
-    min-height: 100vh;
     color: #e0e0e0;
     font-family: 'Arial', sans-serif;
-    display: flex;
-    flex-direction: column;
 }
 
 .main-content {
@@ -18,7 +12,7 @@ body.news {
 }
 
 .wow-news-container {
-    margin: 20px auto;
+    margin: 0 auto 20px;
     padding: 20px;
     background: rgba(0, 0, 0, 0.7);
     border-radius: 5px;
@@ -37,6 +31,7 @@ body.news.single-view .wow-news-container {
     color: #ffd700;
     text-align: center;
     font-size: 2.2em;
+    margin-top: 0;
     margin-bottom: 20px;
     border-bottom: 1px solid #444;
     padding-bottom: 10px;
@@ -110,10 +105,25 @@ body.news.single-view .wow-news-container {
     font-weight: bold;
 }
 
-.category.update { background: #4682b4; color: white; }
-.category.event { background: #8b4513; color: white; }
-.category.maintenance { background: #dc143c; color: white; }
-.category.other { background: #20b2aa; color: white; }
+.category.update {
+    background: #4682b4;
+    color: white;
+}
+
+.category.event {
+    background: #8b4513;
+    color: white;
+}
+
+.category.maintenance {
+    background: #dc143c;
+    color: white;
+}
+
+.category.other {
+    background: #20b2aa;
+    color: white;
+}
 
 .no-news {
     text-align: center;

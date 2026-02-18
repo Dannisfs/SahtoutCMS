@@ -83,8 +83,8 @@ if (isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/warmane.css?v=<?php echo time(); ?>">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.net/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js"></script>
 
     <?php if (file_exists($project_root . "assets/css/{$page_class}.css")): ?>
         <!-- Optional Page Specific Overrides -->

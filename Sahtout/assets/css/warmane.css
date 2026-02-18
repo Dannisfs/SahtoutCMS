@@ -358,4 +358,89 @@ html[lang="zh"] .nav-links li {
     margin: 0 30px;
 }
 
-/* --- End of File --- */
+/* --- MEDIA QUERIES FOR MOBILE --- */
+@media screen and (max-width: 1024px) {
+    .warmane-logo-container {
+        left: 20px;
+    }
+
+    .nav-links {
+        padding-left: 0 !important;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    /* Adjust Wrapper */
+    .warmane-wrapper {
+        flex-direction: column;
+        margin-top: 100px;
+        padding: 0 10px;
+    }
+
+    .left-column {
+        padding: 20px;
+    }
+
+    .right-column {
+        width: 100%;
+        min-width: 0;
+        flex: auto;
+    }
+
+    /* Adjust Navigation */
+    .warmane-nav {
+        height: auto;
+        padding: 15px 0;
+        position: relative;
+        /* Unstick header on mobile if simpler, or keep fixed */
+        flex-direction: column;
+    }
+
+    .warmane-logo-container {
+        position: static;
+        margin-bottom: 10px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .warmane-logo-container a div {
+        justify-content: center;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-left: 0 !important;
+        /* Override inline styles */
+        margin-left: 0 !important;
+    }
+
+    .nav-links li {
+        margin: 5px 10px;
+    }
+
+    .nav-links a {
+        font-size: 13px;
+    }
+
+    /* Hide the spacer borders/bars if they look messy */
+    .nav-links li:nth-child(n) {
+        border: none !important;
+    }
+
+    /* Adjust content images */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Footer stacking */
+    .footer-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+ @ m e d i a   s c r e e n   a n d   ( m a x - w i d t h :   7 6 8 p x )   {   h t m l ,   b o d y   {   b a c k g r o u n d - c o l o r :   # 0 0 0   ! i m p o r t a n t ;   b a c k g r o u n d - i m a g e :   n o n e   ! i m p o r t a n t ;   }   . w a r m a n e - l o g o - c o n t a i n e r   {   b a c k g r o u n d :   # 0 0 0   ! i m p o r t a n t ;   }   }  
+ 

@@ -30,31 +30,86 @@ $bondingTypes = [
 
 $inventoryTypes = [
     0 => null,
-    1 => 'Head', 2 => 'Neck', 3 => 'Shoulder', 4 => 'Shirt', 5 => 'Chest',
-    6 => 'Waist', 7 => 'Legs', 8 => 'Feet', 9 => 'Wrist', 10 => 'Hands',
-    11 => 'Finger', 12 => 'Trinket', 13 => 'One-Hand', 14 => 'Shield',
-    15 => 'Ranged', 16 => 'Back', 17 => 'Two-Hand', 18 => 'Bag', 19 => 'Tabard',
-    20 => 'Robe', 21 => 'Main Hand', 22 => 'Off Hand', 23 => 'Holdable',
-    25 => 'Thrown', 26 => 'Ranged', 28 => 'Relic'
+    1 => 'Head',
+    2 => 'Neck',
+    3 => 'Shoulder',
+    4 => 'Shirt',
+    5 => 'Chest',
+    6 => 'Waist',
+    7 => 'Legs',
+    8 => 'Feet',
+    9 => 'Wrist',
+    10 => 'Hands',
+    11 => 'Finger',
+    12 => 'Trinket',
+    13 => 'One-Hand',
+    14 => 'Shield',
+    15 => 'Ranged',
+    16 => 'Back',
+    17 => 'Two-Hand',
+    18 => 'Bag',
+    19 => 'Tabard',
+    20 => 'Robe',
+    21 => 'Main Hand',
+    22 => 'Off Hand',
+    23 => 'Holdable',
+    25 => 'Thrown',
+    26 => 'Ranged',
+    28 => 'Relic'
 ];
 
 $classNames = [
-    0 => 'Consumable', 1 => 'Container', 2 => 'Weapon', 3 => 'Gem', 4 => 'Armor',
-    5 => 'Reagent', 6 => 'Projectile', 7 => 'Trade Goods', 8 => 'Generic', 9 => 'Recipe',
-    10 => 'Money', 11 => 'Quiver', 12 => 'Quest', 13 => 'Key', 14 => 'Permanent',
-    15 => 'Miscellaneous', 16 => 'Glyph'
+    0 => 'Consumable',
+    1 => 'Container',
+    2 => 'Weapon',
+    3 => 'Gem',
+    4 => 'Armor',
+    5 => 'Reagent',
+    6 => 'Projectile',
+    7 => 'Trade Goods',
+    8 => 'Generic',
+    9 => 'Recipe',
+    10 => 'Money',
+    11 => 'Quiver',
+    12 => 'Quest',
+    13 => 'Key',
+    14 => 'Permanent',
+    15 => 'Miscellaneous',
+    16 => 'Glyph'
 ];
 
 $subclassNames = [
     2 => [
-        0 => 'Axe', 1 => 'Axe (2H)', 2 => 'Bow', 3 => 'Gun', 4 => 'Mace', 5 => 'Mace (2H)',
-        6 => 'Polearm', 7 => 'Sword', 8 => 'Sword (2H)', 10 => 'Staff', 13 => 'Fist Weapon',
-        14 => 'Miscellaneous', 15 => 'Dagger', 16 => 'Thrown', 17 => 'Spear',
-        18 => 'Crossbow', 19 => 'Wand', 20 => 'Fishing Pole'
+        0 => 'Axe',
+        1 => 'Axe (2H)',
+        2 => 'Bow',
+        3 => 'Gun',
+        4 => 'Mace',
+        5 => 'Mace (2H)',
+        6 => 'Polearm',
+        7 => 'Sword',
+        8 => 'Sword (2H)',
+        10 => 'Staff',
+        13 => 'Fist Weapon',
+        14 => 'Miscellaneous',
+        15 => 'Dagger',
+        16 => 'Thrown',
+        17 => 'Spear',
+        18 => 'Crossbow',
+        19 => 'Wand',
+        20 => 'Fishing Pole'
     ],
     4 => [
-        0 => 'Miscellaneous', 1 => 'Cloth', 2 => 'Leather', 3 => 'Mail', 4 => 'Plate',
-        6 => 'Shield', 7 => 'Libram', 8 => 'Idol', 9 => 'Totem', 10 => 'Sigil'
+        0 => 'Miscellaneous',
+        1 => 'Cloth',
+        2 => 'Leather',
+        3 => 'Mail',
+        4 => 'Plate',
+        6 => 'Shield',
+        7 => 'Libram',
+        8 => 'Idol',
+        9 => 'Totem',
+        10 => 'Sigil'
     ]
 ];
 
@@ -149,26 +204,30 @@ $classColors = [
 ];
 
 // Helpers
-function goldSilverCopper($amount) {
+function goldSilverCopper($amount)
+{
     $g = floor($amount / 10000);
     $s = floor(($amount % 10000) / 100);
     $c = $amount % 100;
     return "$g <span style='color:#ffd700;'>g</span> $s <span style='color:#c0c0c0;'>s</span> $c <span style='color:#b87333;'>c</span>";
 }
 
-function formatDPS($min, $max, $delay) {
-    if ($delay <= 0) return '';
+function formatDPS($min, $max, $delay)
+{
+    if ($delay <= 0)
+        return '';
     $dps = ($min + $max) / 2 / ($delay / 1000);
     return number_format($dps, 1);
 }
 
 // Tooltip function
-function generateTooltip($item) {
+function generateTooltip($item)
+{
     global $qualityColors, $bondingTypes, $inventoryTypes, $classNames, $subclassNames, $normalStats, $specialStats, $socketColors, $classRestrictions, $classColors, $triggerFlags, $world_db;
 
     // Set item name color based on quality
     $itemColor = $qualityColors[$item['Quality']] ?? '#ffffff';
-    if ($item['Quality'] == 7 && ($item['flags'] & 134221824) == 134221824) {
+    if ($item['Quality'] == 7 && (($item['flags'] ?? 0) & 134221824) == 134221824) {
         $itemColor = '#e6cc80';
     }
     // Log item color for debugging
@@ -248,52 +307,68 @@ function generateTooltip($item) {
             object-fit: contain;
             vertical-align: middle;
         }
+
         .item-name {
-            color: <?= $itemColor ?> !important;
+            color:
+                <?= $itemColor ?>
+                !important;
         }
     </style>
 
-    <div style="background:#1a1a1a;border:1px solid #444;padding:8px;width:300px;color:#ccc;font:12px Arial;border-radius:4px;font-family:FrizQuadrata,Arial,sans-serif;">
+    <div
+        style="background:#1a1a1a;border:1px solid #444;padding:8px;width:300px;color:#ccc;font:12px Arial;border-radius:4px;font-family:FrizQuadrata,Arial,sans-serif;">
         <div style="display:flex;justify-content:space-between;gap:8px;">
             <div>
                 <div class="item-name" style="font-weight:bold;font-size:14px;"><?= $name ?></div>
-                <?php if ($level): ?><div style="color:#e0b802;">Item Level <?= $level ?></div><?php endif; ?>
+                <?php if ($level): ?>
+                    <div style="color:#e0b802;">Item Level <?= $level ?></div><?php endif; ?>
             </div>
             <div style="text-align:right;">
                 <div><?= $subclassName ?? '' ?></div>
-                <?php if ($speed): ?><div>Speed <?= $speed ?></div><?php endif; ?>
+                <?php if ($speed): ?>
+                    <div>Speed <?= $speed ?></div><?php endif; ?>
             </div>
         </div>
 
-        <?php if ($bonding): ?><div><?= $bonding ?></div><?php endif; ?>
-        <?php if ($invType): ?><div><?= $invType ?></div><?php endif; ?>
-        <?php if ($className): ?><div><?= $className ?></div><?php endif; ?>
+        <?php if ($bonding): ?>
+            <div><?= $bonding ?></div><?php endif; ?>
+        <?php if ($invType): ?>
+            <div><?= $invType ?></div><?php endif; ?>
+        <?php if ($className): ?>
+            <div><?= $className ?></div><?php endif; ?>
 
         <?php
         if ($item['dmg_min1'] > 0 && $item['dmg_max1'] > 0):
             $min = $item['dmg_min1'];
             $max = $item['dmg_max1'];
-        ?>
+            ?>
             <div><?= $min ?> - <?= $max ?> Damage</div>
             <div style="color:#ffd100;">(<?= formatDPS($min, $max, $item['delay']) ?> damage per second)</div>
         <?php endif; ?>
 
-        <?php if ($item['armor'] > 0): ?><div>+<?= $item['armor'] ?> Armor</div><?php endif; ?>
+        <?php if ($item['armor'] > 0): ?>
+            <div>+<?= $item['armor'] ?> Armor</div><?php endif; ?>
 
         <?php for ($i = 1; $i <= 10; $i++):
             $type = $item["stat_type$i"];
             $value = $item["stat_value$i"];
             if ($type > 0 && $value != 0 && isset($normalStats[$type])): ?>
-                <div style="color:#ffffff;">+<?= $value ?> <?= $normalStats[$type] ?></div>
-        <?php endif; endfor; ?>
+                <div style="color:#ffffff;">+<?= $value ?>             <?= $normalStats[$type] ?></div>
+            <?php endif; endfor; ?>
 
         <?php
-        $resistances = ['Holy' => $item['holy_res'], 'Fire' => $item['fire_res'], 'Nature' => $item['nature_res'],
-                        'Frost' => $item['frost_res'], 'Shadow' => $item['shadow_res'], 'Arcane' => $item['arcane_res']];
+        $resistances = [
+            'Holy' => $item['holy_res'],
+            'Fire' => $item['fire_res'],
+            'Nature' => $item['nature_res'],
+            'Frost' => $item['frost_res'],
+            'Shadow' => $item['shadow_res'],
+            'Arcane' => $item['arcane_res']
+        ];
         foreach ($resistances as $school => $val):
             if ($val > 0): ?>
-                <div style="color:#1eff00;">+<?= $val ?> <?= $school ?> Resistance</div>
-        <?php endif; endforeach; ?>
+                <div style="color:#1eff00;">+<?= $val ?>             <?= $school ?> Resistance</div>
+            <?php endif; endforeach; ?>
 
         <!-- Sockets -->
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -302,11 +377,10 @@ function generateTooltip($item) {
                 $colorCode = $item["socketColor_$i"] ?? null;
                 if (isset($socketColors[$colorCode])):
                     $colorData = $socketColors[$colorCode];
-                ?>
+                    ?>
                     <div style="display: flex; align-items: center; gap: 4px;">
-                        <img src="<?= $colorData['icon'] ?>"
-                             alt="<?= $colorData['name'] ?> socket"
-                             style="width: 16px; height: 16px; object-fit: contain;">
+                        <img src="<?= $colorData['icon'] ?>" alt="<?= $colorData['name'] ?> socket"
+                            style="width: 16px; height: 16px; object-fit: contain;">
                         <span style="font-size: 12px; color: <?= strtolower($colorData['name']) ?>;">
                             <?= $colorData['name'] ?>
                         </span>
@@ -319,23 +393,28 @@ function generateTooltip($item) {
             <div style="color:#888;">Socket Bonus: Spell ID <?= htmlspecialchars($item['socketBonus']) ?></div>
         <?php endif; ?>
 
-        <?php if ($dur > 0): ?><div>Durability <?= $dur ?>/<?= $dur ?></div><?php endif; ?>
-        <?php if ($reqLevel): ?><div>Requires Level <?= $reqLevel ?></div><?php endif; ?>
-        <?php if ($requiredClassesText): ?><div><?= $requiredClassesText ?></div><?php endif; ?>
+        <?php if ($dur > 0): ?>
+            <div>Durability <?= $dur ?>/<?= $dur ?></div><?php endif; ?>
+        <?php if ($reqLevel): ?>
+            <div>Requires Level <?= $reqLevel ?></div><?php endif; ?>
+        <?php if ($requiredClassesText): ?>
+            <div><?= $requiredClassesText ?></div><?php endif; ?>
 
         <?php for ($i = 1; $i <= 10; $i++):
             $type = $item["stat_type$i"];
             $value = $item["stat_value$i"];
             if ($type > 0 && $value != 0 && isset($specialStats[$type])): ?>
-                <div style="color:#00ff00;">Equip: Increases +<?= $value ?> <?= $specialStats[$type] ?></div>
-        <?php endif; endfor; ?>
+                <div style="color:#00ff00;">Equip: Increases +<?= $value ?>             <?= $specialStats[$type] ?></div>
+            <?php endif; endfor; ?>
 
         <?php foreach ($spellEffects as $effect): ?>
             <div style="color:#00ff00;"><?= $effect ?></div>
         <?php endforeach; ?>
 
-        <?php if ($sell > 0): ?><div>Sell: <?= goldSilverCopper($sell) ?></div><?php endif; ?>
-        <?php if ($desc): ?><div style="margin-top:6px;color:#eee;font-style:italic;"><?= $desc ?></div><?php endif; ?>
+        <?php if ($sell > 0): ?>
+            <div>Sell: <?= goldSilverCopper($sell) ?></div><?php endif; ?>
+        <?php if ($desc): ?>
+            <div style="margin-top:6px;color:#eee;font-style:italic;"><?= $desc ?></div><?php endif; ?>
     </div>
     <?php
     return ob_get_clean();

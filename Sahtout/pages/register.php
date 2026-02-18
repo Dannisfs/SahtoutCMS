@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($recaptcha_response)) {
             $errors[] = translate('error_recaptcha_empty', 'Please complete the CAPTCHA.');
         } else {
-            $verify = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . RECAPTCHA_SECRET_KEY . '&response=' . $recaptcha_response);
+            $verify = file_get_contents('https://www.recaptcha.net/recaptcha/api/siteverify?secret=' . RECAPTCHA_SECRET_KEY . '&response=' . $recaptcha_response);
             $captcha_result = json_decode($verify);
             if (!$captcha_result->success) {
                 $errors[] = translate('error_recaptcha_failed', 'CAPTCHA verification failed.');
@@ -193,58 +193,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Include header
 require_once $project_root . 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="<?php echo htmlspecialchars($_SESSION['lang'] ?? 'en'); ?>">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<?php echo translate('meta_description', 'Create an account to join our World of Warcraft server adventure!'); ?>">
-    <meta name="robots" content="index">
-    <title><?php echo $site_title_name ." ". translate('page_title', 'Create Account'); ?></title>
-    <style>
-        :root{
-            --bg-register:url('<?php echo $base_path; ?>img/backgrounds/bg-register.jpg');
-            --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
-        }
-    </style>
-</head>
-<body class="register">
-    <main>
-        <section class="register-container">
-            <h1 class="register-title"><?php echo translate('register_title', 'Create Your Account'); ?></h1>
 
-            <?php if (!empty($errors)): ?>
-                <div class="register-form">
-                    <?php foreach ($errors as $error): ?>
-                        <p class="error"><?php echo htmlspecialchars($error); ?></p>
-                    <?php endforeach; ?>
-                </div>
-            <?php elseif ($success): ?>
-                <div class="register-form">
-                    <p class="success"><?php echo htmlspecialchars($success); ?></p>
-                    <p class="login-link-container"><a href="<?php echo $base_path; ?>login"><?php echo translate('login_link_text', 'Click here to login'); ?></a></p>
-                </div>
-            <?php endif; ?>
+<style>
+    :root {
+        --bg-register: url('<?php echo $base_path; ?>img/backgrounds/bg-register.jpg');
+        --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
+    }
 
-            <form class="register-form" method="POST" action="">
-                <input type="text" name="username" placeholder="<?php echo translate('username_placeholder', 'Username'); ?>" required
-                    value="<?php echo htmlspecialchars($username); ?>">
-                <input type="email" name="email" placeholder="<?php echo translate('email_placeholder', 'Email'); ?>" required minlength="3" maxlength="36">
-                <input type="password" name="password" placeholder="<?php echo translate('password_placeholder', 'Password'); ?>" required minlength="6" maxlength="32">
-                <input type="password" name="confirm_password" placeholder="<?php echo translate('password_confirm_placeholder', 'Confirm Password'); ?>" required minlength="6" maxlength="32">
-                <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
-                    <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
-                <?php endif; ?>
-                <button type="submit" class="register-button"><?php echo translate('register_button', 'Register'); ?></button>
-            </form>
+    body.register {
+        background: var(--bg-register) no-repeat center center fixed;
+        background-size: cover;
+    }
+</style>
 
-            <p class="login-link-container"><?php echo sprintf(translate('login_link_text_alt', 'Already have an account? <a href="%s">Login</a>'), htmlspecialchars($base_path . 'login')); ?></p>
-        </section>
-    </main>
+<!-- Register Page Content -->
+<section class="register-container">
+    <h1 class="register-title"><?php echo translate('register_title', 'Create Your Account'); ?></h1>
 
-    <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <?php if (!empty($errors)): ?>
+        <div class="register-form">
+            <?php foreach ($errors as $error): ?>
+                <p class="error"><?php echo htmlspecialchars($error); ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php elseif ($success): ?>
+        <div class="register-form">
+            <p class="success"><?php echo htmlspecialchars($success); ?></p>
+            <p class="login-link-container"><a
+                    href="<?php echo $base_path; ?>login"><?php echo translate('login_link_text', 'Click here to login'); ?></a>
+            </p>
+        </div>
     <?php endif; ?>
-    <?php include_once $project_root . 'includes/footer.php'; ?>
-</body>
-</html>
+
+    <form class="register-form" method="POST" action="">
+        <input type="text" name="username" placeholder="<?php echo translate('username_placeholder', 'Username'); ?>"
+            required value="<?php echo htmlspecialchars($username); ?>">
+        <input type="email" name="email" placeholder="<?php echo translate('email_placeholder', 'Email'); ?>" required
+            minlength="3" maxlength="36">
+        <input type="password" name="password"
+            placeholder="<?php echo translate('password_placeholder', 'Password'); ?>" required minlength="6"
+            maxlength="32">
+        <input type="password" name="confirm_password"
+            placeholder="<?php echo translate('password_confirm_placeholder', 'Confirm Password'); ?>" required
+            minlength="6" maxlength="32">
+        <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
+            <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
+        <?php endif; ?>
+        <button type="submit" class="register-button"><?php echo translate('register_button', 'Register'); ?></button>
+    </form>
+
+    <p class="login-link-container">
+        <?php echo sprintf(translate('login_link_text_alt', 'Already have an account? <a href="%s">Login</a>'), htmlspecialchars($base_path . 'login')); ?>
+    </p>
+</section>
+
+<?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
+    <script src="https://www.recaptcha.net/recaptcha/api.js" async defer></script>
+<?php endif; ?>
+
+<?php include_once $project_root . 'includes/footer.php'; ?>

@@ -29,7 +29,7 @@ $character_class = array
 );
 $lang_defs = array
 (
-    'maps_names' => array('艾泽拉斯','外域','诺森德'),
+    'maps_names' => array('艾泽拉斯', '外域', '诺森德'),
     'total' => '总计',
     'faction' => array('联盟', '部落'),
     'name' => '名字',
@@ -37,6 +37,8 @@ $lang_defs = array
     'class' => '职业',
     'level' => '等级',
     'click_to_next' => '查看下页',
-    'click_to_first' => '返回首页'
+    'click_to_first' => '返回首页',
+    'home_button' => '🏠 返回主页',
+    'page_title' => '在线玩家地图'
 );
 include "zone_names_chinese.php";

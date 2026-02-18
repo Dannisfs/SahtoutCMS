@@ -269,79 +269,70 @@ if (!empty($username)) {
 // Include header after processing form
 include_once $project_root . 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="<?php echo htmlspecialchars($_SESSION['lang'] ?? 'en'); ?>">
+<style>
+    :root {
+        --bg-login: url('<?php echo $base_path; ?>img/backgrounds/bg-login.jpg');
+        --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
+    }
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description"
-        content="<?php echo translate('meta_description', 'Log in to your account to join our World of Warcraft server adventure!'); ?>">
-    <title><?php echo $site_title_name . " " . translate('page_title', 'Login'); ?></title>
-    <style>
-        :root {
-            --bg-login: url('<?php echo $base_path; ?>img/backgrounds/bg-login.jpg');
-            --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
-        }
-    </style>
-</head>
+    body.login {
+        background: var(--bg-login) no-repeat center center fixed;
+        background-size: cover;
+    }
+</style>
 
-<body>
-    <div class="wrapper">
-        <div class="form-container">
-            <div class="form-section">
-                <h2><?php echo translate('login_title', 'Login'); ?></h2>
+<!-- Login Page Content -->
+<section class="form-container">
+    <div class="form-section">
+        <h2><?php echo translate('login_title', 'Login'); ?></h2>
 
-                <?php if (!empty($errors)): ?>
-                    <div class="error">
-                        <?php foreach ($errors as $error): ?>
-                            <p><?php echo htmlspecialchars($error); ?></p>
-                        <?php endforeach; ?>
-                        <?php if ($show_resend_button): ?>
-                            <div class="resend-link">
-                                <p><?php echo translate('resend_activation_prompt', 'CLICK HERE:'); ?></p>
-                                <a
-                                    href="<?php echo $base_path; ?>resend_activation?username=<?php echo htmlspecialchars($username); ?>">
-                                    <?php echo translate('resend_activation_link', 'Resend Activation Code'); ?>
-                                </a>
-                            </div>
-                        <?php endif; ?>
+        <?php if (!empty($errors)): ?>
+            <div class="error">
+                <?php foreach ($errors as $error): ?>
+                    <p><?php echo htmlspecialchars($error); ?></p>
+                <?php endforeach; ?>
+                <?php if ($show_resend_button): ?>
+                    <div class="resend-link">
+                        <p><?php echo translate('resend_activation_prompt', 'CLICK HERE:'); ?></p>
+                        <a
+                            href="<?php echo $base_path; ?>resend_activation?username=<?php echo htmlspecialchars($username); ?>">
+                            <?php echo translate('resend_activation_link', 'Resend Activation Code'); ?>
+                        </a>
                     </div>
                 <?php endif; ?>
-
-                <?php if ($remaining_attempts < MAX_LOGIN_ATTEMPTS && $remaining_attempts > 0): ?>
-                    <div class="attempts-info">
-                        <p><?php echo translate('remaining_attempts', 'You have %d login attempts remaining.', $remaining_attempts); ?>
-                        </p>
-                    </div>
-                <?php endif; ?>
-
-                <form method="POST">
-                    <input type="text" name="username"
-                        placeholder="<?php echo translate('username_placeholder', 'Username'); ?>" required
-                        value="<?php echo htmlspecialchars($username); ?>">
-                    <br>
-                    <input type="password" name="password"
-                        placeholder="<?php echo translate('password_placeholder', 'Password'); ?>" required>
-                    <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
-                        <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
-                    <?php endif; ?>
-                    <button type="submit"><?php echo translate('login_button', 'Sign In'); ?></button>
-                    <div class="register-link">
-                        <?php echo sprintf(translate('register_link_text', 'Don\'t have an account? <a href="%s">Register now</a>'), htmlspecialchars($base_path . 'register')); ?>
-                    </div>
-                    <div class="forgot-password-link">
-                        <?php echo sprintf(translate('forgot_password_link_text', 'Forgot your password? <a href="%s">Reset it here</a>'), htmlspecialchars($base_path . 'forgot_password')); ?>
-                    </div>
-                </form>
             </div>
-        </div>
+        <?php endif; ?>
+
+        <?php if ($remaining_attempts < MAX_LOGIN_ATTEMPTS && $remaining_attempts > 0): ?>
+            <div class="attempts-info">
+                <p><?php echo translate('remaining_attempts', 'You have %d login attempts remaining.', $remaining_attempts); ?>
+                </p>
+            </div>
+        <?php endif; ?>
+
+        <form method="POST">
+            <input type="text" name="username"
+                placeholder="<?php echo translate('username_placeholder', 'Username'); ?>" required
+                value="<?php echo htmlspecialchars($username); ?>">
+            <br>
+            <input type="password" name="password"
+                placeholder="<?php echo translate('password_placeholder', 'Password'); ?>" required>
+            <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
+                <div class="g-recaptcha" data-sitekey="<?php echo RECAPTCHA_SITE_KEY; ?>"></div>
+            <?php endif; ?>
+            <button type="submit"><?php echo translate('login_button', 'Sign In'); ?></button>
+            <div class="register-link">
+                <?php echo sprintf(translate('register_link_text', 'Don\'t have an account? <a href="%s">Register now</a>'), htmlspecialchars($base_path . 'register')); ?>
+            </div>
+            <div class="forgot-password-link">
+                <?php echo sprintf(translate('forgot_password_link_text', 'Forgot your password? <a href="%s">Reset it here</a>'), htmlspecialchars($base_path . 'forgot_password')); ?>
+            </div>
+        </form>
     </div>
+</section>
 
-    <?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <?php endif; ?>
-    <?php include_once $project_root . 'includes/footer.php'; ?>
-</body>
+<?php if (defined('RECAPTCHA_ENABLED') && RECAPTCHA_ENABLED): ?>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<?php endif; ?>
 
-</html>
+<?php include_once $project_root . 'includes/footer.php'; ?>

@@ -5,15 +5,18 @@ require_once __DIR__ . '/../../includes/paths.php';
 
 // Use $project_root for filesystem includes
 require_once $project_root . 'includes/session.php';
+$page_class = 'arena_5v5';
 require_once $project_root . 'includes/header.php';
 
 // Functions to get faction and icon paths
-function getFaction($race) {
+function getFaction($race)
+{
     $alliance = [1, 3, 4, 7, 11, 22, 25, 29];
     return in_array($race, $alliance) ? 'Alliance' : 'Horde';
 }
 
-function factionIconByName($faction) {
+function factionIconByName($faction)
+{
     global $base_path;
     return $base_path . "img/accountimg/faction/" . strtolower($faction) . ".png";
 }
@@ -47,62 +50,88 @@ while ($row = $result->fetch_assoc()) {
 }
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title><?php echo  $site_title_name ." ". translate('arena_5v5_page_title', ' Top 50 5v5 Arena Teams'); ?></title>
-    <!-- Load Tailwind CSS with a custom configuration -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            prefix: 'tw-', // Prefix all Tailwind classes
-            corePlugins: {
-                preflight: false // Disable Tailwind's reset
-            }
+<?php $page_class = 'arena-5v5'; ?>
+<!-- Load Tailwind CSS with a custom configuration -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        prefix: 'tw-', // Prefix all Tailwind classes
+        corePlugins: {
+            preflight: false // Disable Tailwind's reset
         }
-    </script>
-    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/armory/arena_5v5.css">
-    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/armory/arenanavbar.css">
-</head>
+    }
+</script>
+<link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/armory/arena_5v5.css">
+<link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/armory/arenanavbar.css">
+
 <style>
-       :root{
-            --bg-armory:url('<?php echo $base_path; ?>img/backgrounds/bg-armory.jpg');
-            --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
-        }
-    </style>
-<body class="<?php echo $page_class; ?>">
-    <div class="arena-content tw-bg-900 tw-text-white">
-        <div class="tw-container tw-mx-auto tw-px-4 tw-py-8">
-            <h1 class="tw-text-4xl tw-font-bold tw-text-center tw-text-amber-400 tw-mb-6"><?php echo translate('arena_5v5_title', 'Top 50 5v5 Arena Teams'); ?></h1>
+    :root {
+        --bg-armory: url('<?php echo $base_path; ?>img/backgrounds/bg-armory.jpg');
+        --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
+    }
 
-            <?php include_once $project_root . 'includes/arenanavbar.php'; ?>
+    body.arena_5v5 {
+        background: var(--bg-armory) no-repeat center center fixed;
+        background-size: cover;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-            <?php if (count($teams) == 0): ?>
-                <div class="tw-text-center tw-text-lg tw-text-amber-400 tw-bg-gray-800 tw-p-6 tw-rounded-lg tw-shadow-lg">
-                    <?php echo translate('arena_5v5_no_teams', 'No 5v5 arena teams found.'); ?>
-                </div>
-            <?php else: ?>
-                <div class="table-container tw-overflow-x-auto tw-rounded-lg tw-shadow-lg">
-                    <table class="tw-w-full tw-text-sm tw-text-center tw-bg-gray-800">
-                        <thead class="tw-bg-gray-700 tw-text-amber-400 tw-uppercase">
-                            <tr>
-                                <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_rank', 'Rank'); ?></th>
-                                <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_name', 'Name'); ?></th>
-                                <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_faction', 'Faction'); ?></th>
-                                <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_wins', 'Wins'); ?></th>
-                                <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_losses', 'Losses'); ?></th>
-                                <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_winrate', 'Winrate'); ?></th>
-                                <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_rating', 'Rating'); ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $rank = 1;
-                            $teamCount = count($teams);
-                            foreach ($teams as $team) {
-                                $rowClass = ($rank <= 3 && $teamCount >= 3) ? 'top3' : '';
-                                $faction = getFaction($team['race']);
-                                echo "<tr class='{$rowClass} tw-transition tw-duration-200' onclick=\"window.location='{$base_path}armory/arenateam?arenaTeamId={$team['arenaTeamId']}';\">
+    .warmane-wrapper {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        max-width: 1600px !important;
+        width: 100% !important;
+        gap: 30px !important;
+        flex: 1 !important;
+    }
+
+    .warmane-wrapper .left-column {
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
+    }
+
+    .warmane-wrapper .right-column {
+        flex: 0 0 300px !important;
+        min-width: 300px !important;
+    }
+</style>
+
+<div class="arena-content tw-bg-900 tw-text-white">
+    <div class="tw-container tw-mx-auto tw-px-4 tw-py-8">
+        <h1 class="tw-text-4xl tw-font-bold tw-text-center tw-text-amber-400 tw-mb-6">
+            <?php echo translate('arena_5v5_title', 'Top 50 5v5 Arena Teams'); ?>
+        </h1>
+
+        <?php include_once $project_root . 'includes/arenanavbar.php'; ?>
+
+        <?php if (count($teams) == 0): ?>
+            <div class="tw-text-center tw-text-lg tw-text-amber-400 tw-bg-gray-800 tw-p-6 tw-rounded-lg tw-shadow-lg">
+                <?php echo translate('arena_5v5_no_teams', 'No 5v5 arena teams found.'); ?>
+            </div>
+        <?php else: ?>
+            <div class="table-container tw-overflow-x-auto tw-rounded-lg tw-shadow-lg">
+                <table class="tw-w-full tw-text-sm tw-text-center tw-bg-gray-800">
+                    <thead class="tw-bg-gray-700 tw-text-amber-400 tw-uppercase">
+                        <tr>
+                            <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_rank', 'Rank'); ?></th>
+                            <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_name', 'Name'); ?></th>
+                            <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_faction', 'Faction'); ?></th>
+                            <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_wins', 'Wins'); ?></th>
+                            <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_losses', 'Losses'); ?></th>
+                            <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_winrate', 'Winrate'); ?></th>
+                            <th class="tw-py-3 tw-px-6"><?php echo translate('arena_5v5_rating', 'Rating'); ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $rank = 1;
+                        $teamCount = count($teams);
+                        foreach ($teams as $team) {
+                            $rowClass = ($rank <= 3 && $teamCount >= 3) ? 'top3' : '';
+                            $faction = getFaction($team['race']);
+                            echo "<tr class='{$rowClass} tw-transition tw-duration-200' onclick=\"window.location='{$base_path}armory/arenateam?arenaTeamId={$team['arenaTeamId']}';\">
                                     <td class='tw-py-3 tw-px-6'>{$rank}</td>
                                     <td class='tw-py-3 tw-px-6'>" . htmlspecialchars($team['team_name']) . "</td>
                                     <td class='tw-py-3 tw-px-6'>
@@ -113,15 +142,13 @@ while ($row = $result->fetch_assoc()) {
                                     <td class='tw-py-3 tw-px-6'>{$team['winrate']}%</td>
                                     <td class='tw-py-3 tw-px-6'>{$team['rating']}</td>
                                 </tr>";
-                                $rank++;
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php endif; ?>
-        </div>
+                            $rank++;
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
     </div>
-    <?php include_once $project_root . 'includes/footer.php'; ?>
-</body>
-</html>
+</div>
+<?php include_once $project_root . 'includes/footer.php'; ?>

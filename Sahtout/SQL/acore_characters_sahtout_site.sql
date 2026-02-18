@@ -63,24 +63,6 @@ BEGIN
 END//
 DELIMITER ;
 
-
--- --------------------------------------------------------
--- Initialize character_stats (Added by fix)
--- --------------------------------------------------------
-INSERT IGNORE INTO `acore_characters`.`character_stats` 
-(guid, maxhealth, maxpower1, maxpower2, maxpower3, maxpower4, maxpower5, maxpower6, maxpower7,
- strength, agility, stamina, intellect, spirit, armor, 
- resHoly, resFire, resNature, resFrost, resShadow, resArcane,
- blockPct, dodgePct, parryPct, critPct, rangedCritPct, spellCritPct,
- attackPower, rangedAttackPower, spellPower, resilience)
-SELECT 
-    guid, health, power1, power2, power3, power4, power5, power6, power7,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0
-FROM `acore_characters`.`characters`;
-
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

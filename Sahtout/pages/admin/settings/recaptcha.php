@@ -79,34 +79,40 @@ define('RECAPTCHA_SECRET_KEY', \$recaptcha_secret_key);
 
 <!DOCTYPE html>
 <html lang="<?php echo htmlspecialchars($langCode); ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo translate('page_title_recaptcha', 'reCAPTCHA Settings'); ?></title>
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
     <!-- Roboto font -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/recaptcha.css">
-     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
-     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/admin_sidebar.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/admin/settings/settings_navbar.css">
 </head>
+
 <body>
-    <div class="container-fluid">
+    <div class="dashboard-container">
         <div class="row">
             <!-- Admin Sidebar -->
             <?php include $project_root . 'includes/admin_sidebar.php'; ?>
-            
+
             <!-- Main Content with Settings Navbar -->
             <main class="col-md-10 main-content">
                 <?php include $project_root . 'pages/admin/settings/settings_navbar.php'; ?>
                 <div class="content">
                     <h2><?php echo translate('settings_recaptcha', 'reCAPTCHA Settings'); ?></h2>
-                    
+
                     <!-- Status Message -->
                     <div class="status-box mb-3 col-md-6 mx-auto">
-                        <span class="db-status-icon <?php echo $recaptcha_status === 'enabled' ? 'db-status-success' : 'db-status-muted'; ?>">
+                        <span
+                            class="db-status-icon <?php echo $recaptcha_status === 'enabled' ? 'db-status-success' : 'db-status-muted'; ?>">
                             <?php echo $recaptcha_status === 'enabled' ? '✔' : '✖'; ?>
                         </span>
                         <span class="<?php echo $recaptcha_status === 'enabled' ? 'text-success' : 'text-muted'; ?>">
@@ -131,7 +137,8 @@ define('RECAPTCHA_SECRET_KEY', \$recaptcha_secret_key);
                     <?php if ($success): ?>
                         <div class="success-box mb-3 col-md-6 mx-auto">
                             <span class="db-status-icon db-status-success">✔</span>
-                            <span class="success"><?php echo translate('msg_recaptcha_saved', 'reCAPTCHA settings saved successfully!'); ?></span>
+                            <span
+                                class="success"><?php echo translate('msg_recaptcha_saved', 'reCAPTCHA settings saved successfully!'); ?></span>
                         </div>
                     <?php endif; ?>
 
@@ -139,40 +146,60 @@ define('RECAPTCHA_SECRET_KEY', \$recaptcha_secret_key);
                         <div class="row justify-content-center">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="captcha_type" class="form-label"><?php echo translate('label_captcha_type', 'CAPTCHA Type'); ?></label>
+                                    <label for="captcha_type"
+                                        class="form-label"><?php echo translate('label_captcha_type', 'CAPTCHA Type'); ?></label>
                                     <select id="captcha_type" name="captcha_type" class="form-select">
-                                        <option value="recaptcha" <?php echo (($_POST['captcha_type'] ?? 'recaptcha') === 'recaptcha') ? 'selected' : ''; ?>><?php echo translate('option_recaptcha', 'reCAPTCHA'); ?></option>
-                                        <option value="hcaptcha" disabled><?php echo translate('option_hcaptcha', 'hCaptcha (Coming Soon)'); ?></option>
-                                        <option value="other" disabled><?php echo translate('option_other', 'Other (Coming Soon)'); ?></option>
+                                        <option value="recaptcha" <?php echo (($_POST['captcha_type'] ?? 'recaptcha') === 'recaptcha') ? 'selected' : ''; ?>>
+                                            <?php echo translate('option_recaptcha', 'reCAPTCHA'); ?></option>
+                                        <option value="hcaptcha" disabled>
+                                            <?php echo translate('option_hcaptcha', 'hCaptcha (Coming Soon)'); ?>
+                                        </option>
+                                        <option value="other" disabled>
+                                            <?php echo translate('option_other', 'Other (Coming Soon)'); ?></option>
                                     </select>
                                 </div>
 
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" id="recaptcha_enabled" name="recaptcha_enabled" class="form-check-input" <?php echo isset($_POST['recaptcha_enabled']) || $recaptcha_status === 'enabled' ? 'checked' : ''; ?>>
-                                    <label for="recaptcha_enabled" class="form-check-label"><?php echo translate('label_recaptcha_enabled', 'Enable reCAPTCHA'); ?></label>
+                                    <input type="checkbox" id="recaptcha_enabled" name="recaptcha_enabled"
+                                        class="form-check-input" <?php echo isset($_POST['recaptcha_enabled']) || $recaptcha_status === 'enabled' ? 'checked' : ''; ?>>
+                                    <label for="recaptcha_enabled"
+                                        class="form-check-label"><?php echo translate('label_recaptcha_enabled', 'Enable reCAPTCHA'); ?></label>
                                 </div>
 
-                                <div class="recaptcha-fields <?php echo (isset($_POST['recaptcha_enabled']) || $recaptcha_status === 'enabled') ? 'active' : ''; ?>">
+                                <div
+                                    class="recaptcha-fields <?php echo (isset($_POST['recaptcha_enabled']) || $recaptcha_status === 'enabled') ? 'active' : ''; ?>">
                                     <div class="mb-3">
-                                        <label for="recaptcha_site_key" class="form-label"><?php echo translate('label_recaptcha_site_key', 'Site Key'); ?></label>
-                                        <input type="text" id="recaptcha_site_key" name="recaptcha_site_key" class="form-control" placeholder="<?php echo translate('placeholder_recaptcha_default', 'Leave empty for default'); ?>" value="<?php echo htmlspecialchars($_POST['recaptcha_site_key'] ?? (defined('RECAPTCHA_SITE_KEY') ? RECAPTCHA_SITE_KEY : '')); ?>">
+                                        <label for="recaptcha_site_key"
+                                            class="form-label"><?php echo translate('label_recaptcha_site_key', 'Site Key'); ?></label>
+                                        <input type="text" id="recaptcha_site_key" name="recaptcha_site_key"
+                                            class="form-control"
+                                            placeholder="<?php echo translate('placeholder_recaptcha_default', 'Leave empty for default'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['recaptcha_site_key'] ?? (defined('RECAPTCHA_SITE_KEY') ? RECAPTCHA_SITE_KEY : '')); ?>">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="recaptcha_secret_key" class="form-label"><?php echo translate('label_recaptcha_secret_key', 'Secret Key'); ?></label>
-                                        <input type="text" id="recaptcha_secret_key" name="recaptcha_secret_key" class="form-control" placeholder="<?php echo translate('placeholder_recaptcha_default', 'Leave empty for default'); ?>" value="<?php echo htmlspecialchars($_POST['recaptcha_secret_key'] ?? (defined('RECAPTCHA_SECRET_KEY') ? RECAPTCHA_SECRET_KEY : '')); ?>">
+                                        <label for="recaptcha_secret_key"
+                                            class="form-label"><?php echo translate('label_recaptcha_secret_key', 'Secret Key'); ?></label>
+                                        <input type="text" id="recaptcha_secret_key" name="recaptcha_secret_key"
+                                            class="form-control"
+                                            placeholder="<?php echo translate('placeholder_recaptcha_default', 'Leave empty for default'); ?>"
+                                            value="<?php echo htmlspecialchars($_POST['recaptcha_secret_key'] ?? (defined('RECAPTCHA_SECRET_KEY') ? RECAPTCHA_SECRET_KEY : '')); ?>">
                                     </div>
-                                    <p class="note"><?php echo translate('note_recaptcha_empty', 'Leave reCAPTCHA fields empty to use default keys when enabled'); ?></p>
+                                    <p class="note">
+                                        <?php echo translate('note_recaptcha_empty', 'Leave reCAPTCHA fields empty to use default keys when enabled'); ?>
+                                    </p>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary"><?php echo translate('btn_save_recaptcha', 'Save reCAPTCHA Settings'); ?></button>
+                                <button type="submit"
+                                    class="btn btn-primary"><?php echo translate('btn_save_recaptcha', 'Save reCAPTCHA Settings'); ?></button>
                             </div>
-                        </form>
-                    </div>
-                   <script src="<?php echo $base_path; ?>assets/js/pages/admin/settings/recaptcha.js"></script>
+                    </form>
                 </div>
-            </main>
+                <script src="<?php echo $base_path; ?>assets/js/pages/admin/settings/recaptcha.js"></script>
         </div>
+        </main>
+    </div>
     </div>
     <?php include_once $project_root . 'includes/footer.php'; ?>
 </body>
+
 </html>

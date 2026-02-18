@@ -1,0 +1,32 @@
+<?php
+return [
+    'vote_title' => ' - 投票赢取奖励',
+    'vote_title_h1' => ' - 投票赢取奖励',
+    'vote_subtitle' => '通过在排行网站投票来支持我们的服务器，赚取专属游戏内奖励！',
+    'vote_no_sites' => '暂时没有可用的投票站点。',
+    'vote_points_label' => '投票积分',
+    'vote_button' => '投票',
+    'claim_button' => '领取',
+    'vote_cooldown_label' => '小时冷却',
+    'vote_cooldown_timer' => '冷却中：计算中...',
+    'vote_cooldown_ready' => '可以投票了！',
+    'vote_rewards_title' => '投票奖励',
+    'vote_reward_gold' => '金币',
+    'vote_reward_gold_desc' => '每次投票可获得最多40金币，增加您的游戏财富。',
+    'vote_reward_enchants' => '附魔',
+    'vote_reward_enchants_desc' => '解锁强力武器和护甲附魔。',
+    'vote_reward_mounts' => '坐骑',
+    'vote_reward_mounts_desc' => '获得仅通过投票才能获取的专属坐骑。',
+    'vote_reward_vip_points' => 'VIP积分',
+    'vote_reward_vip_points_desc' => '赚取积分兑换特殊物品和特权。',
+    'vote_modal_title' => '感谢您的投票！',
+    'vote_modal_message' => '正在将您重定向到 <span class="site-name"></span> 完成投票。',
+    'vote_modal_button' => '继续',
+    'site_logo_alt' => '服务器Logo',
+    'vote_login_prompt' => '请登录后投票并赚取奖励。',
+    'vote_unauthorized' => '冷却期间不能投票。',
+    'vote_claim_success' => '奖励领取成功！',
+    'vote_claim_error' => '领取奖励出错：',
+    'vote_site_image_alt' => '投票站点'
+];
+?>

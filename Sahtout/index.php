@@ -73,7 +73,8 @@ $result = $site_db->query($query);
         <div class="news-grid-warmane">
             <?php if ($result->num_rows === 0): ?>
                 <p style="color: #888; text-align: center; padding: 20px;">
-                    <?php echo translate('home_no_news', 'No news available at the time.'); ?></p>
+                    <?php echo translate('home_no_news', 'No news available at the time.'); ?>
+                </p>
             <?php else: ?>
                 <?php while ($news = $result->fetch_assoc()): ?>
                     <div class="news-item"
@@ -89,7 +90,8 @@ $result = $site_db->query($query);
                             <div class="news-content" style="margin-left: 20px; flex-grow: 1;">
                                 <h3 class="news-title"
                                     style="margin: 0 0 8px 0; font-size: 18px; color: #ecc05b; font-family: 'Cinzel', serif;">
-                                    <?php echo htmlspecialchars($news['title']); ?></h3>
+                                    <?php echo htmlspecialchars($news['title']); ?>
+                                </h3>
                                 <p class="news-date" style="font-size: 12px; color: #888; margin: 0 0 10px 0;"><i
                                         class="far fa-clock"></i> <?php echo date('M j, Y', strtotime($news['post_date'])); ?>
                                 </p>
@@ -102,20 +104,23 @@ $result = $site_db->query($query);
         </div>
 
         <?php if ($total_pages > 1): ?>
-        <div class="news-pagination" style="display: flex; justify-content: center; gap: 8px; margin-top: 20px; padding: 15px 0;">
-            <?php if ($news_page > 1): ?>
-                <a href="?news_page=<?php echo $news_page - 1; ?>" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(0,0,0,0.5); border: 1px solid #5c3a16; color: #ecc05b; text-decoration: none; border-radius: 4px; font-size: 14px; transition: all 0.3s;">&laquo;</a>
-            <?php endif; ?>
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?news_page=<?php echo $i; ?>" 
-                   style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: <?php echo $i === $news_page ? 'linear-gradient(135deg, #5c3a16, #8b6914)' : 'rgba(0,0,0,0.5)'; ?>; border: 1px solid <?php echo $i === $news_page ? '#ecc05b' : '#5c3a16'; ?>; color: <?php echo $i === $news_page ? '#fff' : '#ecc05b'; ?>; text-decoration: none; border-radius: 4px; font-family: 'Cinzel', serif; font-size: 14px; font-weight: <?php echo $i === $news_page ? '700' : '400'; ?>; transition: all 0.3s;">
-                    <?php echo $i; ?>
-                </a>
-            <?php endfor; ?>
-            <?php if ($news_page < $total_pages): ?>
-                <a href="?news_page=<?php echo $news_page + 1; ?>" style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(0,0,0,0.5); border: 1px solid #5c3a16; color: #ecc05b; text-decoration: none; border-radius: 4px; font-size: 14px; transition: all 0.3s;">&raquo;</a>
-            <?php endif; ?>
-        </div>
+            <div class="news-pagination"
+                style="display: flex; justify-content: center; gap: 8px; margin-top: 20px; padding: 15px 0;">
+                <?php if ($news_page > 1): ?>
+                    <a href="?news_page=<?php echo $news_page - 1; ?>"
+                        style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(0,0,0,0.5); border: 1px solid #5c3a16; color: #ecc05b; text-decoration: none; border-radius: 4px; font-size: 14px; transition: all 0.3s;">&laquo;</a>
+                <?php endif; ?>
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?news_page=<?php echo $i; ?>"
+                        style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: <?php echo $i === $news_page ? 'linear-gradient(135deg, #5c3a16, #8b6914)' : 'rgba(0,0,0,0.5)'; ?>; border: 1px solid <?php echo $i === $news_page ? '#ecc05b' : '#5c3a16'; ?>; color: <?php echo $i === $news_page ? '#fff' : '#ecc05b'; ?>; text-decoration: none; border-radius: 4px; font-family: 'Cinzel', serif; font-size: 14px; font-weight: <?php echo $i === $news_page ? '700' : '400'; ?>; transition: all 0.3s;">
+                        <?php echo $i; ?>
+                    </a>
+                <?php endfor; ?>
+                <?php if ($news_page < $total_pages): ?>
+                    <a href="?news_page=<?php echo $news_page + 1; ?>"
+                        style="display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: rgba(0,0,0,0.5); border: 1px solid #5c3a16; color: #ecc05b; text-decoration: none; border-radius: 4px; font-size: 14px; transition: all 0.3s;">&raquo;</a>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
     </section>
 

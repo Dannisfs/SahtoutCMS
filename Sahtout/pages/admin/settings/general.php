@@ -117,6 +117,34 @@ require_once $project_root . 'includes/header.php';
                                 </div>
                             </div>
 
+                            <!-- Server Status Info -->
+                            <h4 class="mb-3 mt-4"><?php echo translate('header_server_status', 'Server Status Info'); ?>
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label
+                                        class="form-label fw-bold"><?php echo translate('label_realmlist', 'Realmlist'); ?></label>
+                                    <input type="text" name="server_realmlist" class="form-control"
+                                        value="<?php echo htmlspecialchars($server_realmlist ?? 'set realmlist 127.0.0.1'); ?>"
+                                        placeholder="set realmlist logon.example.com">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label
+                                        class="form-label fw-bold"><?php echo translate('label_server_version', 'Game Version'); ?></label>
+                                    <input type="text" name="server_version" class="form-control"
+                                        value="<?php echo htmlspecialchars($server_version ?? '3.3.5a'); ?>"
+                                        placeholder="e.g. 3.3.5a">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label
+                                        class="form-label fw-bold"><?php echo translate('label_server_status_text', 'Status Text'); ?></label>
+                                    <input type="text" name="server_status_text" class="form-control"
+                                        value="<?php echo htmlspecialchars($server_status_text ?? 'Stable'); ?>"
+                                        placeholder="e.g. Stable, Online, Maintenance">
+                                </div>
+                            </div>
+                            <hr class="my-4">
+
                             <!-- Social Links -->
                             <div class="mb-4">
                                 <label

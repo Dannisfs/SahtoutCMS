@@ -12,7 +12,8 @@ $character_race = array(
   9 => 'Goblin',
   10 => 'Blood Elf',
   11 => 'Draenei',
-  12 => 'High Elf');
+  12 => 'High Elf'
+);
 
 $character_class = array(
   1 => 'Warrior',
@@ -24,10 +25,11 @@ $character_class = array(
   7 => 'Shaman',
   8 => 'Mage',
   9 => 'Warlock',
-  11 => 'Druid');
+  11 => 'Druid'
+);
 
 $lang_defs = array(
-  'maps_names' => array('Azeroth','Outland','Northrend'),
+  'maps_names' => array('Azeroth', 'Outland', 'Northrend'),
   'total' => 'Total',
   'faction' => array('Alliance', 'Horde'),
   'name' => 'Name',
@@ -35,7 +37,9 @@ $lang_defs = array(
   'class' => 'Class',
   'level' => 'lvl',
   'click_to_next' => 'Click: go to next',
-  'click_to_first' => 'Click: go to first'
+  'click_to_first' => 'Click: go to first',
+  'home_button' => '🏠 Return to Home',
+  'page_title' => 'Online Playermap'
 );
 
 include "zone_names_english.php";

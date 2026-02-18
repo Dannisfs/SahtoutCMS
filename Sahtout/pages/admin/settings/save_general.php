@@ -96,6 +96,16 @@ if (!empty($bugtracker_url_new) && !filter_var($bugtracker_url_new, FILTER_VALID
     $errors[] = translate('error_invalid_bugtracker_url', 'Invalid BugTracker URL format.');
 }
 
+// Handle Server Status Info
+$server_realmlist_new = trim($_POST['server_realmlist'] ?? 'set realmlist 127.0.0.1');
+$server_version_new = trim($_POST['server_version'] ?? '3.3.5a');
+$server_status_text_new = trim($_POST['server_status_text'] ?? 'Stable');
+
+// Sanitize inputs
+$server_realmlist_new = htmlspecialchars($server_realmlist_new, ENT_QUOTES, 'UTF-8');
+$server_version_new = htmlspecialchars($server_version_new, ENT_QUOTES, 'UTF-8');
+$server_status_text_new = htmlspecialchars($server_status_text_new, ENT_QUOTES, 'UTF-8');
+
 // Handle social links (YOUR ORIGINAL CODE - UNTOUCHED)
 $social_links_new = [
     'facebook' => filter_input(INPUT_POST, 'facebook', FILTER_VALIDATE_URL) ?: '',
@@ -133,6 +143,12 @@ if (empty($errors)) {
         // === BugTracker URL ===
         $config_content .= "// BugTracker URL\n";
         $config_content .= "\$bugtracker_url = " . var_export($bugtracker_url_new, true) . ";\n\n";
+
+        // === Server Status Info ===
+        $config_content .= "// Server Status Info\n";
+        $config_content .= "\$server_realmlist = " . var_export($server_realmlist_new, true) . ";\n";
+        $config_content .= "\$server_version = " . var_export($server_version_new, true) . ";\n";
+        $config_content .= "\$server_status_text = " . var_export($server_status_text_new, true) . ";\n\n";
 
         // === Social Links ===
         $config_content .= "// Social links\n";

@@ -1,13 +1,21 @@
         body {
-            background-color: #212529;
+            background-color: #ffffff;
+            color: #333;
+            font-family: 'Roboto', Arial, sans-serif;
         }
-        /* Main content */
+
+        .dashboard-container {
+            flex-grow: 1;
+            max-width: 1000px;
+            width: 95vw;
+            margin: 1rem auto;
+            padding: 0 1rem 20px;
+        }
+
         .main-content {
-            padding-top: 80px; /* Clear header */
-            min-height: calc(100vh - 80px);
+            padding-bottom: 2rem;
             display: flex;
             flex-direction: column;
-            justify-content: center;
         }
 
         .content {
@@ -15,14 +23,15 @@
             background: #ffffff;
             border: 1px solid #dee2e6;
             border-radius: 6px;
-            margin: 1rem;
+            margin-top: 1rem;
             color: #212529;
             text-align: center;
-            flex-grow: 1;
         }
 
         /* Status, error, and success messages */
-        .status-box, .error-box, .success-box {
+        .status-box,
+        .error-box,
+        .success-box {
             padding: 1rem;
             border-radius: 6px;
             margin-bottom: 1rem;
@@ -74,7 +83,8 @@
             font-size: 0.95rem;
         }
 
-        .success, .text-success {
+        .success,
+        .text-success {
             color: #28a745;
             font-weight: 500;
             font-family: 'Roboto', Arial, sans-serif;
@@ -89,7 +99,8 @@
         }
 
         /* Constrain form elements */
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             max-width: 400px;
             margin-left: auto;
             margin-right: auto;
@@ -101,9 +112,11 @@
             width: 100%;
             text-align: left;
         }
+
         .custom-file-upload input[type="file"] {
             display: none;
         }
+
         .custom-file-upload .btn {
             width: 200px;
             display: flex;
@@ -117,10 +130,12 @@
             background-color: #0b71e6ff;
             transition: all 0.3s ease;
         }
+
         .custom-file-upload .btn:hover {
             font-family: 'Roboto', Arial, sans-serif;
             font-size: 0.95rem;
         }
+
         .custom-file-upload .file-name {
             margin-top: 0.5rem;
             text-align: center;
@@ -131,7 +146,8 @@
         /* Mobile adjustments */
         @media (max-width: 768px) {
             .main-content {
-                padding-top: 60px; /* Adjust for mobile header and navbar */
+                padding-top: 60px;
+                /* Adjust for mobile header and navbar */
                 padding-left: 0;
                 padding-right: 0;
             }
@@ -141,7 +157,11 @@
                 padding: 1rem;
             }
 
-            .form-control, .form-select, .status-box, .error-box, .success-box {
+            .form-control,
+            .form-select,
+            .status-box,
+            .error-box,
+            .success-box {
                 max-width: 100%;
             }
         }
