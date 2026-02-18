@@ -4,83 +4,77 @@ require_once __DIR__ . '/../includes/paths.php'; // Include paths.php
 require_once $project_root . 'includes/session.php';
 require_once $project_root . 'languages/language.php';
 require_once $project_root . 'includes/item_tooltip.php';
+require_once $project_root . 'includes/config.settings.php';
 $page_class = 'character';
+$page_title = $site_title_name . " " . translate('page_title', 'Character Equipment');
+$meta_description = translate('meta_description', 'View your World of Warcraft character equipment, stats, and PvP details.');
 require_once $project_root . 'includes/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="<?php echo htmlspecialchars($_SESSION['lang'] ?? 'en'); ?>">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="<?php echo translate('meta_description', 'View your World of Warcraft character equipment, stats, and PvP details.'); ?>">
-    <meta name="robots" content="index">
-    <title><?php echo $site_title_name . " " . translate('page_title', 'Character Equipment'); ?></title>
 
-    <style>
-        :root {
-            --bg-character: url('<?php echo $base_path; ?>img/backgrounds/bg-character.jpg');
-            --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
-        }
-    </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tooltip = document.createElement('div');
-            tooltip.className = 'item-tooltip';
-            document.body.appendChild(tooltip);
-            const slots = document.querySelectorAll('.slot.has-item');
-            slots.forEach(slot => {
-                slot.addEventListener('mouseenter', (e) => {
-                    showTooltip(e, slot);
-                });
-                slot.addEventListener('mousemove', updateTooltipPosition);
-                slot.addEventListener('mouseleave', hideTooltip);
-                slot.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    showTooltip(e, slot);
-                    setTimeout(hideTooltip, 3000);
-                });
-                slot.addEventListener('touchmove', updateTooltipPosition);
+<style>
+    :root {
+        --bg-character: url('<?php echo $base_path; ?>img/backgrounds/bg-character.jpg');
+        --hover-wow-gif: url('<?php echo $base_path; ?>img/hover_wow.gif');
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'item-tooltip';
+        document.body.appendChild(tooltip);
+        const slots = document.querySelectorAll('.slot.has-item');
+        slots.forEach(slot => {
+            slot.addEventListener('mouseenter', (e) => {
+                showTooltip(e, slot);
             });
-            function showTooltip(e, slot) {
-                const tooltipContent = slot.dataset.tooltip;
-                if (tooltipContent) {
-                    tooltip.innerHTML = tooltipContent;
-                    tooltip.style.display = 'block';
-                    updateTooltipPosition(e);
-                }
+            slot.addEventListener('mousemove', updateTooltipPosition);
+            slot.addEventListener('mouseleave', hideTooltip);
+            slot.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                showTooltip(e, slot);
+                setTimeout(hideTooltip, 3000);
+            });
+            slot.addEventListener('touchmove', updateTooltipPosition);
+        });
+        function showTooltip(e, slot) {
+            const tooltipContent = slot.dataset.tooltip;
+            if (tooltipContent) {
+                tooltip.innerHTML = tooltipContent;
+                tooltip.style.display = 'block';
+                updateTooltipPosition(e);
             }
-            function hideTooltip() {
-                tooltip.style.display = 'none';
+        }
+        function hideTooltip() {
+            tooltip.style.display = 'none';
+        }
+        function updateTooltipPosition(e) {
+            const tooltip = document.querySelector('.item-tooltip');
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) + 10;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) + 10;
+            tooltip.style.left = `${x}px`;
+            tooltip.style.top = `${y}px`;
+            const rect = tooltip.getBoundingClientRect();
+            if (rect.right > window.innerWidth) {
+                tooltip.style.left = `${window.innerWidth - rect.width - 10}px`;
             }
-            function updateTooltipPosition(e) {
-                const tooltip = document.querySelector('.item-tooltip');
-                const x = (e.clientX || (e.touches && e.touches[0].clientX)) + 10;
-                const y = (e.clientY || (e.touches && e.touches[0].clientY)) + 10;
-                tooltip.style.left = `${x}px`;
-                tooltip.style.top = `${y}px`;
-                const rect = tooltip.getBoundingClientRect();
-                if (rect.right > window.innerWidth) {
-                    tooltip.style.left = `${window.innerWidth - rect.width - 10}px`;
-                }
-                if (rect.bottom > window.innerHeight) {
-                    tooltip.style.top = `${window.innerHeight - rect.height - 10}px`;
-                }
+            if (rect.bottom > window.innerHeight) {
+                tooltip.style.top = `${window.innerHeight - rect.height - 10}px`;
             }
-            // Tab navigation
-            const tabs = document.querySelectorAll('.tab-nav button');
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.getElementById(tab.dataset.tab).classList.add('active');
-                });
+        }
+        // Tab navigation
+        const tabs = document.querySelectorAll('.tab-nav button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
             });
         });
-    </script>
+    });
+</script>
 </head>
 
 <body>
@@ -454,13 +448,13 @@ require_once $project_root . 'includes/header.php';
                             alt="<?php echo translate('default_character_image', 'Default Character Image'); ?>"
                             class="default-image">
                         <script type="importmap">
-                                {
-                                    "imports": {
-                                        "three": "https://esm.sh/three@0.167.1",
-                                        "three/addons/": "https://esm.sh/three@0.167.1/examples/jsm/"
-                                    }
-                                }
-                            </script>
+                                                {
+                                                    "imports": {
+                                                        "three": "https://esm.sh/three@0.167.1",
+                                                        "three/addons/": "https://esm.sh/three@0.167.1/examples/jsm/"
+                                                    }
+                                                }
+                                            </script>
                         <script type="module">
                             import * as THREE from 'three';
                             import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -810,6 +804,3 @@ require_once $project_root . 'includes/header.php';
         <div style="clear: both;"></div>
     </main>
     <?php include_once $project_root . 'includes/footer.php'; ?>
-</body>
-
-</html>
